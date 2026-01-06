@@ -4,32 +4,32 @@ Current phase tasks.
 
 ## Phase 4: Publisher CLI
 
-### 4a: CLI Foundation
-- [ ] Create CLI entry point (src/cli/index.js)
-- [ ] Parse command line arguments (--help, --version)
-- [ ] Support subcommands: publish, derive, validate, list
+### 4a: CLI Foundation ✅
+- [x] Create CLI entry point (src/cli/index.js)
+- [x] Parse command line arguments (--help, --version)
+- [x] Support subcommands: publish, derive, validate, list
 
-### 4b: Publish Command
-- [ ] `tref publish <content>` - create and publish block
-- [ ] `tref publish -f <file>` - publish from file
-- [ ] `tref publish --stdin` - read content from stdin
-- [ ] Options: --refs (add references), --license, --pretty
+### 4b: Publish Command ✅
+- [x] `tref publish <content>` - create and publish block
+- [x] `tref publish -f <file>` - publish from file
+- [x] `tref publish --stdin` - read content from stdin
+- [x] Options: --refs (add references), --license, --pretty
 
-### 4c: Derive Command
-- [ ] `tref derive <parent-id> <content>` - derive from parent
-- [ ] `tref derive -f <parent.tref> <content>` - derive from file
-- [ ] Preserve parent refs automatically
+### 4c: Derive Command ✅
+- [x] `tref derive <parent-id> <content>` - derive from parent
+- [x] `tref derive -f <parent.tref> <content>` - derive from file
+- [x] Preserve parent refs automatically
 
-### 4d: Validate Command
-- [ ] `tref validate <file.tref>` - validate block integrity
-- [ ] Check ID matches content hash
-- [ ] Check schema compliance
-- [ ] Exit codes: 0=valid, 1=invalid
+### 4d: Validate Command ✅
+- [x] `tref validate <file.tref>` - validate block integrity
+- [x] Check ID matches content hash
+- [x] Check schema compliance
+- [x] Exit codes: 0=valid, 1=invalid
 
-### 4e: List/Info Commands
-- [ ] `tref list` - list all published blocks
-- [ ] `tref info <id>` - show block details
-- [ ] `tref cat <id>` - output block content
+### 4e: List/Info Commands ✅
+- [x] `tref list` - list all published blocks
+- [x] `tref info <id>` - show block details
+- [x] `tref cat <id>` - output block content
 
 ### 4f: MCP Server (Optional)
 - [ ] MCP server wrapper for AI integration

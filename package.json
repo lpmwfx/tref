@@ -4,6 +4,9 @@
   "description": "AI Blocks - JavaScript with TypeScript-level safety",
   "type": "module",
   "main": "src/index.js",
+  "bin": {
+    "tref": "./src/cli/index.js"
+  },
   "scripts": {
     "typecheck": "tsc $(find src -name '*.js' ! -name '*.test.js') --noEmit --checkJs --strict --target ES2024 --module NodeNext --moduleResolution NodeNext --skipLibCheck --types node",
     "lint": "eslint src/",
