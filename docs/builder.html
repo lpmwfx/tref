@@ -598,14 +598,8 @@
         const wrapperEl = blockContainer.querySelector('.tref-wrapper');
         wrapperEl.classList.add('block-appear');
 
-        // Attach dropdown events
+        // Attach wrapper events (drag, copy, download)
         currentWrapper.attachEvents(wrapperEl);
-
-        // Make draggable
-        wrapperEl.setAttribute('draggable', 'true');
-        wrapperEl.addEventListener('dragstart', (e) => {
-          currentWrapper.setDragData(e.dataTransfer);
-        });
 
         // Setup drop zone
         setupDropZone();
@@ -655,13 +649,7 @@
 
             dropArea.classList.add('has-block');
             dropArea.innerHTML = wrapper.toHTML();
-
-            // Make it draggable again
-            const el = dropArea.querySelector('.tref-wrapper');
-            el.setAttribute('draggable', 'true');
-            el.addEventListener('dragstart', (ev) => {
-              wrapper.setDragData(ev.dataTransfer);
-            });
+            wrapper.attachEvents(dropArea.querySelector('.tref-wrapper'));
           }
         } catch (err) {
           console.error('Drop error:', err);
