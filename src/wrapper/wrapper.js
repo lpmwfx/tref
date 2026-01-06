@@ -158,10 +158,12 @@ export class TrefWrapper {
    * @returns {{ type: string, data: string }[]}
    */
   getDragData() {
+    // All formats get the same JSON - drag = .tref file content
+    const json = this.toJSON();
     return [
-      { type: TREF_MIME_TYPE, data: this.toJSON() },
-      { type: 'application/json', data: this.toJSON() },
-      { type: 'text/plain', data: this.#block.content }, // Content only for chat apps
+      { type: TREF_MIME_TYPE, data: json },
+      { type: 'application/json', data: json },
+      { type: 'text/plain', data: json },
     ];
   }
 
