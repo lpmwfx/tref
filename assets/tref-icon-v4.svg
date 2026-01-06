@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Filled rectangle -->
+  <rect x="8" y="4" width="48" height="56" rx="6" fill="#2563eb" />
+
+  <!-- Link icon (white) -->
+  <path d="M26 24 L34 16 A8 8 0 0 1 46 28 L38 36"
+        stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" />
+  <path d="M38 36 L30 44 A8 8 0 0 1 18 32 L26 24"
+        stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" />
+</svg>

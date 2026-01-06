@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Document with corner fold -->
+  <path d="M12 8 L44 8 L52 16 L52 56 L12 56 Z" fill="#2563eb" />
+  <path d="M44 8 L44 16 L52 16" fill="#1d4ed8" />
+
+  <!-- Content lines -->
+  <rect x="18" y="24" width="28" height="3" rx="1.5" fill="#fff" opacity="0.9" />
+  <rect x="18" y="32" width="22" height="3" rx="1.5" fill="#fff" opacity="0.6" />
+  <rect x="18" y="40" width="25" height="3" rx="1.5" fill="#fff" opacity="0.6" />
+
+  <!-- Small link badge -->
+  <circle cx="48" cy="48" r="10" fill="#10b981" />
+  <path d="M44 46 L48 42 A3 3 0 0 1 52 46 L50 48"
+        stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" />
+  <path d="M50 48 L48 50 A3 3 0 0 1 44 46 L46 44"
+        stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" />
+</svg>
