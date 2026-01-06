@@ -279,6 +279,43 @@ AIBlocks is an attempt to give knowledge **backbone** in a world of probabilisti
 
 ---
 
+## Visual Identity
+
+### Theme: Purple-Mint
+
+| Element | Value |
+|---------|-------|
+| Primary background | `#2D1B4E` (deep purple) |
+| Primary accent | `#5CCCCC` (mint) |
+| Icon | Chain link (traceable reference) |
+
+### Assets
+
+```
+assets/
+├── SVG/
+│   ├── tref-link.svg                    (base)
+│   ├── tref-link-purple-mint.svg        (primary)
+│   └── tref-link-purple-mint-square.svg (square)
+├── PNG/
+│   └── tref-link-{16,32,48,64,128,256,512}.png
+├── favicon/
+│   ├── favicon.ico
+│   └── apple-touch-icon.png
+└── origin/
+    └── source files
+```
+
+### Icon Meaning
+
+The chain link represents:
+
+* **Traceability** – references are linked, not lost
+* **Connection** – knowledge connects to its sources
+* **Integrity** – the chain is unbroken
+
+---
+
 ## Status
 
 AIBlocks is an open, experimental format under active development.
