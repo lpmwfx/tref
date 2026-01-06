@@ -1,11 +1,13 @@
 /**
  * @fileoverview Tests for TREF wrapper
+ * Self-contained - uses inline block creation
  */
 
 /* global atob */
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import {
   TrefWrapper,
   TrefReceiver,
@@ -15,12 +17,69 @@ import {
   TREF_ICON_DATA_URL,
   TREF_MIME_TYPE,
 } from './wrapper.js';
-import { publish } from '../publisher/publish.js';
-import { createDraft } from '../schemas/block.js';
+
+// ========== Test Helpers ==========
+
+/**
+ * Sort object keys recursively for canonical JSON
+ * @param {unknown} obj
+ * @returns {unknown}
+ */
+function sortKeys(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(sortKeys);
+  }
+  if (obj !== null && typeof obj === 'object') {
+    const sorted = /** @type {Record<string, unknown>} */ ({});
+    const record = /** @type {Record<string, unknown>} */ (obj);
+    for (const key of Object.keys(record).sort()) {
+      sorted[key] = sortKeys(record[key]);
+    }
+    return sorted;
+  }
+  return obj;
+}
+
+/**
+ * @typedef {object} TestBlockOptions
+ * @property {string} [created]
+ * @property {string} [license]
+ * @property {string} [author]
+ * @property {Array<{ type: string, url?: string }>} [refs]
+ * @property {string} [parent]
+ */
+
+/**
+ * Create a test block with proper sha256 ID
+ * @param {string} content
+ * @param {TestBlockOptions} [options]
+ * @returns {{ v: 1, id: string, content: string, meta: { created: string, license: string, author?: string }, refs?: Array<{ type: string, url?: string }>, parent?: string }}
+ */
+function createTestBlock(content, options = {}) {
+  const draft = {
+    v: /** @type {1} */ (1),
+    content,
+    meta: {
+      created: options.created ?? new Date().toISOString(),
+      license: options.license ?? 'CC-BY-4.0',
+      ...(options.author ? { author: options.author } : {}),
+    },
+    ...(options.refs ? { refs: options.refs } : {}),
+    ...(options.parent ? { parent: options.parent } : {}),
+  };
+
+  const canonical = JSON.stringify(sortKeys(draft));
+  const hash = createHash('sha256').update(canonical).digest('hex');
+  const id = `sha256:${hash}`;
+
+  return { ...draft, id };
+}
+
+// ========== Tests ==========
 
 describe('TrefWrapper', () => {
   it('wraps a valid block', () => {
-    const block = publish(createDraft('Test content'));
+    const block = createTestBlock('Test content');
     const wrapper = new TrefWrapper(block);
 
     assert.equal(wrapper.id, block.id);
@@ -30,18 +89,18 @@ describe('TrefWrapper', () => {
   it('throws on invalid block', () => {
     assert.throws(() => {
       new TrefWrapper(/** @type {any} */ ({ v: 1, content: 'test' }));
-    }, /Invalid block/);
+    }, /Invalid/);
   });
 
   it('provides block getter', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     assert.deepEqual(wrapper.block, block);
   });
 
   it('provides shortId', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     assert.equal(wrapper.shortId.length, 8);
@@ -51,7 +110,7 @@ describe('TrefWrapper', () => {
 
 describe('toJSON', () => {
   it('serializes to compact JSON by default', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const json = wrapper.toJSON();
@@ -61,7 +120,7 @@ describe('toJSON', () => {
   });
 
   it('serializes to pretty JSON when requested', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const json = wrapper.toJSON({ pretty: true });
@@ -70,7 +129,7 @@ describe('toJSON', () => {
   });
 
   it('produces valid JSON', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const json = wrapper.toJSON();
@@ -83,7 +142,7 @@ describe('toJSON', () => {
 
 describe('getFilename', () => {
   it('returns hash with .tref extension', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const filename = wrapper.getFilename();
@@ -96,7 +155,7 @@ describe('getFilename', () => {
 
 describe('toDataURL', () => {
   it('returns data URL with correct MIME type', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const url = wrapper.toDataURL();
@@ -107,7 +166,7 @@ describe('toDataURL', () => {
   });
 
   it('encodes block data correctly', () => {
-    const block = publish(createDraft('Test content'));
+    const block = createTestBlock('Test content');
     const wrapper = new TrefWrapper(block);
 
     const url = wrapper.toDataURL();
@@ -121,7 +180,7 @@ describe('toDataURL', () => {
 
 describe('getDragData', () => {
   it('returns array of type/data pairs', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const dragData = wrapper.getDragData();
@@ -131,7 +190,7 @@ describe('getDragData', () => {
   });
 
   it('includes TREF MIME type', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const dragData = wrapper.getDragData();
@@ -142,7 +201,7 @@ describe('getDragData', () => {
   });
 
   it('includes application/json', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const dragData = wrapper.getDragData();
@@ -152,7 +211,7 @@ describe('getDragData', () => {
   });
 
   it('includes text/plain with full JSON', () => {
-    const block = publish(createDraft('My content'));
+    const block = createTestBlock('My content');
     const wrapper = new TrefWrapper(block);
 
     const dragData = wrapper.getDragData();
@@ -165,7 +224,7 @@ describe('getDragData', () => {
 
 describe('toHTML', () => {
   it('generates HTML with wrapper class', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML();
@@ -175,7 +234,7 @@ describe('toHTML', () => {
   });
 
   it('includes icon by default', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML();
@@ -184,17 +243,18 @@ describe('toHTML', () => {
     assert.ok(html.includes('<svg'));
   });
 
-  it('excludes icon when requested', () => {
-    const block = publish(createDraft('Test'));
+  it('hides action buttons when interactive=false', () => {
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
-    const html = wrapper.toHTML({ includeIcon: false });
+    const html = wrapper.toHTML({ interactive: false });
 
-    assert.ok(!html.includes('class="tref-icon"'));
+    assert.ok(!html.includes('class="tref-actions"'));
+    assert.ok(html.includes('class="tref-icon"')); // Icon always present (drag handle)
   });
 
   it('includes content preview by default', () => {
-    const block = publish(createDraft('My test content'));
+    const block = createTestBlock('My test content');
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML();
@@ -205,7 +265,7 @@ describe('toHTML', () => {
 
   it('truncates long content', () => {
     const longContent = 'A'.repeat(300);
-    const block = publish(createDraft(longContent));
+    const block = createTestBlock(longContent);
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML({ maxContentLength: 100 });
@@ -215,7 +275,7 @@ describe('toHTML', () => {
   });
 
   it('escapes HTML in content', () => {
-    const block = publish(createDraft('<script>alert("xss")</script>'));
+    const block = createTestBlock('<script>alert("xss")</script>');
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML();
@@ -225,7 +285,7 @@ describe('toHTML', () => {
   });
 
   it('includes short ID', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML();
@@ -234,7 +294,7 @@ describe('toHTML', () => {
   });
 
   it('includes date from meta', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML();
@@ -257,7 +317,7 @@ describe('getStyles', () => {
 
 describe('wrap', () => {
   it('creates wrapper from valid data', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const wrapper = wrap(block);
 
     assert.ok(wrapper instanceof TrefWrapper);
@@ -273,7 +333,7 @@ describe('wrap', () => {
 
 describe('unwrap', () => {
   it('parses JSON string to wrapper', () => {
-    const block = publish(createDraft('Test'));
+    const block = createTestBlock('Test');
     const json = JSON.stringify(block);
 
     const wrapper = unwrap(json);

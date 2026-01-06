@@ -1,19 +1,25 @@
 /**
  * @fileoverview TREF Block wrapper for display and interaction
+ * Self-contained - no external dependencies
  */
 
-/* global btoa, navigator, Blob, URL, DataTransfer */
+/* global btoa, navigator, Blob, URL, document */
 
-import { AIBlockSchema } from '../schemas/block.js';
-import { TREF_EXTENSION } from '../publisher/io.js';
+/** File extension for TREF files */
+const TREF_EXTENSION = '.tref';
 
 /**
- * @typedef {import('../schemas/block.js').AIBlock} AIBlock
+ * @typedef {object} AIBlock
+ * @property {1} v
+ * @property {string} id
+ * @property {string} content
+ * @property {{ author?: string, created: string, modified?: string, license: string, lang?: string }} meta
+ * @property {Array<{ type: string, url?: string, title?: string, snippet?: string, query?: string }>} [refs]
+ * @property {string} [parent]
  */
 
 /**
- * SVG icon for AI-Block (purple-mint theme with chain link)
- * Can be used inline or as data URL
+ * SVG icon for TREF (purple-mint theme with chain link)
  */
 export const TREF_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
   <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
@@ -26,139 +32,125 @@ export const TREF_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0
   </g>
 </svg>`;
 
-/**
- * TREF icon as data URL for use in img src or CSS
- */
-export const TREF_ICON_DATA_URL = `data:image/svg+xml,${encodeURIComponent(TREF_ICON_SVG)}`;
+/** MIME type for TREF files */
+export const TREF_MIME_TYPE = 'application/vnd.tref+json';
+
+/** Icon as data URL for embedding */
+export const TREF_ICON_DATA_URL = 'data:image/svg+xml,' + encodeURIComponent(TREF_ICON_SVG);
 
 /**
- * MIME type for TREF files
+ * Escape HTML special characters
+ * @param {string} str
+ * @returns {string}
  */
-export const TREF_MIME_TYPE = 'application/vnd.aiblocks.tref+json';
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
 /**
- * Wrapper class for TREF blocks
- * Provides methods for serialization, clipboard, and drag-and-drop
+ * Validate block structure
+ * @param {unknown} block
+ * @returns {block is AIBlock}
+ */
+function isValidBlock(block) {
+  if (!block || typeof block !== 'object') {
+    return false;
+  }
+  const b = /** @type {Record<string, unknown>} */ (block);
+  if (b.v !== 1) {
+    return false;
+  }
+  if (typeof b.id !== 'string') {
+    return false;
+  }
+  if (!b.id.startsWith('sha256:')) {
+    return false;
+  }
+  if (typeof b.content !== 'string') {
+    return false;
+  }
+  if (!b.meta || typeof b.meta !== 'object') {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * TrefWrapper - displays a TREF block with drag/copy/download actions
+ *
+ * Design:
+ * - Icon is the drag handle (only icon is draggable)
+ * - Hover shows action buttons (copy, download)
+ * - Status feedback in the ID badge
  */
 export class TrefWrapper {
   /** @type {AIBlock} */
   #block;
 
   /**
-   * Create a wrapper for a block
-   * @param {AIBlock} block - Valid AIBlock to wrap
-   * @throws {Error} If block is invalid
+   * @param {AIBlock} block
    */
   constructor(block) {
-    // Validate block
-    const result = AIBlockSchema.safeParse(block);
-    if (!result.success) {
-      throw new Error(`Invalid block: ${result.error.message}`);
+    if (!isValidBlock(block)) {
+      throw new Error('Invalid TREF block');
     }
-    this.#block = result.data;
+    this.#block = block;
   }
 
-  /**
-   * Get the wrapped block
-   * @returns {AIBlock}
-   */
   get block() {
     return this.#block;
   }
 
-  /**
-   * Get block ID
-   * @returns {string}
-   */
   get id() {
     return this.#block.id;
   }
 
-  /**
-   * Get short ID (first 8 chars of hash)
-   * @returns {string}
-   */
   get shortId() {
     return this.#block.id.replace('sha256:', '').slice(0, 8);
   }
 
-  /**
-   * Get block content
-   * @returns {string}
-   */
   get content() {
     return this.#block.content;
   }
 
   /**
-   * Serialize block to JSON string
-   * @param {object} [options]
-   * @param {boolean} [options.pretty] - Pretty print (default: false)
-   * @returns {string}
+   * @param {{ pretty?: boolean }} [options]
    */
   toJSON(options = {}) {
-    const { pretty = false } = options;
-    return pretty ? JSON.stringify(this.#block, null, 2) : JSON.stringify(this.#block);
+    return options.pretty ? JSON.stringify(this.#block, null, 2) : JSON.stringify(this.#block);
   }
 
-  /**
-   * Get suggested filename for download
-   * @returns {string}
-   */
   getFilename() {
-    const hash = this.#block.id.replace('sha256:', '');
-    return hash + TREF_EXTENSION;
+    return this.#block.id.replace('sha256:', '') + TREF_EXTENSION;
   }
 
-  /**
-   * Create a Blob for the block
-   * @returns {Blob}
-   */
   toBlob() {
     return new Blob([this.toJSON()], { type: TREF_MIME_TYPE });
   }
 
-  /**
-   * Create a data URL for downloading
-   * @returns {string}
-   */
   toDataURL() {
     const json = this.toJSON();
     const base64 = btoa(unescape(encodeURIComponent(json)));
     return `data:${TREF_MIME_TYPE};base64,${base64}`;
   }
 
-  /**
-   * Create an object URL for downloading (browser only)
-   * Remember to call URL.revokeObjectURL() after use
-   * @returns {string}
-   */
   toObjectURL() {
     return URL.createObjectURL(this.toBlob());
   }
 
-  /**
-   * Copy block JSON to clipboard (browser only)
-   * @returns {Promise<void>}
-   */
   async copyToClipboard() {
     await navigator.clipboard.writeText(this.toJSON());
   }
 
-  /**
-   * Copy block content (not full JSON) to clipboard (browser only)
-   * @returns {Promise<void>}
-   */
   async copyContentToClipboard() {
     await navigator.clipboard.writeText(this.#block.content);
   }
 
-  /**
-   * Get data for drag-and-drop DataTransfer
-   * @returns {{ type: string, data: string }[]}
-   */
   getDragData() {
-    // All formats get the same JSON - drag = .tref file content
     const json = this.toJSON();
     return [
       { type: TREF_MIME_TYPE, data: json },
@@ -167,10 +159,7 @@ export class TrefWrapper {
     ];
   }
 
-  /**
-   * Set up drag data on a DataTransfer object (browser only)
-   * @param {DataTransfer} dataTransfer
-   */
+  /** @param {DataTransfer} dataTransfer */
   setDragData(dataTransfer) {
     for (const { type, data } of this.getDragData()) {
       dataTransfer.setData(type, data);
@@ -178,41 +167,118 @@ export class TrefWrapper {
   }
 
   /**
-   * Generate HTML representation of the block
-   * @param {object} [options]
-   * @param {boolean} [options.includeIcon] - Include TREF icon (default: true)
-   * @param {boolean} [options.includeContent] - Show content preview (default: true)
-   * @param {number} [options.maxContentLength] - Max content chars (default: 200)
-   * @returns {string}
+   * Generate HTML
+   * @param {{ includeContent?: boolean, interactive?: boolean, maxContentLength?: number }} [options]
    */
   toHTML(options = {}) {
-    const { includeIcon = true, includeContent = true, maxContentLength = 200 } = options;
+    const { includeContent = true, interactive = true, maxContentLength = 200 } = options;
 
-    const contentPreview =
+    const preview =
       this.#block.content.length > maxContentLength
         ? this.#block.content.slice(0, maxContentLength) + '...'
         : this.#block.content;
 
-    const icon = includeIcon ? `<span class="tref-icon">${TREF_ICON_SVG}</span>` : '';
-
     const contentHtml = includeContent
-      ? `<div class="tref-content">${escapeHtml(contentPreview)}</div>`
+      ? `<div class="tref-content">${escapeHtml(preview)}</div>`
+      : '';
+
+    const refsHtml =
+      this.#block.refs && this.#block.refs.length > 0
+        ? `<div class="tref-refs">${this.#block.refs
+            .filter(r => r.type === 'url' && r.url)
+            .map(r => `<a href="${r.url}" target="_blank">${r.title || r.url}</a>`)
+            .join(', ')}</div>`
+        : '';
+
+    // Hover actions: drag hint, copy, download
+    const actionsHtml = interactive
+      ? `<div class="tref-actions">
+        <span class="tref-hint">drag me</span>
+        <button class="tref-btn" data-action="copy" title="Copy JSON">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+        <button class="tref-btn" data-action="download" title="Download .tref">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        </button>
+      </div>`
       : '';
 
     return `<div class="tref-wrapper" data-tref-id="${this.#block.id}">
   <div class="tref-header">
-    ${icon}
+    <span class="tref-icon" draggable="true" title="Drag to share">${TREF_ICON_SVG}</span>
     <span class="tref-id">${this.shortId}</span>
     <span class="tref-meta">${this.#block.meta.created.split('T')[0]}</span>
+    ${actionsHtml}
   </div>
   ${contentHtml}
+  ${refsHtml}
 </div>`;
   }
 
   /**
-   * Get CSS styles for the wrapper
-   * @returns {string}
+   * Attach event listeners to a rendered wrapper
+   * @param {HTMLElement} element
    */
+  attachEvents(element) {
+    const iconEl = element.querySelector('.tref-icon');
+
+    // Icon is drag handle
+    if (iconEl) {
+      /** @type {HTMLElement} */ (iconEl).addEventListener('dragstart', e => {
+        const de = /** @type {DragEvent} */ (e);
+        if (de.dataTransfer) {
+          this.setDragData(de.dataTransfer);
+          de.dataTransfer.effectAllowed = 'copy';
+        }
+      });
+    }
+
+    // Action buttons - use arrow function to preserve this
+    const handleClick = async (/** @type {Event} */ e) => {
+      e.stopPropagation();
+      const action = /** @type {HTMLElement} */ (e.currentTarget).dataset.action;
+      const statusEl = element.querySelector('.tref-id');
+      const originalText = statusEl?.textContent || '';
+
+      try {
+        if (action === 'copy') {
+          await this.copyToClipboard();
+          if (statusEl) {
+            statusEl.textContent = 'Copied!';
+          }
+        } else if (action === 'download') {
+          const url = this.toObjectURL();
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = this.getFilename();
+          a.click();
+          URL.revokeObjectURL(url);
+          if (statusEl) {
+            statusEl.textContent = 'Saved!';
+          }
+        }
+        setTimeout(() => {
+          if (statusEl) {
+            statusEl.textContent = originalText;
+          }
+        }, 1500);
+      } catch {
+        if (statusEl) {
+          statusEl.textContent = 'Error';
+        }
+        setTimeout(() => {
+          if (statusEl) {
+            statusEl.textContent = originalText;
+          }
+        }, 1500);
+      }
+    };
+
+    element.querySelectorAll('.tref-btn').forEach(btn => {
+      btn.addEventListener('click', e => void handleClick(e));
+    });
+  }
+
   static getStyles() {
     return `
 .tref-wrapper {
@@ -233,11 +299,12 @@ export class TrefWrapper {
   display: inline-flex;
   width: 24px;
   height: 24px;
+  cursor: grab;
+  transition: transform 0.15s;
 }
-.tref-icon svg {
-  width: 100%;
-  height: 100%;
-}
+.tref-icon:hover { transform: scale(1.1); }
+.tref-icon:active { cursor: grabbing; }
+.tref-icon svg { width: 100%; height: 100%; }
 .tref-id {
   font-family: monospace;
   font-size: 12px;
@@ -245,11 +312,38 @@ export class TrefWrapper {
   background: #e5e7eb;
   padding: 2px 6px;
   border-radius: 4px;
+  transition: all 0.2s;
 }
-.tref-meta {
-  font-size: 12px;
-  color: #9ca3af;
+.tref-meta { font-size: 12px; color: #9ca3af; }
+.tref-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.tref-wrapper:hover .tref-actions { opacity: 1; }
+.tref-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-right: 4px;
+}
+.tref-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.tref-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
 }
 .tref-content {
   font-size: 14px;
@@ -258,43 +352,21 @@ export class TrefWrapper {
   white-space: pre-wrap;
   word-break: break-word;
 }
-.tref-wrapper[draggable="true"] {
-  cursor: grab;
+.tref-refs {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #6b7280;
 }
-.tref-wrapper[draggable="true"]:active {
-  cursor: grabbing;
-}
+.tref-refs a { color: #5CCCCC; text-decoration: none; }
+.tref-refs a:hover { text-decoration: underline; }
 `;
   }
 }
 
 /**
- * Escape HTML special characters
- * @param {string} str
- * @returns {string}
- */
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-/**
- * Create a wrapper from block data
- * @param {unknown} data - Block data to wrap
- * @returns {TrefWrapper}
- */
-export function wrap(data) {
-  const block = AIBlockSchema.parse(data);
-  return new TrefWrapper(block);
-}
-
-/**
- * TREF Receiver component for drop zones
- * Creates a drop target that accepts TREF blocks
+ * TrefReceiver - drop zone for TREF blocks
  */
 export class TrefReceiver {
   /** @type {HTMLElement} */
@@ -305,11 +377,8 @@ export class TrefReceiver {
   #onError;
 
   /**
-   * Create a receiver on an element
-   * @param {HTMLElement} element - Element to make a drop zone
-   * @param {object} [options]
-   * @param {(wrapper: TrefWrapper) => void} [options.onReceive] - Called when valid TREF received
-   * @param {(error: Error) => void} [options.onError] - Called on invalid drop
+   * @param {HTMLElement} element
+   * @param {{ onReceive?: (wrapper: TrefWrapper) => void, onError?: (error: Error) => void }} [options]
    */
   constructor(element, options = {}) {
     this.#element = element;
@@ -339,7 +408,7 @@ export class TrefReceiver {
       el.classList.remove('tref-receiver-active');
 
       if (!e.dataTransfer) {
-        this.#onError(new Error('No data transfer'));
+        this.#onError(new Error('No data'));
         return;
       }
 
@@ -356,16 +425,12 @@ export class TrefReceiver {
     });
   }
 
-  /**
-   * Get the receiver element
-   * @returns {HTMLElement}
-   */
   get element() {
     return this.#element;
   }
 
   /**
-   * Render received block inside the receiver
+   * Display a block in the receiver
    * @param {TrefWrapper} wrapper
    */
   showBlock(wrapper) {
@@ -373,18 +438,11 @@ export class TrefReceiver {
     this.#element.classList.add('tref-receiver-has-block');
   }
 
-  /**
-   * Clear the receiver
-   */
   clear() {
     this.#element.innerHTML = this.#element.dataset.placeholder || 'Drop TREF here';
     this.#element.classList.remove('tref-receiver-has-block');
   }
 
-  /**
-   * Get CSS styles for the receiver
-   * @returns {string}
-   */
   static getStyles() {
     return `
 .tref-receiver {
@@ -421,18 +479,25 @@ export class TrefReceiver {
 }
 
 /**
- * Parse TREF data from drag-and-drop or clipboard
- * @param {DataTransfer | string} source - DataTransfer object or JSON string
+ * Create wrapper from block data
+ * @param {unknown} data
+ * @returns {TrefWrapper}
+ */
+export function wrap(data) {
+  return new TrefWrapper(/** @type {AIBlock} */ (data));
+}
+
+/**
+ * Parse TREF from DataTransfer or string
+ * @param {DataTransfer | string} source
  * @returns {TrefWrapper | null}
  */
 export function unwrap(source) {
   try {
     let json;
-
     if (typeof source === 'string') {
       json = source;
     } else if (source && typeof source.getData === 'function') {
-      // Try TREF MIME type first, then JSON, then plain text
       json =
         source.getData(TREF_MIME_TYPE) ||
         source.getData('application/json') ||
@@ -444,9 +509,7 @@ export function unwrap(source) {
     if (!json) {
       return null;
     }
-
-    const data = /** @type {unknown} */ (JSON.parse(json));
-    return wrap(data);
+    return wrap(JSON.parse(json));
   } catch {
     return null;
   }

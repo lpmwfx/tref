@@ -1,33 +1,171 @@
 /**
  * @fileoverview Publishing functions for TREF blocks
+ * Self-contained - no external schema dependencies
  */
 
 import { generateId, verifyId } from './id.js';
-import { DraftBlockSchema, AIBlockSchema } from '../schemas/block.js';
 
 /**
- * @typedef {import('../schemas/block.js').DraftBlock} DraftBlock
- * @typedef {import('../schemas/block.js').AIBlock} AIBlock
+ * @typedef {object} Ref
+ * @property {'url' | 'archive' | 'search' | 'hash'} type
+ * @property {string} [url]
+ * @property {string} [title]
+ * @property {string} [snippet]
+ * @property {string} [query]
+ * @property {string} [alg]
+ * @property {string} [value]
  */
+
+/**
+ * @typedef {object} BlockMeta
+ * @property {string} [author]
+ * @property {string} created
+ * @property {string} [modified]
+ * @property {string} license
+ * @property {string} [lang]
+ */
+
+/**
+ * @typedef {object} DraftBlock
+ * @property {1} v
+ * @property {string} content
+ * @property {BlockMeta} meta
+ * @property {Ref[]} [refs]
+ * @property {string} [parent]
+ */
+
+/**
+ * @typedef {object} AIBlock
+ * @property {1} v
+ * @property {string} id
+ * @property {string} content
+ * @property {BlockMeta} meta
+ * @property {Ref[]} [refs]
+ * @property {string} [parent]
+ */
+
+/**
+ * Validate draft block structure
+ * @param {unknown} draft
+ * @returns {{ valid: true, data: DraftBlock } | { valid: false, error: string }}
+ */
+function validateDraft(draft) {
+  if (!draft || typeof draft !== 'object') {
+    return { valid: false, error: 'Draft must be an object' };
+  }
+
+  const d = /** @type {Record<string, unknown>} */ (draft);
+
+  if (d.v !== 1) {
+    return { valid: false, error: 'Version must be 1' };
+  }
+
+  if (typeof d.content !== 'string' || d.content.length === 0) {
+    return { valid: false, error: 'Content must be a non-empty string' };
+  }
+
+  if (!d.meta || typeof d.meta !== 'object') {
+    return { valid: false, error: 'Meta must be an object' };
+  }
+
+  const meta = /** @type {Record<string, unknown>} */ (d.meta);
+
+  if (typeof meta.created !== 'string') {
+    return { valid: false, error: 'meta.created must be a string' };
+  }
+
+  if (typeof meta.license !== 'string') {
+    return { valid: false, error: 'meta.license must be a string' };
+  }
+
+  return { valid: true, data: /** @type {DraftBlock} */ (draft) };
+}
+
+/**
+ * Validate complete block structure (with id)
+ * @param {unknown} block
+ * @returns {{ valid: true, data: AIBlock } | { valid: false, error: string }}
+ */
+function validateBlock(block) {
+  if (!block || typeof block !== 'object') {
+    return { valid: false, error: 'Block must be an object' };
+  }
+
+  const b = /** @type {Record<string, unknown>} */ (block);
+
+  if (typeof b.id !== 'string' || !b.id.startsWith('sha256:')) {
+    return { valid: false, error: 'ID must be a sha256: prefixed string' };
+  }
+
+  // Validate rest as draft
+  const draftResult = validateDraft(block);
+  if (!draftResult.valid) {
+    return draftResult;
+  }
+
+  return { valid: true, data: /** @type {AIBlock} */ (block) };
+}
+
+/**
+ * Create a draft block from content
+ * @param {string} content
+ * @param {object} [options]
+ * @param {string} [options.author]
+ * @param {string} [options.license]
+ * @param {string} [options.lang]
+ * @param {Ref[]} [options.refs]
+ * @param {string} [options.parent]
+ * @returns {DraftBlock}
+ */
+export function createDraft(content, options = {}) {
+  /** @type {DraftBlock} */
+  const draft = {
+    v: 1,
+    content,
+    meta: {
+      created: new Date().toISOString(),
+      license: options.license || 'CC-BY-4.0',
+    },
+  };
+
+  if (options.author) {
+    draft.meta.author = options.author;
+  }
+
+  if (options.lang) {
+    draft.meta.lang = options.lang;
+  }
+
+  if (options.refs && options.refs.length > 0) {
+    draft.refs = options.refs;
+  }
+
+  if (options.parent) {
+    draft.parent = options.parent;
+  }
+
+  return draft;
+}
 
 /**
  * Publish a draft block by adding a content-based ID
  *
  * @param {DraftBlock} draft - Draft block without ID
  * @returns {AIBlock} - Published block with ID
+ * @throws {Error} If draft is invalid
  */
 export function publish(draft) {
   // Validate draft
-  const validDraft = DraftBlockSchema.parse(draft);
+  const result = validateDraft(draft);
+  if (!result.valid) {
+    throw new Error(`Invalid draft: ${result.error}`);
+  }
 
   // Generate ID from content
-  const id = generateId(validDraft);
+  const id = generateId(/** @type {Record<string, unknown>} */ (draft));
 
   // Create published block
-  const block = { ...validDraft, id };
-
-  // Validate final block
-  return AIBlockSchema.parse(block);
+  return /** @type {AIBlock} */ ({ ...draft, id });
 }
 
 /**
@@ -38,34 +176,27 @@ export function publish(draft) {
  * @param {string} newContent - New content for derived block
  * @param {object} [options] - Optional overrides
  * @param {string} [options.author] - New author
- * @param {import('../schemas/reference.js').Ref[]} [options.additionalRefs] - Additional refs to add
+ * @param {Ref[]} [options.additionalRefs] - Additional refs to add
  * @returns {AIBlock} - New derived block with parent reference
+ * @throws {Error} If source is invalid
  */
 export function derive(source, newContent, options = {}) {
   // Validate source block
-  const validSource = AIBlockSchema.parse(source);
+  const result = validateBlock(source);
+  if (!result.valid) {
+    throw new Error(`Invalid source: ${result.error}`);
+  }
+
+  const validSource = result.data;
 
   // Create draft for derived block
-  const draft = {
-    v: /** @type {1} */ (1),
-    content: newContent,
-    meta: {
-      ...validSource.meta,
-      author: options.author ?? validSource.meta.author,
-      created: new Date().toISOString(),
-      modified: undefined,
-    },
-    refs: [...validSource.refs, ...(options.additionalRefs ?? [])],
+  const draft = createDraft(newContent, {
+    author: options.author ?? validSource.meta.author,
+    license: validSource.meta.license,
+    lang: validSource.meta.lang,
+    refs: [...(validSource.refs || []), ...(options.additionalRefs || [])],
     parent: validSource.id,
-  };
-
-  // Remove undefined fields
-  if (draft.meta.modified === undefined) {
-    delete draft.meta.modified;
-  }
-  if (draft.meta.author === undefined) {
-    delete draft.meta.author;
-  }
+  });
 
   // Publish the derived block
   return publish(draft);
@@ -80,20 +211,14 @@ export function derive(source, newContent, options = {}) {
  */
 export function validate(block) {
   // Check basic structure
-  const parseResult = AIBlockSchema.safeParse(block);
-  if (!parseResult.success) {
-    return {
-      valid: false,
-      error: `Invalid block structure: ${parseResult.error.message}`,
-    };
+  const result = validateBlock(block);
+  if (!result.valid) {
+    return { valid: false, error: `Invalid block structure: ${result.error}` };
   }
 
   // Check ID matches content
   if (!verifyId(/** @type {Record<string, unknown>} */ (block))) {
-    return {
-      valid: false,
-      error: 'ID does not match content hash',
-    };
+    return { valid: false, error: 'ID does not match content hash' };
   }
 
   return { valid: true };

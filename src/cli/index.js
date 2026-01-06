@@ -3,9 +3,7 @@
  * @fileoverview TREF CLI - Command line interface for publishing TREF blocks
  */
 
-import { createDraft } from '../schemas/block.js';
-import { RefSchema } from '../schemas/reference.js';
-import { publish, derive, validate } from '../publisher/publish.js';
+import { createDraft, publish, derive, validate } from '../publisher/publish.js';
 import { load, exportBlock, loadById } from '../publisher/io.js';
 import {
   listRegistered,
@@ -138,9 +136,31 @@ function getPublishDir(flags) {
 }
 
 /**
+ * @typedef {{ type: 'url' | 'archive' | 'search' | 'hash', url?: string, title?: string, query?: string }} Ref
+ */
+
+const VALID_REF_TYPES = /** @type {const} */ (['url', 'archive', 'search', 'hash']);
+
+/**
+ * Validate a ref object
+ * @param {unknown} item
+ * @returns {Ref}
+ */
+function validateRef(item) {
+  if (!item || typeof item !== 'object') {
+    throw new Error('Ref must be an object');
+  }
+  const obj = /** @type {Record<string, unknown>} */ (item);
+  if (typeof obj.type !== 'string' || !VALID_REF_TYPES.includes(/** @type {any} */ (obj.type))) {
+    throw new Error('Ref must have a valid type (url, archive, search, hash)');
+  }
+  return /** @type {Ref} */ (item);
+}
+
+/**
  * Parse refs from JSON string
  * @param {string | boolean | undefined} refsArg
- * @returns {import('../schemas/reference.js').Ref[] | undefined}
+ * @returns {Ref[] | undefined}
  */
 function parseRefs(refsArg) {
   if (typeof refsArg !== 'string') {
@@ -153,10 +173,10 @@ function parseRefs(refsArg) {
       process.exit(1);
     }
     // Validate each ref
-    /** @type {import('../schemas/reference.js').Ref[]} */
+    /** @type {Ref[]} */
     const refs = [];
     for (const item of parsed) {
-      refs.push(RefSchema.parse(item));
+      refs.push(validateRef(item));
     }
     return refs;
   } catch (err) {

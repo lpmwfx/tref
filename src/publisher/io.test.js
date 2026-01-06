@@ -8,8 +8,7 @@ import { rm, readFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { save, load, exportBlock, exists, loadById, TREF_EXTENSION } from './io.js';
-import { publish } from './publish.js';
-import { createDraft } from '../schemas/block.js';
+import { publish, createDraft } from './publish.js';
 
 /** @type {string} */
 let testDir;

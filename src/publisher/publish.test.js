@@ -4,9 +4,17 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { publish, derive, validate } from './publish.js';
-import { createDraft } from '../schemas/block.js';
-import { urlRef } from '../schemas/reference.js';
+import { publish, derive, validate, createDraft } from './publish.js';
+
+/**
+ * Create URL reference helper
+ * @param {string} url
+ * @param {string} [title]
+ * @returns {{ type: 'url', url: string, title?: string }}
+ */
+function urlRef(url, title) {
+  return title ? { type: 'url', url, title } : { type: 'url', url };
+}
 
 describe('publish', () => {
   it('adds ID to draft block', () => {
@@ -26,6 +34,7 @@ describe('publish', () => {
 
     assert.equal(block.content, '# Test');
     assert.equal(block.meta.author, 'Test Author');
+    assert.ok(block.refs);
     assert.equal(block.refs.length, 1);
     assert.equal(block.refs[0].type, 'url');
   });
@@ -36,9 +45,8 @@ describe('publish', () => {
       content: '# Test',
       meta: {
         created: '2025-01-06T12:00:00Z',
-        license: 'AIBlocks-1.0',
+        license: 'CC-BY-4.0',
       },
-      refs: [],
     };
     const draft2 = { ...draft1 };
 
@@ -50,7 +58,7 @@ describe('publish', () => {
 
   it('throws on invalid draft', () => {
     assert.throws(() => {
-      publish({ v: 1, content: '' }); // empty content
+      publish(/** @type {any} */ ({ v: 1, content: '' })); // empty content
     });
   });
 
@@ -93,6 +101,7 @@ describe('derive', () => {
     );
     const derived = derive(original, 'Derived');
 
+    assert.ok(derived.refs);
     assert.equal(derived.refs.length, 1);
     assert.equal(derived.refs[0].url, 'https://example.com');
   });
@@ -107,6 +116,7 @@ describe('derive', () => {
       additionalRefs: [urlRef('https://b.com', 'B')],
     });
 
+    assert.ok(derived.refs);
     assert.equal(derived.refs.length, 2);
   });
 
@@ -129,9 +139,8 @@ describe('derive', () => {
       content: 'Original',
       meta: {
         created: '2020-01-01T00:00:00Z', // Old timestamp
-        license: 'AIBlocks-1.0',
+        license: 'CC-BY-4.0',
       },
-      refs: [],
     });
     const derived = derive(original, 'Derived');
 
@@ -231,6 +240,7 @@ describe('publish → derive → validate chain', () => {
 
     // Check lineage
     assert.equal(derived.parent, original.id);
+    assert.ok(derived.refs);
     assert.equal(derived.refs.length, 2);
   });
 });

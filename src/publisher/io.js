@@ -4,15 +4,39 @@
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
-import { AIBlockSchema } from '../schemas/block.js';
 import { validate } from './publish.js';
 
 /**
- * @typedef {import('../schemas/block.js').AIBlock} AIBlock
+ * @typedef {import('./publish.js').AIBlock} AIBlock
  */
 
 /** Default file extension */
 export const TREF_EXTENSION = '.tref';
+
+/**
+ * Basic structure validation for loaded block
+ * @param {unknown} data
+ * @returns {AIBlock}
+ */
+function parseBlock(data) {
+  if (!data || typeof data !== 'object') {
+    throw new Error('Block must be an object');
+  }
+  const b = /** @type {Record<string, unknown>} */ (data);
+  if (b.v !== 1) {
+    throw new Error('Invalid version');
+  }
+  if (typeof b.id !== 'string' || !b.id.startsWith('sha256:')) {
+    throw new Error('Invalid ID');
+  }
+  if (typeof b.content !== 'string') {
+    throw new Error('Invalid content');
+  }
+  if (!b.meta || typeof b.meta !== 'object') {
+    throw new Error('Invalid meta');
+  }
+  return /** @type {AIBlock} */ (data);
+}
 
 /**
  * Save a block to a .tref file
@@ -66,7 +90,7 @@ export async function load(filePath, options = {}) {
 
   // Parse and validate structure
   const data = /** @type {unknown} */ (JSON.parse(json));
-  const block = AIBlockSchema.parse(data);
+  const block = parseBlock(data);
 
   // Validate ID integrity
   if (shouldValidate) {

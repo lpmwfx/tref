@@ -12,9 +12,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
-import { createDraft } from '../schemas/block.js';
-import { RefSchema } from '../schemas/reference.js';
-import { publish, derive, validate } from '../publisher/publish.js';
+import { createDraft, publish, derive, validate } from '../publisher/publish.js';
 import { load, exportBlock, loadById } from '../publisher/io.js';
 import {
   listRegistered,
@@ -25,6 +23,14 @@ import {
 
 const VERSION = '0.1.0';
 const DEFAULT_PUBLISH_DIR = './published';
+
+/** Ref schema for references */
+const RefSchema = z.object({
+  type: z.enum(['url', 'archive', 'search', 'hash']),
+  url: z.string().optional(),
+  title: z.string().optional(),
+  query: z.string().optional(),
+});
 
 /**
  * Create and configure the MCP server
@@ -73,7 +79,7 @@ export function createServer() {
                 id: block.id,
                 shortId: block.id.replace('sha256:', '').slice(0, 8),
                 contentLength: block.content.length,
-                refsCount: block.refs.length,
+                refsCount: block.refs?.length ?? 0,
               },
               null,
               2
@@ -133,7 +139,7 @@ export function createServer() {
                 shortId: block.id.replace('sha256:', '').slice(0, 8),
                 parentId: block.parent,
                 contentLength: block.content.length,
-                refsCount: block.refs.length,
+                refsCount: block.refs?.length ?? 0,
               },
               null,
               2
@@ -260,7 +266,7 @@ export function createServer() {
                 license: block.meta.license,
                 author: block.meta.author || null,
                 parent: block.parent || null,
-                refsCount: block.refs.length,
+                refsCount: block.refs?.length ?? 0,
                 contentLength: block.content.length,
                 contentPreview:
                   block.content.slice(0, 200) + (block.content.length > 200 ? '...' : ''),

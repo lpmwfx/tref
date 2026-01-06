@@ -17,8 +17,7 @@ import {
   getRegistryStats,
   REGISTRY_FILE,
 } from './registry.js';
-import { publish } from './publish.js';
-import { createDraft } from '../schemas/block.js';
+import { publish, createDraft } from './publish.js';
 
 /** @type {string} */
 let testDir;
