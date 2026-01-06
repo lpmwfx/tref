@@ -203,6 +203,63 @@
     .tref-refs a:hover {
       text-decoration: underline;
     }
+
+    /* TREF Icon with hover menu */
+    .tref-icon-container {
+      position: relative;
+      display: inline-block;
+    }
+    .tref-icon-container .tref-drag-icon {
+      cursor: grab;
+      transition: transform 0.15s;
+    }
+    .tref-icon-container .tref-drag-icon:hover {
+      transform: scale(1.1);
+    }
+    .tref-icon-container .tref-drag-icon:active {
+      cursor: grabbing;
+    }
+    .tref-icon-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #1f2937;
+      border-radius: 6px;
+      padding: 4px 0;
+      min-width: 120px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: all 0.15s;
+      z-index: 100;
+    }
+    .tref-icon-container:hover .tref-icon-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(4px);
+    }
+    .tref-icon-menu button {
+      display: block;
+      width: 100%;
+      background: none;
+      border: none;
+      color: #e5e7eb;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .tref-icon-menu button:hover {
+      background: #374151;
+    }
+    .tref-icon-menu .menu-hint {
+      color: #9ca3af;
+      padding: 6px 12px;
+      font-size: 11px;
+      border-bottom: 1px solid #374151;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body>
@@ -252,8 +309,14 @@ https://ipfs.tech/</textarea>
       <button onclick="copyContent()">Copy Content</button>
       <button onclick="downloadBlock()">Download .tref</button>
     </div>
-    <div class="info">
-      Tip: Drag the block preview above to another application or the drop zone below!
+  </div>
+
+  <div class="section" id="icon-section" style="display: none;">
+    <h2>Standalone Icon (for websites)</h2>
+    <p>Hover over the icon for options:</p>
+    <div id="standalone-icon"></div>
+    <div class="info" style="margin-top: 15px;">
+      This is how the icon appears on websites. Drag it directly, or hover for menu.
     </div>
   </div>
 
@@ -526,11 +589,44 @@ https://ipfs.tech/</textarea>
         });
 
         document.getElementById('json-output').textContent = currentWrapper.toJSON({ pretty: true });
+
+        // Show standalone icon with hover menu
+        document.getElementById('icon-section').style.display = 'block';
+        renderStandaloneIcon();
+
         showToast('Block created: ' + currentWrapper.shortId);
       } catch (err) {
         showToast('Error: ' + err.message);
       }
     };
+
+    // Render standalone draggable icon with hover menu
+    function renderStandaloneIcon() {
+      const container = document.getElementById('standalone-icon');
+      container.innerHTML = `
+        <div class="tref-icon-container">
+          <div class="tref-drag-icon" draggable="true" title="Drag me!">
+            ${TREF_ICON_SVG.replace('width="24"', 'width="48"').replace('height="24"', 'height="48"')}
+          </div>
+          <div class="tref-icon-menu">
+            <div class="menu-hint">↑ Just drag the icon</div>
+            <button onclick="downloadBlock()">⬇ Download .tref</button>
+            <button onclick="copyJSON()">📋 Copy JSON</button>
+          </div>
+        </div>
+      `;
+
+      // Setup drag on the icon
+      const dragIcon = container.querySelector('.tref-drag-icon');
+      dragIcon.addEventListener('dragstart', (e) => {
+        currentWrapper.setDragData(e.dataTransfer);
+        e.dataTransfer.effectAllowed = 'copy';
+
+        // Use the hidden drag image
+        const dragImg = document.getElementById('drag-icon');
+        e.dataTransfer.setDragImage(dragImg, 20, 20);
+      });
+    }
 
     window.copyJSON = async function() {
       if (!currentWrapper) return;
@@ -559,6 +655,7 @@ https://ipfs.tech/</textarea>
     window.resetDemo = function() {
       currentWrapper = null;
       document.getElementById('block-section').style.display = 'none';
+      document.getElementById('icon-section').style.display = 'none';
       document.getElementById('json-output').textContent = '// Block JSON will appear here';
       document.getElementById('content-input').value = `## Understanding Content-Addressed Storage
 
