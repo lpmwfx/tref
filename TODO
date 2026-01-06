@@ -2,60 +2,19 @@
 
 Current phase tasks.
 
-## Phase 5: Website & Documentation
+## Phase 5: Website & Documentation (COMPLETE)
 
-Goal: Create an easy-to-use, consumer-friendly website at tref.lpmwfx.com
+All tasks completed and deployed to https://tref.lpmwfx.com
 
-### 5a: Landing Page
-- [ ] Modern, clean design with TREF branding
-- [ ] "What is TREF?" - Simple explanation with visual
-- [ ] Installation one-liner for each platform
-- [ ] Quick start example (3 steps)
-- [ ] Links to all other pages
+See DONE for full list.
 
-### 5b: Embed Snippets Page
-- [ ] Copy-paste HTML snippet for TrefWrapper
-- [ ] Copy-paste HTML snippet for TrefReceiver
-- [ ] CDN link for tref.js browser bundle
-- [ ] Live preview of each snippet
-- [ ] Minimal CSS included
+## Phase 6: Future Enhancements (PLANNING)
 
-### 5c: Format Guide Page
-- [ ] Anatomy of a .tref file (visual)
-- [ ] Field explanations with examples
-- [ ] Reference types explained
-- [ ] License handling
-- [ ] Derivation/lineage explanation
+Potential future work:
 
-### 5d: CLI Guide Page
-- [ ] Installation instructions
-- [ ] Command reference with examples
-- [ ] Common workflows (publish, derive, validate)
-- [ ] MCP setup for Claude Code
-
-### 5e: Builder Page
-- [ ] Interactive TREF block builder
-- [ ] Content input with preview
-- [ ] Add references (URL, search, archive)
-- [ ] Set license
-- [ ] Download/copy result
-- [ ] Page itself uses TREF for its content
-
-### 5f: Demo Page
-- [ ] Article with embedded TREF blocks
-- [ ] Drag-and-drop playground
-- [ ] Chat simulation with TREF citations
 - [ ] Knowledge graph visualization
-- [ ] Each demo uses real TREF blocks
-
-### 5g: Release Page
-- [ ] Links to GitHub release
-- [ ] Download buttons with icons
-- [ ] Version info
-- [ ] Changelog summary
-
-### 5h: Browser Bundle
-- [ ] Create tref.min.js CDN bundle
-- [ ] Exports: TrefWrapper, TrefReceiver, wrap, unwrap
-- [ ] Self-contained (no dependencies)
-- [ ] Document usage in embed page
+- [ ] TREF browser extension
+- [ ] VSCode extension for .tref files
+- [ ] TREF API service
+- [ ] Multi-language documentation
+- [ ] Block search/discovery

@@ -65,3 +65,14 @@ Full name: **AIBlocks - Traceable Knowledge Format**
 - [x] GitHub Pages site at tref.lpmwfx.com
 - [x] v0.1.0 MVP release with cross-platform executables
 - [x] 167 tests total
+
+## Phase 5: Website & Documentation (COMPLETE)
+
+- [x] 5a: Landing Page - Modern design, what is TREF, quick start, install one-liners
+- [x] 5b: Embed Snippets Page - Copy-paste HTML for TrefWrapper/TrefReceiver with live previews
+- [x] 5c: Format Guide Page - Block anatomy, field reference, reference types explained
+- [x] 5d: CLI Guide Page - Installation, command reference, MCP setup
+- [x] 5e: Builder Page - Interactive TREF builder with live preview and download
+- [x] 5f: Demo Page - Article citations, chat demo, drag-drop playground, validation
+- [x] 5g: Release Page - Download links with icons, changelog, GitHub links
+- [x] 5h: Browser Bundle - tref.min.js (8KB), self-contained, CDN-ready
