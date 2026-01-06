@@ -23,7 +23,7 @@ import {
   addToRegistry,
 } from '../publisher/registry.js';
 
-const VERSION = '1.0.0';
+const VERSION = '0.1.0';
 const DEFAULT_PUBLISH_DIR = './published';
 
 /**

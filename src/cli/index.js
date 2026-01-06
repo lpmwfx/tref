@@ -15,7 +15,7 @@ import {
 } from '../publisher/registry.js';
 import { readFile } from 'node:fs/promises';
 
-const VERSION = '1.0.0';
+const VERSION = '0.1.0';
 
 /**
  * @typedef {Object} ParsedArgs
