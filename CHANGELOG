@@ -5,8 +5,27 @@ Finished changes for AIBlocks project.
 ## [Unreleased]
 
 ### Added
-- Initial project setup with TypeScript-level safety in pure JavaScript
-- Block schema with Zod validation (id, type, content, metadata)
+- Phase 1 complete: Block Format Specification v1.0
+- Format name: **AIBlocks - Traceable Knowledge Format**
+- Complete format specification (doc/format.md)
+- License-as-format philosophy (doc/license.md)
+- Publisher two-outputs model (doc/publisher.md)
+- Security section: format is safe by construction (no executable code)
+- Block schema: v, id, content, meta, origin, refs, parent
+- Reference types: url, archive, search, hash
+- ID format: sha256:<64 hex chars> (content-based)
+- Canonical JSON spec for deterministic ID generation
+- Zod schemas with JSDoc types
+- 26 tests passing
+
+### Changed
+- Simplified schema: removed type, version, childIds (not needed for v1.0)
+- Renamed fields: createdAt → created, updatedAt → modified
+- Renamed fields: parentId → parent
+- Consistent naming: AI-Blocks → AIBlocks (no hyphen)
+
+### Technical
+- TypeScript-level safety in pure JavaScript
 - JSDoc type annotations throughout
 - ESLint with typescript-eslint type-aware rules
 - Prettier formatting configuration

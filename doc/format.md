@@ -1,5 +1,11 @@
 # AIBlocks Format Specification v1.0
 
+**AIBlocks - Traceable Knowledge Format**
+
+A JSON-based format for knowledge exchange where references are structural, not optional.
+
+---
+
 ## Overview
 
 An AIBlock is a JSON object containing:

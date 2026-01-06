@@ -12,14 +12,15 @@ Completed tasks moved from TODO.
 - [x] Document TS-like-JS approach in doc/TS-like-JS.md
 - [x] Write project vision in doc/project.md
 
-## Phase 1: Block Format Specification (Partial)
-- [x] Define Block base schema (id, type, content, metadata)
-- [x] Define block types enum (article, data, reference, prompt, summary)
+## Phase 1: Block Format Specification (COMPLETE)
+
+Full name: **AIBlocks - Traceable Knowledge Format**
+
+- [x] Define Block base schema (v, id, content, meta, origin, refs, parent)
+- [x] Simplify to essential fields only (removed type, version, childIds)
 - [x] Add license field for attribution preservation
-- [x] Add timestamps (createdAt, updatedAt)
-- [x] Add parentId field (derivedFrom reference)
-- [x] Add version field for block versioning
-- [x] Add childIds array (derived blocks tracking)
+- [x] Add timestamps (created, modified)
+- [x] Add parent field (lineage reference)
 - [x] URL reference type (classic links)
 - [x] Archive snippet type (RAG-snippets for dead link recovery)
 - [x] Search prompt type (query for refinding)
@@ -27,5 +28,10 @@ Completed tasks moved from TODO.
 - [x] Create Zod schemas with JSDoc types
 - [x] Write tests for Block schema validation (26 tests passing)
 - [x] Write tests for reference types
+- [x] Complete format specification (doc/format.md)
+- [x] License-as-format philosophy (doc/license.md)
+- [x] Publisher two-outputs model (doc/publisher.md)
 - [x] Translate docs to English (project.md, publisher.md)
+- [x] Security section (safe by construction)
+- [x] Format naming decision: "AIBlocks - Traceable Knowledge Format"
 - [x] Add README.md

@@ -2,35 +2,39 @@
 
 Dynamic phase description for AIBlocks project.
 
-## Current Phase: 1 - Block Format Specification
-
-Define the core format with publisher requirements as constraints.
-
-Deliverables:
-- Block schema (id, type, content, metadata)
-- Lineage structure (parentId/derivedFrom, version)
-- Reference types (URL, archive snippet, search prompt, hash)
-- Serialization spec (field order, encoding for deterministic hashing)
-- Zod schemas with JSDoc types
-
-Constraint: Format must support content-based ID generation and lineage preservation.
-
----
-
-## Phase 2: Publisher Core
+## Current Phase: 2 - Publisher Core
 
 Build the publishing mechanism for blocks.
 
-### 2a: Lineage Engine
-- Create new block version on content change
-- Link old version as parent in lineage tree
-- Generate deterministic content-based ID
-- Cryptographic hash for integrity
+### 2a: ID Generation
+- Content-based ID generation (sha256 of canonical JSON)
+- Canonical JSON serialization (sorted keys, no whitespace)
+- Test ID generation determinism
 
-### 2b: Package Generator
-- Single-file bundle output (JSON + embedded wrapper)
-- Static file export (`/ai-blocks/<id>.json`)
-- Minimal embeddable format
+### 2b: Publishing Functions
+- Publish draft → AIBlock (add ID)
+- Derive block (set parent, preserve refs)
+- Validate block integrity (ID matches content)
+
+### 2c: File I/O
+- Save block to .aiblock file
+- Load block from .aiblock file
+- Export to PUBLISH_DIR
+
+---
+
+## Completed: Phase 1 - Block Format Specification
+
+Format spec v1.0 complete. Full name: **AIBlocks - Traceable Knowledge Format**
+
+Deliverables (done):
+- Block schema (v, id, content, meta, origin, refs, parent)
+- Reference types (url, archive, search, hash)
+- ID format: sha256:<64 hex chars>
+- Canonical JSON spec for ID generation
+- Zod schemas with JSDoc types
+- Security section (safe by construction)
+- License-as-format philosophy
 
 ---
 
@@ -39,27 +43,37 @@ Build the publishing mechanism for blocks.
 Runtime component for browser/website integration.
 
 Deliverables:
-- Visual AI-Block icon (SVG)
-- Load block data on demand
+- Visual AIBlock icon (SVG)
 - Drag/copy/download interactions
-- Deliver data payload (not icon) on action
+- Data transfer (JSON, text/plain, uri-list)
 - Zero dependencies, minimal footprint
 
 ---
 
-## Phase 4: Python Publisher
+## Phase 4: Publisher CLI (stdio/MCP)
+
+Terminal and AI integration.
+
+Deliverables:
+- CLI interface: `aiblock publish < draft.md > block.aiblock`
+- MCP server for Claude/AI tools
+- stdin/stdout for piping
+- Batch processing
+
+---
+
+## Phase 5: Python Publisher
 
 Build-time publishing for pipelines and static sites.
 
 Deliverables:
-- Block generation from sources (MD, JSON, YAML)
-- Normalization and serialization
+- Block generation from markdown files
 - Batch export for static site generators
 - CI/CD integration patterns
 
 ---
 
-## Phase 5: Validation & Verification
+## Phase 6: Validation & Verification
 
 Cross-block integrity and reference checking.
 

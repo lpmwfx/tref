@@ -1,12 +1,14 @@
-# AI-Blocks
+# AIBlocks
+
+**Traceable Knowledge Format**
 
 ## Purpose
 
-AI-Blocks is an open, transportable, and verifiable block format designed to solve a core problem in the AI era: **preservation, validation, and reuse of knowledge with traceable source origin** – across websites, editors, chats, LLMs, and tools.
+AIBlocks is an open, transportable, and verifiable JSON format designed to solve a core problem in the AI era: **preservation, validation, and reuse of knowledge with traceable source origin** – across websites, editors, chats, LLMs, and tools.
 
-The project introduces a *block-based article and data format*, where content, metadata, license, references, and history are combined in a single self-contained unit that can be copied, dragged, shared, and rewritten – without losing origin, context, or accountability.
+The format combines content, metadata, license, references, and lineage in a single self-contained unit that can be copied, dragged, shared, and rewritten – without losing origin, context, or accountability.
 
-AI-Blocks is not a CMS, a social network, or an AI model. It is a **knowledge-bearing object format**.
+AIBlocks is not a CMS, a social network, or an AI model. It is a **knowledge exchange format**.
 
 ---
 
@@ -91,7 +93,7 @@ This makes legitimate reuse trivial and illegitimate use detectable.
 
 ### 1. The Block is the Atom of Truth
 
-An AI-Block is the smallest meaningful unit of knowledge.
+An AIBlock is the smallest meaningful unit of knowledge.
 
 * It can stand alone
 * It can be embedded in other systems
@@ -139,7 +141,7 @@ The format is designed for:
 
 …but remains readable and editable by humans (JSON / YAML / Markdown).
 
-AI-Blocks can be used directly as:
+AIBlocks can be used directly as:
 
 * Chat input (drag and drop)
 * RAG sources
@@ -199,7 +201,7 @@ Drag block to chat → AI reads markdown + refs → AI creates new block → Pub
 
 ## Non-Goals
 
-AI-Blocks is **not**:
+AIBlocks is **not**:
 
 * A payment platform
 * A blockchain
@@ -213,7 +215,7 @@ It is a *format and a practice*.
 
 ## Vision
 
-If AI-Blocks is widely used:
+If AIBlocks is widely used:
 
 * Articles become composed of verifiable parts
 * AI can cross-check AI
@@ -222,11 +224,11 @@ If AI-Blocks is widely used:
 * Legitimate reuse becomes frictionless
 * Attribution becomes automatic
 
-AI-Blocks is an attempt to give knowledge **backbone** in a world of probabilistic models.
+AIBlocks is an attempt to give knowledge **backbone** in a world of probabilistic models.
 
 ---
 
 ## Status
 
-AI-Blocks is an open, experimental format under active development.
+AIBlocks is an open, experimental format under active development.
 Standardization emerges through use – not through prior committees.

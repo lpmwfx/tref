@@ -1,10 +1,12 @@
-# AI-Blocks
+# AIBlocks
 
-An open, transportable, and verifiable block format for preserving, validating, and reusing knowledge with traceable source origin.
+**Traceable Knowledge Format**
 
-## What is AI-Blocks?
+A JSON-based format for knowledge exchange where references are structural, not optional.
 
-AI-Blocks is a **knowledge-bearing object format** – not a CMS, not an AI model, not a platform. It's a format and a practice for creating self-contained units of knowledge that preserve:
+## What is AIBlocks?
+
+AIBlocks is a **knowledge exchange format** – not a CMS, not an AI model, not a platform. It's a JSON format for creating self-contained units of knowledge that preserve:
 
 - **Content** – the actual information
 - **Metadata** – author, timestamps, source
@@ -56,6 +58,8 @@ src/
     reference.js      # Reference types (URL, archive, search, hash)
     block.test.js     # Tests
 doc/
+  format.md           # Format specification v1.0
+  license.md          # License philosophy (format-as-license)
   project.md          # Project vision and principles
   publisher.md        # Publisher specification
   TS-like-JS.md       # TypeScript-in-JS approach
@@ -63,13 +67,15 @@ doc/
 
 ## Documentation
 
+- [Format Specification](doc/format.md) – complete AIBlocks v1.0 format spec
+- [License Philosophy](doc/license.md) – format-as-license concept
 - [Project Vision](doc/project.md) – core principles and design philosophy
 - [Publisher Spec](doc/publisher.md) – publishing mechanism specification
 - [TS-like-JS](doc/TS-like-JS.md) – how we achieve TypeScript safety in JavaScript
 
 ## Status
 
-Experimental format under active development. Phase 1: Block Format Specification.
+Format specification complete. Phase 2: Publisher Core.
 
 ## License
 
