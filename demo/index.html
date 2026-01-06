@@ -189,6 +189,20 @@
     .tref-wrapper[draggable="true"]:active {
       cursor: grabbing;
     }
+    .tref-refs {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .tref-refs a {
+      color: #5CCCCC;
+      text-decoration: none;
+    }
+    .tref-refs a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -209,14 +223,22 @@
   <div class="section">
     <h2>Create Block</h2>
     <p>Enter content to create a new TREF block:</p>
-    <textarea id="content-input" rows="4">## Hello AIBlocks!
+    <textarea id="content-input" rows="8">## Understanding Content-Addressed Storage
 
-This is a **TREF block** - a self-contained knowledge unit with:
-- Content-addressed ID (SHA-256)
-- Metadata (author, license, timestamps)
-- References and lineage tracking
+Content-addressed storage (CAS) uses cryptographic hashes to create unique identifiers for data. Unlike location-based addressing (URLs, file paths), the address IS the content.
 
-Try dragging this block or copying it!</textarea>
+**Key benefits:**
+- Immutability: changing content changes the ID
+- Deduplication: identical content = identical ID
+- Verification: recalculate hash to verify integrity
+
+TREF blocks use SHA-256 hashes, providing 2^256 possible addresses.</textarea>
+
+    <h3 style="margin-top: 15px; margin-bottom: 10px;">References (one URL per line)</h3>
+    <textarea id="refs-input" rows="3" placeholder="https://en.wikipedia.org/wiki/Content-addressable_storage
+https://ipfs.tech/">https://en.wikipedia.org/wiki/Content-addressable_storage
+https://ipfs.tech/</textarea>
+
     <div class="actions">
       <button onclick="createBlock()">Create Block</button>
     </div>
@@ -412,6 +434,14 @@ Try dragging this block or copying it!</textarea>
           ? this.#block.content.slice(0, maxContentLength) + '...'
           : this.#block.content;
 
+        const refsHtml = this.#block.refs && this.#block.refs.length > 0
+          ? `<div class="tref-refs">
+              <strong>Refs:</strong> ${this.#block.refs.map(r =>
+                `<a href="${r.url}" target="_blank" rel="noopener">${r.label || r.url}</a>`
+              ).join(', ')}
+            </div>`
+          : '';
+
         return `<div class="tref-wrapper" data-tref-id="${this.#block.id}">
           <div class="tref-header">
             <span class="tref-icon">${TREF_ICON_SVG}</span>
@@ -419,6 +449,7 @@ Try dragging this block or copying it!</textarea>
             <span class="tref-meta">${this.#block.meta.created.split('T')[0]}</span>
           </div>
           <div class="tref-content">${escapeHtml(preview)}</div>
+          ${refsHtml}
         </div>`;
       }
     }
@@ -463,8 +494,16 @@ Try dragging this block or copying it!</textarea>
         return;
       }
 
+      // Parse refs from textarea
+      const refsText = document.getElementById('refs-input').value.trim();
+      const refs = refsText
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.startsWith('http'))
+        .map(url => ({ type: 'url', url, label: new URL(url).hostname }));
+
       try {
-        const draft = createDraft(content, { author: 'Demo User' });
+        const draft = createDraft(content, { author: 'Demo User', refs });
         const block = await publish(draft);
         currentWrapper = new TrefWrapper(block);
 
@@ -519,14 +558,19 @@ Try dragging this block or copying it!</textarea>
       currentWrapper = null;
       document.getElementById('block-section').style.display = 'none';
       document.getElementById('json-output').textContent = '// Block JSON will appear here';
-      document.getElementById('content-input').value = `## Hello AIBlocks!
+      document.getElementById('content-input').value = `## Understanding Content-Addressed Storage
 
-This is a **TREF block** - a self-contained knowledge unit with:
-- Content-addressed ID (SHA-256)
-- Metadata (author, license, timestamps)
-- References and lineage tracking
+Content-addressed storage (CAS) uses cryptographic hashes to create unique identifiers for data. Unlike location-based addressing (URLs, file paths), the address IS the content.
 
-Try dragging this block or copying it!`;
+**Key benefits:**
+- Immutability: changing content changes the ID
+- Deduplication: identical content = identical ID
+- Verification: recalculate hash to verify integrity
+
+TREF blocks use SHA-256 hashes, providing 2^256 possible addresses.`;
+
+      document.getElementById('refs-input').value = `https://en.wikipedia.org/wiki/Content-addressable_storage
+https://ipfs.tech/`;
 
       const dropZone = document.getElementById('drop-zone');
       dropZone.classList.remove('has-content');
