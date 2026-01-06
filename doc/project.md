@@ -199,6 +199,57 @@ Drag block to chat → AI reads markdown + refs → AI creates new block → Pub
 
 ---
 
+## AI Canvas
+
+TREF is ideal as an AI Canvas format – a collaborative workspace where humans and AI work together with full traceability.
+
+### How It Works
+
+```
+User writes draft
+       ↓
+   [block A]
+       ↓
+AI expands content → adds refs to sources used
+       ↓
+   [block B, parent: A]
+       ↓
+User edits → verifies refs → accepts/rejects
+       ↓
+   [block C, parent: B]
+```
+
+Each iteration creates a new block. The lineage tree shows exactly who contributed what.
+
+### Why TREF for Canvas
+
+| Feature | Canvas Benefit |
+|---------|----------------|
+| `content` | Markdown canvas – universal, portable |
+| `refs` | AI's sources visible and verifiable |
+| `parent` | Version history without version control |
+| `id` | Snapshot verification – detect tampering |
+| No executable code | Safe to share, safe to open |
+
+### Detecting AI Hallucinations
+
+When AI generates content:
+
+* **Good**: AI adds `refs` pointing to real sources
+* **Suspicious**: AI writes claims without `refs`
+* **Verifiable**: Human can check if `refs` support the claims
+
+The format makes AI's work transparent. Missing or incorrect refs reveal where AI is guessing.
+
+### Canvas Scenarios
+
+1. **Research Assistant**: AI summarizes papers → refs link to original PDFs/arxiv
+2. **Writing Partner**: AI expands outline → parent chain shows evolution
+3. **Fact Checker**: AI reviews claims → adds hash refs for verification
+4. **Translation**: AI translates → parent points to original language block
+
+---
+
 ## Non-Goals
 
 AIBlocks is **not**:
