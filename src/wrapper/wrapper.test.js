@@ -8,6 +8,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   TrefWrapper,
+  TrefReceiver,
   wrap,
   unwrap,
   TREF_ICON_SVG,
@@ -326,5 +327,28 @@ describe('TREF_MIME_TYPE', () => {
   it('is vendor MIME type', () => {
     assert.ok(TREF_MIME_TYPE.startsWith('application/vnd.'));
     assert.ok(TREF_MIME_TYPE.includes('tref'));
+  });
+});
+
+describe('TrefReceiver', () => {
+  it('has getStyles static method', () => {
+    const styles = TrefReceiver.getStyles();
+    assert.ok(typeof styles === 'string');
+    assert.ok(styles.includes('.tref-receiver'));
+  });
+
+  it('styles include all states', () => {
+    const styles = TrefReceiver.getStyles();
+    assert.ok(styles.includes('.tref-receiver-active'));
+    assert.ok(styles.includes('.tref-receiver-success'));
+    assert.ok(styles.includes('.tref-receiver-error'));
+    assert.ok(styles.includes('.tref-receiver-has-block'));
+  });
+
+  it('styles use brand colors', () => {
+    const styles = TrefReceiver.getStyles();
+    assert.ok(styles.includes('#5CCCCC')); // Mint border
+    assert.ok(styles.includes('#8B5CF6')); // Purple active
+    assert.ok(styles.includes('#10B981')); // Green success
   });
 });

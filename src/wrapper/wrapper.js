@@ -293,6 +293,134 @@ export function wrap(data) {
 }
 
 /**
+ * TREF Receiver component for drop zones
+ * Creates a drop target that accepts TREF blocks
+ */
+export class TrefReceiver {
+  /** @type {HTMLElement} */
+  #element;
+  /** @type {(wrapper: TrefWrapper) => void} */
+  #onReceive;
+  /** @type {(error: Error) => void} */
+  #onError;
+
+  /**
+   * Create a receiver on an element
+   * @param {HTMLElement} element - Element to make a drop zone
+   * @param {object} [options]
+   * @param {(wrapper: TrefWrapper) => void} [options.onReceive] - Called when valid TREF received
+   * @param {(error: Error) => void} [options.onError] - Called on invalid drop
+   */
+  constructor(element, options = {}) {
+    this.#element = element;
+    this.#onReceive = options.onReceive || (() => {});
+    this.#onError = options.onError || (() => {});
+    this.#setup();
+  }
+
+  #setup() {
+    const el = this.#element;
+    el.classList.add('tref-receiver');
+
+    el.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'copy';
+      }
+      el.classList.add('tref-receiver-active');
+    });
+
+    el.addEventListener('dragleave', () => {
+      el.classList.remove('tref-receiver-active');
+    });
+
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      el.classList.remove('tref-receiver-active');
+
+      if (!e.dataTransfer) {
+        this.#onError(new Error('No data transfer'));
+        return;
+      }
+
+      const wrapper = unwrap(e.dataTransfer);
+      if (wrapper) {
+        el.classList.add('tref-receiver-success');
+        setTimeout(() => el.classList.remove('tref-receiver-success'), 1000);
+        this.#onReceive(wrapper);
+      } else {
+        el.classList.add('tref-receiver-error');
+        setTimeout(() => el.classList.remove('tref-receiver-error'), 1000);
+        this.#onError(new Error('Invalid TREF data'));
+      }
+    });
+  }
+
+  /**
+   * Get the receiver element
+   * @returns {HTMLElement}
+   */
+  get element() {
+    return this.#element;
+  }
+
+  /**
+   * Render received block inside the receiver
+   * @param {TrefWrapper} wrapper
+   */
+  showBlock(wrapper) {
+    this.#element.innerHTML = wrapper.toHTML();
+    this.#element.classList.add('tref-receiver-has-block');
+  }
+
+  /**
+   * Clear the receiver
+   */
+  clear() {
+    this.#element.innerHTML = this.#element.dataset.placeholder || 'Drop TREF here';
+    this.#element.classList.remove('tref-receiver-has-block');
+  }
+
+  /**
+   * Get CSS styles for the receiver
+   * @returns {string}
+   */
+  static getStyles() {
+    return `
+.tref-receiver {
+  border: 2px dashed #5CCCCC;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  background: #f9fafb;
+  transition: all 0.2s;
+}
+.tref-receiver-active {
+  border-color: #8B5CF6;
+  background: #f3e8ff;
+  color: #8B5CF6;
+}
+.tref-receiver-success {
+  border-color: #10B981;
+  background: #ecfdf5;
+}
+.tref-receiver-error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+.tref-receiver-has-block {
+  border-style: solid;
+  background: white;
+}
+`;
+  }
+}
+
+/**
  * Parse TREF data from drag-and-drop or clipboard
  * @param {DataTransfer | string} source - DataTransfer object or JSON string
  * @returns {TrefWrapper | null}
