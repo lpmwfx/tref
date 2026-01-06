@@ -19,6 +19,12 @@ Current phase tasks.
 - [x] Load block from .tref file
 - [x] Export to PUBLISH_DIR
 
+### 2d: Registry ✅
+- [x] Create published.json index file
+- [x] Add block ID to registry on export
+- [x] List all published IDs
+- [x] Check if ID is registered
+
 ---
 
 ## Phase 3: Wrapper JS
