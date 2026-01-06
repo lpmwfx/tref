@@ -1,4 +1,7 @@
 {
+  "files.associations": {
+    "*.tref": "json"
+  },
   "js/ts.implicitProjectConfig.checkJs": true,
   "javascript.suggest.completeFunctionCalls": true,
   "javascript.preferences.quoteStyle": "single",
