@@ -42,6 +42,13 @@ export default tseslint.config(
     },
   },
   {
+    // Disable floating promises for test files (Node.js test runner returns promises)
+    files: ['**/*.test.js'],
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'off',
+    },
+  },
+  {
     ignores: ['node_modules/', 'dist/', '*.config.js'],
   }
 );

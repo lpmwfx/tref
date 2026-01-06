@@ -1,0 +1,13 @@
+# CHANGELOG
+
+Finished changes for AIBlocks project.
+
+## [Unreleased]
+
+### Added
+- Initial project setup with TypeScript-level safety in pure JavaScript
+- Block schema with Zod validation (id, type, content, metadata)
+- JSDoc type annotations throughout
+- ESLint with typescript-eslint type-aware rules
+- Prettier formatting configuration
+- VS Code settings for editor integration

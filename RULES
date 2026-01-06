@@ -1,0 +1,25 @@
+# RULES
+
+Cross-AI model rules for AIBlocks project.
+
+## Code Style
+- Pure JavaScript with JSDoc type annotations (no TypeScript files)
+- ES2024 module syntax (import/export)
+- Zod for all external data validation
+- Use unknown type for unvalidated input, never any
+
+## Type Safety
+- All functions must have JSDoc @param and @returns
+- Define types with @typedef using z.infer<typeof Schema>
+- Run npm run check before committing
+
+## Block Design
+- Every block has a UUID id
+- Blocks are immutable - modifications create new blocks
+- Lineage must be preserved (parent references)
+- References include fallback mechanisms (not just URLs)
+
+## Testing
+- Use Node.js built-in test runner (node --test)
+- Test files: *.test.js alongside source files
+- Test validation both success and failure cases

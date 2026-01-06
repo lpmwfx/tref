@@ -1,0 +1,13 @@
+# DONE
+
+Completed tasks moved from TODO.
+
+## Initial Setup
+- [x] Create project structure
+- [x] Configure jsconfig.json with strict TypeScript checking
+- [x] Configure ESLint with type-aware rules
+- [x] Configure Prettier
+- [x] Set up VS Code settings
+- [x] Create initial Block schema with Zod
+- [x] Document TS-like-JS approach in doc/TS-like-JS.md
+- [x] Write project vision in doc/project.md

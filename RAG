@@ -1,0 +1,21 @@
+# RAG
+
+All searches, findings, links for AIBlocks project.
+
+## Documentation References
+
+### Zod
+- https://zod.dev/ - Official Zod documentation
+- z.infer<typeof Schema> for deriving types from schemas
+
+### TypeScript + JSDoc
+- JSDoc reference: https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
+- checkJs in tsconfig/jsconfig enables type checking for .js files
+
+### ESLint typescript-eslint
+- https://typescript-eslint.io/ - Type-aware linting for JavaScript
+
+## Search Terms
+- "JSDoc TypeScript checking JavaScript"
+- "Zod runtime validation"
+- "eslint typescript-eslint checkJs"

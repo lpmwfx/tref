@@ -1,0 +1,70 @@
+# PHASES
+
+Dynamic phase description for AIBlocks project.
+
+## Current Phase: 1 - Block Format Specification
+
+Define the core format with publisher requirements as constraints.
+
+Deliverables:
+- Block schema (id, type, content, metadata)
+- Lineage structure (parentId/derivedFrom, version)
+- Reference types (URL, archive snippet, search prompt, hash)
+- Serialization spec (field order, encoding for deterministic hashing)
+- Zod schemas with JSDoc types
+
+Constraint: Format must support content-based ID generation and lineage preservation.
+
+---
+
+## Phase 2: Publisher Core
+
+Build the publishing mechanism for blocks.
+
+### 2a: Lineage Engine
+- Create new block version on content change
+- Link old version as parent in lineage tree
+- Generate deterministic content-based ID
+- Cryptographic hash for integrity
+
+### 2b: Package Generator
+- Single-file bundle output (JSON + embedded wrapper)
+- Static file export (`/ai-blocks/<id>.json`)
+- Minimal embeddable format
+
+---
+
+## Phase 3: Wrapper JS
+
+Runtime component for browser/website integration.
+
+Deliverables:
+- Visual AI-Block icon (SVG)
+- Load block data on demand
+- Drag/copy/download interactions
+- Deliver data payload (not icon) on action
+- Zero dependencies, minimal footprint
+
+---
+
+## Phase 4: Python Publisher
+
+Build-time publishing for pipelines and static sites.
+
+Deliverables:
+- Block generation from sources (MD, JSON, YAML)
+- Normalization and serialization
+- Batch export for static site generators
+- CI/CD integration patterns
+
+---
+
+## Phase 5: Validation & Verification
+
+Cross-block integrity and reference checking.
+
+Deliverables:
+- Reference validation (URL alive, hash match)
+- Lineage tree verification
+- Duplicate/conflict detection
+- Comparison across publishers
