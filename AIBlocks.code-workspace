@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"js/ts.implicitProjectConfig.checkJs": true,
+		"typescript.tsdk": "node_modules/typescript/lib"
+	}
+}

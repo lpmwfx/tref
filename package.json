@@ -1,0 +1,33 @@
+{
+  "name": "aiblocks",
+  "version": "1.0.0",
+  "description": "AI Blocks - JavaScript with TypeScript-level safety",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "typecheck": "tsc --project jsconfig.json",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "check": "npm run typecheck && npm run lint && npm run format:check",
+    "test": "node --test src/**/*.test.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "ai",
+    "blocks"
+  ],
+  "author": "lpm",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.52.0"
+  },
+  "dependencies": {
+    "zod": "^4.3.5"
+  }
+}
