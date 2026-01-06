@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aiblocks.org/schema/tref-v1.json",
+  "title": "TREF - Traceable Reference Format",
+  "description": "A JSON-based format for knowledge exchange where references are structural, not optional.",
+  "type": "object",
+  "required": ["v", "id", "content", "meta"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "const": 1,
+      "description": "Format version"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Content-based hash identifier"
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Markdown content (CommonMark)"
+    },
+    "meta": {
+      "type": "object",
+      "required": ["created", "license"],
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "type": "string",
+          "description": "Author name or identifier"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 creation timestamp"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 modification timestamp"
+        },
+        "license": {
+          "type": "string",
+          "description": "License identifier"
+        },
+        "lang": {
+          "type": "string",
+          "pattern": "^[a-z]{2}$",
+          "description": "ISO 639-1 language code"
+        }
+      }
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URL where block is published"
+        },
+        "title": {
+          "type": "string",
+          "description": "Document title"
+        }
+      }
+    },
+    "refs": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/urlRef" },
+          { "$ref": "#/$defs/archiveRef" },
+          { "$ref": "#/$defs/searchRef" },
+          { "$ref": "#/$defs/hashRef" }
+        ]
+      },
+      "description": "Reference objects"
+    },
+    "parent": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Parent block ID for derived blocks"
+    }
+  },
+  "$defs": {
+    "urlRef": {
+      "type": "object",
+      "required": ["type", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "url" },
+        "url": { "type": "string", "format": "uri" },
+        "title": { "type": "string" },
+        "accessed": { "type": "string", "format": "date-time" }
+      }
+    },
+    "archiveRef": {
+      "type": "object",
+      "required": ["type", "snippet"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "archive" },
+        "snippet": { "type": "string", "minLength": 1 },
+        "from": { "type": "string", "format": "uri" },
+        "archived": { "type": "string", "format": "date-time" },
+        "context": { "type": "string" }
+      }
+    },
+    "searchRef": {
+      "type": "object",
+      "required": ["type", "query"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "search" },
+        "query": { "type": "string", "minLength": 1 },
+        "engine": { "type": "string" },
+        "expect": { "type": "string" }
+      }
+    },
+    "hashRef": {
+      "type": "object",
+      "required": ["type", "alg", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "hash" },
+        "alg": { "enum": ["sha256", "sha384", "sha512"] },
+        "value": { "type": "string", "pattern": "^[a-f0-9]+$" },
+        "of": { "type": "string" }
+      }
+    }
+  }
+}

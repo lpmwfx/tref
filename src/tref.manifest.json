@@ -1,0 +1,44 @@
+{
+  "format": {
+    "name": "TREF",
+    "fullName": "Traceable Reference Format",
+    "version": "1.0",
+    "description": "A JSON-based format for knowledge exchange where references are structural, not optional.",
+    "philosophy": "AI-first, human-readable. References survive rewriting. The format IS the license."
+  },
+  "files": {
+    "extension": ".tref",
+    "alternateExtension": ".tref.json",
+    "mimeType": "application/vnd.tref+json",
+    "encoding": "UTF-8"
+  },
+  "identity": {
+    "algorithm": "sha256",
+    "format": "sha256:<hex>",
+    "canonical": {
+      "keyOrder": "sorted",
+      "whitespace": "none",
+      "encoding": "UTF-8"
+    }
+  },
+  "schema": {
+    "$ref": "tref.schema.json",
+    "draft": "2020-12"
+  },
+  "license": {
+    "default": "AIBlocks-1.0",
+    "principle": "Use freely. Preserve the format. References follow automatically."
+  },
+  "security": {
+    "executable": false,
+    "binary": false,
+    "network": false,
+    "filesystem": false,
+    "safe": ["drag-drop", "ai-ingestion", "pipelines", "user-content"]
+  },
+  "project": {
+    "name": "AIBlocks",
+    "url": "https://github.com/lpmwfx/AiBlocks",
+    "spec": "https://aiblocks.org/spec/tref-v1"
+  }
+}
