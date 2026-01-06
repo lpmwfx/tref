@@ -306,9 +306,9 @@ describe('TREF_ICON_SVG', () => {
     assert.ok(TREF_ICON_SVG.includes('</svg>'));
   });
 
-  it('includes gradient colors', () => {
-    assert.ok(TREF_ICON_SVG.includes('#8B5CF6')); // Purple
-    assert.ok(TREF_ICON_SVG.includes('#10B981')); // Mint
+  it('includes brand colors', () => {
+    assert.ok(TREF_ICON_SVG.includes('#2D1B4E')); // Dark purple
+    assert.ok(TREF_ICON_SVG.includes('#5CCCCC')); // Mint/teal
   });
 });
 
