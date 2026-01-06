@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Main block -->
+  <rect x="8" y="12" width="36" height="44" rx="4" fill="currentColor" />
+
+  <!-- Content lines (cutout) -->
+  <rect x="14" y="20" width="24" height="3" rx="1.5" fill="#fff" />
+  <rect x="14" y="28" width="20" height="3" rx="1.5" fill="#fff" opacity="0.7" />
+  <rect x="14" y="36" width="22" height="3" rx="1.5" fill="#fff" opacity="0.7" />
+
+  <!-- Reference nodes -->
+  <circle cx="52" cy="20" r="6" fill="currentColor" />
+  <circle cx="52" cy="36" r="6" fill="currentColor" />
+  <circle cx="52" cy="52" r="6" fill="currentColor" />
+
+  <!-- Connection lines -->
+  <path d="M44 24 L46 20 L52 20" stroke="currentColor" stroke-width="2" fill="none" />
+  <path d="M44 32 L48 36 L52 36" stroke="currentColor" stroke-width="2" fill="none" />
+  <path d="M44 44 L46 52 L52 52" stroke="currentColor" stroke-width="2" fill="none" />
+
+  <!-- Inner dots -->
+  <circle cx="52" cy="20" r="2" fill="#fff" />
+  <circle cx="52" cy="36" r="2" fill="#fff" />
+  <circle cx="52" cy="52" r="2" fill="#fff" />
+</svg>

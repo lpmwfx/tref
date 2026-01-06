@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Main block -->
+  <rect x="8" y="12" width="36" height="44" rx="4" fill="#2563eb" />
+
+  <!-- Content lines -->
+  <rect x="14" y="20" width="24" height="3" rx="1.5" fill="#fff" opacity="0.9" />
+  <rect x="14" y="28" width="20" height="3" rx="1.5" fill="#fff" opacity="0.6" />
+  <rect x="14" y="36" width="22" height="3" rx="1.5" fill="#fff" opacity="0.6" />
+
+  <!-- Reference nodes -->
+  <circle cx="52" cy="20" r="6" fill="#10b981" />
+  <circle cx="52" cy="36" r="6" fill="#10b981" />
+  <circle cx="52" cy="52" r="6" fill="#10b981" />
+
+  <!-- Connection lines (traceable refs) -->
+  <path d="M44 24 L46 20 L52 20" stroke="#10b981" stroke-width="2" fill="none" />
+  <path d="M44 32 L48 36 L52 36" stroke="#10b981" stroke-width="2" fill="none" />
+  <path d="M44 44 L46 52 L52 52" stroke="#10b981" stroke-width="2" fill="none" />
+
+  <!-- Small dots in ref nodes (link symbol) -->
+  <circle cx="52" cy="20" r="2" fill="#fff" />
+  <circle cx="52" cy="36" r="2" fill="#fff" />
+  <circle cx="52" cy="52" r="2" fill="#fff" />
+</svg>
