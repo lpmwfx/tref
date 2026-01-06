@@ -27,11 +27,11 @@ Current phase tasks.
 
 ---
 
-## Phase 3: Wrapper JS
+## Phase 3: Wrapper JS ✅
 
-- [ ] Design wrapper component
-- [ ] Drag/copy/download interactions
-- [ ] Visual AI-Block icon (SVG)
+- [x] Design wrapper component
+- [x] Drag/copy/download interactions
+- [x] Visual AI-Block icon (SVG)
 
 ---
 
