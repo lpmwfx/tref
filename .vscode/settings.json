@@ -2,6 +2,13 @@
   "files.associations": {
     "*.tref": "json"
   },
+  "vsicons.associations.files": [
+    {
+      "icon": "tref",
+      "extensions": ["tref"],
+      "format": "svg"
+    }
+  ],
   "js/ts.implicitProjectConfig.checkJs": true,
   "javascript.suggest.completeFunctionCalls": true,
   "javascript.preferences.quoteStyle": "single",
