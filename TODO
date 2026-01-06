@@ -14,10 +14,10 @@ Current phase tasks.
 - [x] Derive block (set parent, preserve refs)
 - [x] Validate block integrity (ID matches content)
 
-### 2c: File I/O
-- [ ] Save block to .tref file
-- [ ] Load block from .tref file
-- [ ] Export to PUBLISH_DIR
+### 2c: File I/O ✅
+- [x] Save block to .tref file
+- [x] Load block from .tref file
+- [x] Export to PUBLISH_DIR
 
 ---
 
