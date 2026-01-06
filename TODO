@@ -2,41 +2,35 @@
 
 Current phase tasks.
 
-## Phase 2: Publisher Core
+## Phase 4: Publisher CLI
 
-### 2a: ID Generation ✅
-- [x] Implement content-based ID generation (sha256 of canonical JSON)
-- [x] Canonical JSON serialization (sorted keys, no whitespace)
-- [x] Test ID generation determinism (21 tests)
+### 4a: CLI Foundation
+- [ ] Create CLI entry point (src/cli/index.js)
+- [ ] Parse command line arguments (--help, --version)
+- [ ] Support subcommands: publish, derive, validate, list
 
-### 2b: Publishing Functions ✅
-- [x] Publish draft → AIBlock (add ID)
-- [x] Derive block (set parent, preserve refs)
-- [x] Validate block integrity (ID matches content)
+### 4b: Publish Command
+- [ ] `tref publish <content>` - create and publish block
+- [ ] `tref publish -f <file>` - publish from file
+- [ ] `tref publish --stdin` - read content from stdin
+- [ ] Options: --refs (add references), --license, --pretty
 
-### 2c: File I/O ✅
-- [x] Save block to .tref file
-- [x] Load block from .tref file
-- [x] Export to PUBLISH_DIR
+### 4c: Derive Command
+- [ ] `tref derive <parent-id> <content>` - derive from parent
+- [ ] `tref derive -f <parent.tref> <content>` - derive from file
+- [ ] Preserve parent refs automatically
 
-### 2d: Registry ✅
-- [x] Create published.json index file
-- [x] Add block ID to registry on export
-- [x] List all published IDs
-- [x] Check if ID is registered
+### 4d: Validate Command
+- [ ] `tref validate <file.tref>` - validate block integrity
+- [ ] Check ID matches content hash
+- [ ] Check schema compliance
+- [ ] Exit codes: 0=valid, 1=invalid
 
----
+### 4e: List/Info Commands
+- [ ] `tref list` - list all published blocks
+- [ ] `tref info <id>` - show block details
+- [ ] `tref cat <id>` - output block content
 
-## Phase 3: Wrapper JS ✅
-
-- [x] Design wrapper component
-- [x] Drag/copy/download interactions
-- [x] Visual AI-Block icon (SVG)
-
----
-
-## Phase 4: Publisher CLI (stdio/MCP)
-
-- [ ] CLI interface for publishing
-- [ ] MCP server for AI integration
-- [ ] stdin/stdout for piping
+### 4f: MCP Server (Optional)
+- [ ] MCP server wrapper for AI integration
+- [ ] Tools: publish, derive, validate, list

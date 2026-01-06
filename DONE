@@ -35,3 +35,20 @@ Full name: **AIBlocks - Traceable Knowledge Format**
 - [x] Security section (safe by construction)
 - [x] Format naming decision: "AIBlocks - Traceable Knowledge Format"
 - [x] Add README.md
+
+## Phase 2: Publisher Core (COMPLETE)
+
+- [x] 2a: ID Generation - SHA-256 content-based IDs (21 tests)
+- [x] 2b: Publishing Functions - publish, derive, validate (43 tests)
+- [x] 2c: File I/O - save/load .tref files (20 tests)
+- [x] 2d: Registry - published.json index (19 tests)
+
+## Phase 3: Wrapper JS (COMPLETE)
+
+- [x] TrefWrapper class - display, serialize, drag/copy/download
+- [x] TrefReceiver class - drop zones for receiving TREF blocks
+- [x] TREF icon (purple-mint chain link SVG)
+- [x] MIME type: application/vnd.aiblocks.tref+json
+- [x] wrap() and unwrap() functions
+- [x] Demo page with article, drag, and chat receiver
+- [x] 37 wrapper tests (140 total)
