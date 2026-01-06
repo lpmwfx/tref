@@ -9,10 +9,10 @@ Current phase tasks.
 - [x] Canonical JSON serialization (sorted keys, no whitespace)
 - [x] Test ID generation determinism (21 tests)
 
-### 2b: Publishing Functions
-- [ ] Publish draft → AIBlock (add ID)
-- [ ] Derive block (set parent, preserve refs)
-- [ ] Validate block integrity (ID matches content)
+### 2b: Publishing Functions ✅
+- [x] Publish draft → AIBlock (add ID)
+- [x] Derive block (set parent, preserve refs)
+- [x] Validate block integrity (ID matches content)
 
 ### 2c: File I/O
 - [ ] Save block to .tref file
