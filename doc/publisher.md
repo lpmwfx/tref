@@ -10,6 +10,103 @@ It has one responsibility: to make blocks **accessible, consistent, and verifiab
 
 ---
 
+## Two Outputs
+
+The publisher takes a draft and produces two outputs:
+
+```
+                    ┌──────────────┐
+Draft markdown ───► │   PUBLISHER  │
++ refs              └──────┬───────┘
+                           │
+           ┌───────────────┴───────────────┐
+           ▼                               ▼
+    AIBlock (.aiblock)           HTML article + wrapper
+    - pure JSON data             - rendered markdown
+    - transportable              - embedded block data
+    - AI-readable                - drag/copy/download
+```
+
+### Output 1: AIBlock File
+
+Pure JSON data for transport and AI consumption:
+
+```json
+{
+  "v": 1,
+  "id": "sha256:...",
+  "content": "# Article\n\nMarkdown...",
+  "meta": { "author": "...", "created": "..." },
+  "refs": [ ... ],
+  "parent": "sha256:..."
+}
+```
+
+- No JavaScript, no HTML, no CSS
+- Machine-readable
+- Content-addressable (ID from hash)
+- Safe for drag-and-drop
+
+### Output 2: HTML Article with Wrapper
+
+Website-ready article with embedded block:
+
+```html
+<article class="aiblock-article">
+  <!-- Rendered markdown as HTML -->
+  <h1>Article</h1>
+  <p>Content...</p>
+</article>
+
+<div class="aiblock-wrapper" data-block-id="sha256:...">
+  <svg class="aiblock-icon">...</svg>
+  <script type="application/json" class="aiblock-data">
+    { "v": 1, "id": "sha256:...", ... }
+  </script>
+</div>
+
+<script src="aiblock-wrapper.js"></script>
+```
+
+- Text is 1:1 identical to block content
+- Wrapper enables drag/copy/download
+- Site adds its own styling
+- Block data embedded or linked
+
+---
+
+## Publisher Functions
+
+### Core Functions
+
+| Function | Input | Output |
+|----------|-------|--------|
+| `publish(draft)` | Draft block | AIBlock with ID |
+| `render(block)` | AIBlock | HTML article |
+| `wrap(block)` | AIBlock | HTML wrapper snippet |
+| `bundle(block)` | AIBlock | Complete HTML file |
+
+### ID Generation
+
+1. Take draft (without ID)
+2. Serialize to canonical JSON (sorted keys, no whitespace)
+3. Hash with SHA-256
+4. Format as `sha256:<hex>`
+
+Same content always produces same ID.
+
+### Derive Function
+
+When creating a derived block:
+
+1. Take source block
+2. Modify content
+3. Set `parent` to source block's ID
+4. Preserve relevant `refs`
+5. Publish → new ID
+
+---
+
 ## Design Philosophy
 
 ### Minimalism
@@ -18,10 +115,10 @@ The publisher should be implementable:
 
 * As a small JS script on a static site
 * As a Python module in a build or data flow
+* As a CLI tool (stdio)
+* As an MCP server for AI integration
 
 No databases required. No login. No sessions.
-
----
 
 ### Determinism
 
@@ -37,8 +134,6 @@ This enables:
 * Comparison across sites
 * Independent validation
 
----
-
 ### Publishing ≠ Ownership
 
 The publisher:
@@ -51,125 +146,74 @@ It **exposes** – it does not edit.
 
 ---
 
-## Core Responsibilities
+## Wrapper Component
 
-### 1. Block Serialization
+The wrapper is a small JS component that:
 
-The publisher must be able to:
+1. **Displays** an AI-Block icon
+2. **Enables** drag-and-drop of block data
+3. **Enables** copy to clipboard
+4. **Enables** download as .aiblock file
 
-* Load a block (JSON / YAML / MD)
-* Normalize structure (field order, encoding)
-* Serialize to a stable format
+### Interactions
 
-This is the foundation for hash and ID.
+| Action | Result |
+|--------|--------|
+| Click icon | Show block info |
+| Drag icon | Transfer block JSON |
+| Right-click | Context menu (copy/download) |
+| Keyboard | Accessible alternatives |
 
----
+### Data Transfer
 
-### 2. Identity & Stable ID
+On drag/copy, the wrapper provides:
 
-Each block is assigned an identity layer based on:
-
-* Normalized content
-* Metadata
-* References
-
-The ID is **content-dependent**, not publisher-dependent.
-
----
-
-### 3. Hash & Integrity
-
-The publisher generates:
-
-* A cryptographic hash of the serialized block
-
-This enables:
-
-* Integrity control
-* Manipulation detection
-* Comparison of copies
+* `application/json` – full block JSON
+* `text/plain` – markdown content only
+* `text/uri-list` – link to .aiblock file
 
 ---
 
-### 4. Distribution
+## Implementation Targets
 
-The publisher makes the block available via:
+### JS Publisher (Runtime)
 
-* Static file (e.g., `/ai-blocks/<id>.json`)
-* Inline embed
-* Download trigger (drag / copy)
+For static websites and browsers:
 
-How it is served is secondary – **access** is central.
+* Validates blocks
+* Generates wrapper HTML
+* Handles drag/copy/download
+* No server required
 
----
+### Python Publisher (Build-time)
 
-### 5. Visual Wrapper (JS)
+For static site generators and pipelines:
 
-In JS context, the publisher provides:
+* Generates blocks from markdown files
+* Batch processing
+* CI/CD integration
+* File output
 
-* A visual icon (AI-Block)
-* An interaction interface
-* A data output on action
+### CLI Publisher (stdio/MCP)
 
-The icon is only affordance – data is payload.
+For terminal and AI integration:
 
----
-
-### 6. Build-time Publishing (Python)
-
-In Python context, the publisher is typically used:
-
-* During site build
-* In document generation
-* In data pipelines
-
-The publisher functions as a *purity filter* between raw content and public block.
+* `aiblock publish < draft.md > block.aiblock`
+* `aiblock render < block.aiblock > article.html`
+* MCP server for Claude/AI tools
+* Pipe-friendly
 
 ---
 
-## JS Publisher – Conceptual Role
-
-The JS version is **runtime-oriented**:
-
-* Loads block data
-* Validates structure
-* Delivers the block on user action
-
-It has no persistent state.
-
-Typical environments:
-
-* Static website
-* Docs sites
-* Blogs
-* Knowledge bases
-
----
-
-## Python Publisher – Conceptual Role
-
-The Python version is **build and pipeline-oriented**:
-
-* Generates blocks from sources
-* Normalizes and signs output
-* Exports to files
-
-Typical environments:
-
-* Static site generators
-* CI/CD
-* Data pipelines
-* Archiving
-
----
-
-## Security & Responsibility
+## Security
 
 The publisher:
 
 * Does not log users
 * Does not track behavior
 * Collects no personal data
+* Executes no remote code
+* Only processes local data
 
 Responsibility lies in **block content**, not in the mechanism.
 
@@ -189,20 +233,8 @@ This enables:
 
 ---
 
-## Design Consequence
+## Summary
 
-The publisher is deliberately boring.
-
-The less it does, the stronger the format becomes.
-
----
-
-## Positioning
-
-AI-Blocks Publisher is:
-
-* A library, not a service
-* A tool, not a platform
-* A principle, not a policy
+The publisher is deliberately boring. The less it does, the stronger the format becomes.
 
 It exists to ensure that knowledge can be published **once** – and used **many places** without losing itself.
