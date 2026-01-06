@@ -2,6 +2,7 @@
   "files.associations": {
     "*.tref": "json"
   },
+  "vsicons.customIconFolderPath": "/home/lpm/.vscode/vsicons-custom-icons",
   "vsicons.associations.files": [
     {
       "icon": "tref",

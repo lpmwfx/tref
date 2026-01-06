@@ -4,10 +4,10 @@ Current phase tasks.
 
 ## Phase 2: Publisher Core
 
-### 2a: ID Generation
-- [ ] Implement content-based ID generation (sha256 of canonical JSON)
-- [ ] Canonical JSON serialization (sorted keys, no whitespace)
-- [ ] Test ID generation determinism
+### 2a: ID Generation ✅
+- [x] Implement content-based ID generation (sha256 of canonical JSON)
+- [x] Canonical JSON serialization (sorted keys, no whitespace)
+- [x] Test ID generation determinism (21 tests)
 
 ### 2b: Publishing Functions
 - [ ] Publish draft → AIBlock (add ID)
@@ -15,8 +15,8 @@ Current phase tasks.
 - [ ] Validate block integrity (ID matches content)
 
 ### 2c: File I/O
-- [ ] Save block to .aiblock file
-- [ ] Load block from .aiblock file
+- [ ] Save block to .tref file
+- [ ] Load block from .tref file
 - [ ] Export to PUBLISH_DIR
 
 ---
