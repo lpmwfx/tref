@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TREF Demo - Interactive Examples</title>
+  <meta name="description" content="Interactive demonstrations of TREF blocks in action.">
+  <link rel="stylesheet" href="css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+  <style>
+    .demo-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .demo-section h2 {
+      color: var(--dark-purple);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .article-content {
+      line-height: 1.8;
+      color: var(--gray-700);
+    }
+    .article-content p {
+      margin-bottom: 1rem;
+    }
+    .inline-tref {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .chat-demo {
+      background: var(--gray-900);
+      border-radius: 12px;
+      padding: 1rem;
+      max-width: 500px;
+    }
+    .chat-header {
+      color: var(--gray-300);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--gray-700);
+    }
+    .chat-messages {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .chat-msg {
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .chat-msg.user {
+      background: var(--gray-800);
+      color: var(--gray-200);
+    }
+    .chat-msg.ai {
+      background: #3730a3;
+      color: white;
+    }
+    .chat-msg.tref-citation {
+      background: var(--dark-purple);
+      border: 1px solid var(--mint);
+    }
+    .chat-input-area {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--gray-800);
+      color: white;
+    }
+    .chat-drop-zone {
+      border: 2px dashed var(--mint);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      transition: all 0.2s;
+    }
+    .chat-drop-zone.active {
+      background: rgba(92, 204, 204, 0.1);
+      border-color: var(--purple);
+    }
+    .playground-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .playground-area { grid-template-columns: 1fr; }
+    }
+    .drag-source {
+      padding: 1rem;
+      background: var(--gray-100);
+      border-radius: 8px;
+    }
+    .drop-target {
+      min-height: 200px;
+    }
+    .lineage-tree {
+      font-family: monospace;
+      background: var(--gray-100);
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .lineage-node {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      background: white;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .lineage-node.current {
+      border-color: var(--purple);
+      background: #f3e8ff;
+    }
+    .lineage-arrow {
+      color: var(--gray-400);
+      padding: 0.25rem 0.5rem;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--gray-900);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="embed.html">Embed</a></li>
+        <li><a href="builder.html">Builder</a></li>
+        <li><a href="demo.html" class="active">Demo</a></li>
+        <li><a href="release.html">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="hero" style="padding: 2rem;">
+    <h1 style="font-size: 2rem;">Interactive Demos</h1>
+    <p class="hero-subtitle" style="font-size: 1.1rem;">See TREF in action</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Demo 1: Article with Citations -->
+      <div class="demo-section">
+        <h2>📰 Article with Embedded Citations</h2>
+        <p style="color: var(--gray-500); margin-bottom: 1.5rem;">
+          Real content with verifiable TREF blocks as inline citations. Drag them to use elsewhere.
+        </p>
+
+        <div class="article-content">
+          <p>
+            <strong>Understanding Cellular Energy</strong>
+          </p>
+          <p>
+            Every living cell requires energy to function. This energy comes primarily from a process that occurs within specialized structures called mitochondria.
+          </p>
+
+          <div id="citation-1" class="inline-tref" style="margin: 1rem 0;"></div>
+
+          <p>
+            This process, known as cellular respiration, converts nutrients into ATP (adenosine triphosphate), the universal energy currency of life.
+          </p>
+
+          <div id="citation-2" class="inline-tref" style="margin: 1rem 0;"></div>
+
+          <p>
+            <em>Try dragging these blocks to the chat demo below!</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Demo 2: Chat with TREF Citations -->
+      <div class="demo-section">
+        <h2>💬 AI Chat with TREF Citations</h2>
+        <p style="color: var(--gray-500); margin-bottom: 1.5rem;">
+          Drag TREF blocks into the chat to cite them. The AI acknowledges citations with traceable sources.
+        </p>
+
+        <div class="chat-demo">
+          <div class="chat-header">🤖 AI Assistant</div>
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-msg ai">Hello! You can drag TREF blocks into this chat to cite them. I'll incorporate them into our discussion.</div>
+          </div>
+          <div class="chat-drop-zone" id="chat-drop">📎 Drop TREF block here to cite</div>
+        </div>
+      </div>
+
+      <!-- Demo 3: Drag & Drop Playground -->
+      <div class="demo-section">
+        <h2>🎮 Drag & Drop Playground</h2>
+        <p style="color: var(--gray-500); margin-bottom: 1.5rem;">
+          Drag blocks between zones. TREF data transfers seamlessly.
+        </p>
+
+        <div class="playground-area">
+          <div>
+            <h4 style="margin-bottom: 1rem;">Drag these blocks:</h4>
+            <div class="drag-source" id="source-blocks"></div>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 1rem;">Drop here:</h4>
+            <div id="drop-zone" class="tref-receiver drop-target" data-placeholder="Drop blocks here">
+              Drop blocks here
+            </div>
+            <div id="received-info" style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray-500);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo 4: Derivation Chain -->
+      <div class="demo-section">
+        <h2>🌳 Block Derivation</h2>
+        <p style="color: var(--gray-500); margin-bottom: 1.5rem;">
+          See how derived blocks maintain lineage. Each derivation preserves the parent chain.
+        </p>
+
+        <div class="demo-grid">
+          <div>
+            <h4 style="margin-bottom: 1rem;">Original Block</h4>
+            <div id="original-block"></div>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 1rem;">Derived Block</h4>
+            <div id="derived-block"></div>
+          </div>
+        </div>
+
+        <div class="lineage-tree" style="margin-top: 1.5rem;">
+          <div style="margin-bottom: 0.5rem; color: var(--gray-500);">Lineage:</div>
+          <span class="lineage-node" id="parent-node">sha256:parent...</span>
+          <span class="lineage-arrow">→</span>
+          <span class="lineage-node current" id="child-node">sha256:child...</span>
+        </div>
+      </div>
+
+      <!-- Demo 5: Block Validation -->
+      <div class="demo-section">
+        <h2>✅ Live Validation</h2>
+        <p style="color: var(--gray-500); margin-bottom: 1.5rem;">
+          TREF blocks are self-verifying. Change the content and watch the validation fail.
+        </p>
+
+        <div class="demo-grid">
+          <div>
+            <textarea id="validate-content" rows="5" style="width: 100%; padding: 1rem; border-radius: 8px; border: 1px solid var(--gray-300);">Edit this text and click Validate</textarea>
+            <button class="btn btn-primary mt-2" onclick="runValidation()">🔍 Validate</button>
+          </div>
+          <div>
+            <div id="validation-result" style="padding: 1rem; border-radius: 8px; background: var(--gray-100);">
+              Validation result will appear here
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/lpmwfx/tref">GitHub</a>
+      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
+      <a href="guide.html">Documentation</a>
+      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
+    </div>
+    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+  </footer>
+
+  <script src="js/tref.min.js"></script>
+  <script>
+    // Inject styles
+    const style = document.createElement('style');
+    style.textContent = TREF.getStyles();
+    document.head.appendChild(style);
+
+    let blocks = {};
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function makeDraggable(container, wrapper) {
+      const el = container.querySelector('.tref-wrapper');
+      if (el) {
+        el.setAttribute('draggable', 'true');
+        el.addEventListener('dragstart', (e) => {
+          wrapper.setDragData(e.dataTransfer);
+          e.dataTransfer.effectAllowed = 'copy';
+        });
+      }
+    }
+
+    // Initialize demos
+    (async () => {
+      // Citation 1
+      blocks.mito = await TREF.publish("The mitochondria is the powerhouse of the cell. It generates most of the cell's supply of ATP through oxidative phosphorylation.", {
+        author: "Biology Textbook",
+        refs: [{ type: "url", url: "https://en.wikipedia.org/wiki/Mitochondrion", label: "Wikipedia" }]
+      });
+      const wrap1 = new TREF.TrefWrapper(blocks.mito);
+      document.getElementById('citation-1').innerHTML = wrap1.toHTML({ maxContentLength: 100 });
+      makeDraggable(document.getElementById('citation-1'), wrap1);
+
+      // Citation 2
+      blocks.atp = await TREF.publish("ATP (adenosine triphosphate) is the primary energy carrier in all living organisms. It stores and transports chemical energy within cells.", {
+        author: "Biochemistry Guide",
+        refs: [{ type: "url", url: "https://en.wikipedia.org/wiki/Adenosine_triphosphate", label: "Wikipedia" }]
+      });
+      const wrap2 = new TREF.TrefWrapper(blocks.atp);
+      document.getElementById('citation-2').innerHTML = wrap2.toHTML({ maxContentLength: 100 });
+      makeDraggable(document.getElementById('citation-2'), wrap2);
+
+      // Source blocks for playground
+      const sourceContainer = document.getElementById('source-blocks');
+      blocks.fact1 = await TREF.publish("Water covers about 71% of Earth's surface.", { author: "Geography" });
+      const wrapFact1 = new TREF.TrefWrapper(blocks.fact1);
+      sourceContainer.innerHTML = wrapFact1.toHTML();
+      makeDraggable(sourceContainer, wrapFact1);
+
+      // Drop zone
+      new TREF.TrefReceiver(document.getElementById('drop-zone'), {
+        onReceive: (w) => {
+          document.getElementById('drop-zone').innerHTML = w.toHTML();
+          document.getElementById('received-info').textContent = `Received: ${w.id}`;
+          showToast('Block received!');
+        },
+        onError: () => showToast('Invalid TREF data')
+      });
+
+      // Original and derived blocks
+      blocks.original = await TREF.publish("This is the original content.", { author: "Author A" });
+      blocks.derived = await TREF.derive(blocks.original, "This is derived content with updates.", { author: "Author B" });
+
+      const wrapOrig = new TREF.TrefWrapper(blocks.original);
+      const wrapDerived = new TREF.TrefWrapper(blocks.derived);
+
+      document.getElementById('original-block').innerHTML = wrapOrig.toHTML();
+      document.getElementById('derived-block').innerHTML = wrapDerived.toHTML();
+      makeDraggable(document.getElementById('original-block'), wrapOrig);
+      makeDraggable(document.getElementById('derived-block'), wrapDerived);
+
+      document.getElementById('parent-node').textContent = wrapOrig.shortId;
+      document.getElementById('child-node').textContent = wrapDerived.shortId;
+
+      // Chat drop zone
+      const chatDrop = document.getElementById('chat-drop');
+      chatDrop.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        chatDrop.classList.add('active');
+      });
+      chatDrop.addEventListener('dragleave', () => {
+        chatDrop.classList.remove('active');
+      });
+      chatDrop.addEventListener('drop', (e) => {
+        e.preventDefault();
+        chatDrop.classList.remove('active');
+        const wrapper = TREF.unwrap(e.dataTransfer);
+        if (wrapper) {
+          addChatMessage(wrapper);
+        }
+      });
+
+      // Validation demo
+      blocks.validationBlock = await TREF.publish("Edit this text and click Validate");
+      document.getElementById('validate-content').value = blocks.validationBlock.content;
+    })();
+
+    function addChatMessage(wrapper) {
+      const msgs = document.getElementById('chat-messages');
+
+      // Add citation
+      const citation = document.createElement('div');
+      citation.className = 'chat-msg tref-citation';
+      citation.innerHTML = `📎 <strong>Cited [${wrapper.shortId}]:</strong> ${wrapper.content.slice(0, 100)}...`;
+      msgs.appendChild(citation);
+
+      // Add AI response
+      setTimeout(() => {
+        const response = document.createElement('div');
+        response.className = 'chat-msg ai';
+        response.textContent = `Thanks for sharing that citation! The block ${wrapper.shortId} provides verified information that I can incorporate into our discussion.`;
+        msgs.appendChild(response);
+        msgs.scrollTop = msgs.scrollHeight;
+      }, 500);
+
+      showToast('Citation added to chat!');
+    }
+
+    async function runValidation() {
+      const content = document.getElementById('validate-content').value;
+      const resultEl = document.getElementById('validation-result');
+
+      // Create a tampered block (same ID but different content)
+      const tampered = { ...blocks.validationBlock, content };
+
+      const result = await TREF.validate(tampered);
+
+      if (result.valid) {
+        resultEl.innerHTML = '<span style="color: #166534;">✓ Valid!</span> The content matches the block ID.';
+        resultEl.style.background = '#dcfce7';
+      } else {
+        resultEl.innerHTML = `<span style="color: #dc2626;">✗ Invalid!</span> ${result.error}`;
+        resultEl.style.background = '#fef2f2';
+      }
+    }
+  </script>
+</body>
+</html>

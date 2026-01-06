@@ -3,872 +3,265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIBlocks TREF Demo</title>
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-
-    h1 {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    h1 svg { width: 40px; height: 40px; }
-
-    .section {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .section h2 {
-      margin-top: 0;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 10px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 15px;
-    }
-
-    button {
-      background: linear-gradient(135deg, #8B5CF6, #10B981);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-
-    button:hover { opacity: 0.9; }
-    button:active { opacity: 0.8; }
-
-    .drop-zone {
-      border: 2px dashed #d1d5db;
-      border-radius: 8px;
-      padding: 40px;
-      text-align: center;
-      color: #6b7280;
-      transition: all 0.2s;
-    }
-
-    .drop-zone.drag-over {
-      border-color: #8B5CF6;
-      background: #f3e8ff;
-      color: #8B5CF6;
-    }
-
-    .drop-zone.has-content {
-      border-style: solid;
-      border-color: #10B981;
-      background: #ecfdf5;
-    }
-
-    #json-output {
-      background: #1e1e1e;
-      color: #d4d4d4;
-      padding: 15px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-family: 'Fira Code', 'Consolas', monospace;
-      font-size: 12px;
-      white-space: pre-wrap;
-      word-break: break-all;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    #html-output {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 20px;
-      background: #fafafa;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #1f2937;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s;
-      z-index: 1000;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .info {
-      background: #eff6ff;
-      border-left: 4px solid #3b82f6;
-      padding: 12px 16px;
-      margin: 15px 0;
-      border-radius: 0 8px 8px 0;
-      font-size: 14px;
-      color: #1e40af;
-    }
-
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      font-family: inherit;
-      resize: vertical;
-    }
-
-    /* TrefWrapper styles */
-    .tref-wrapper {
-      font-family: system-ui, -apple-system, sans-serif;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 12px;
-      background: #fafafa;
-      max-width: 400px;
-    }
-    .tref-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    .tref-icon {
-      display: inline-flex;
-      width: 24px;
-      height: 24px;
-    }
-    .tref-icon svg {
-      width: 100%;
-      height: 100%;
-    }
-    .tref-id {
-      font-family: monospace;
-      font-size: 12px;
-      color: #6b7280;
-      background: #e5e7eb;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .tref-meta {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-left: auto;
-    }
-    .tref-content {
-      font-size: 14px;
-      line-height: 1.5;
-      color: #374151;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .tref-wrapper[draggable="true"] {
-      cursor: grab;
-    }
-    .tref-wrapper[draggable="true"]:active {
-      cursor: grabbing;
-    }
-    .tref-refs {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #e5e7eb;
-      font-size: 12px;
-      color: #6b7280;
-    }
-    .tref-refs a {
-      color: #5CCCCC;
-      text-decoration: none;
-    }
-    .tref-refs a:hover {
-      text-decoration: underline;
-    }
-
-    /* TREF Icon with hover menu */
-    .tref-icon-container {
-      position: relative;
-      display: inline-block;
-    }
-    .tref-icon-container .tref-drag-icon {
-      cursor: grab;
-      transition: transform 0.15s;
-    }
-    .tref-icon-container .tref-drag-icon:hover {
-      transform: scale(1.1);
-    }
-    .tref-icon-container .tref-drag-icon:active {
-      cursor: grabbing;
-    }
-    .tref-icon-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #1f2937;
-      border-radius: 6px;
-      padding: 4px 0;
-      min-width: 120px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-4px);
-      transition: all 0.15s;
-      z-index: 100;
-    }
-    .tref-icon-container:hover .tref-icon-menu {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(4px);
-    }
-    .tref-icon-menu button {
-      display: block;
-      width: 100%;
-      background: none;
-      border: none;
-      color: #e5e7eb;
-      padding: 8px 12px;
-      text-align: left;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .tref-icon-menu button:hover {
-      background: #374151;
-    }
-    .tref-icon-menu .menu-hint {
-      color: #9ca3af;
-      padding: 6px 12px;
-      font-size: 11px;
-      border-bottom: 1px solid #374151;
-      margin-bottom: 4px;
-    }
-
-    /* TREF Receiver styles */
-    .tref-receiver {
-      border: 2px dashed #5CCCCC;
-      border-radius: 8px;
-      padding: 20px;
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6b7280;
-      background: #f9fafb;
-      transition: all 0.2s;
-    }
-    .tref-receiver-active {
-      border-color: #8B5CF6;
-      background: #f3e8ff;
-      color: #8B5CF6;
-    }
-    .tref-receiver-success {
-      border-color: #10B981;
-      background: #ecfdf5;
-    }
-    .tref-receiver-error {
-      border-color: #ef4444;
-      background: #fef2f2;
-    }
-    .tref-receiver-has-block {
-      border-style: solid;
-      background: white;
-    }
-    .chat-simulation {
-      background: #1f2937;
-      border-radius: 12px;
-      padding: 16px;
-      max-width: 500px;
-    }
-    .chat-simulation h3 {
-      color: #e5e7eb;
-      margin: 0 0 12px 0;
-      font-size: 14px;
-    }
-    .chat-messages {
-      background: #111827;
-      border-radius: 8px;
-      padding: 12px;
-      min-height: 100px;
-      margin-bottom: 12px;
-    }
-    .chat-message {
-      background: #374151;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      color: #e5e7eb;
-      font-size: 13px;
-    }
-    .chat-message.tref-block {
-      background: #2D1B4E;
-      border: 1px solid #5CCCCC;
-    }
-  </style>
+  <title>TREF - Traceable Reference Format</title>
+  <meta name="description" content="Open, transportable, and verifiable knowledge blocks with traceable source origin.">
+  <link rel="stylesheet" href="css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
 </head>
 <body>
-  <h1>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40">
-      <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
-      <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
-        <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
-          <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
-          <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
-          <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
-        </g>
-      </g>
-    </svg>
-    AIBlocks TREF Demo
-  </h1>
-
-  <div class="section">
-    <h2>Create Block</h2>
-    <p>Enter content to create a new TREF block:</p>
-    <textarea id="content-input" rows="8">## Understanding Content-Addressed Storage
-
-Content-addressed storage (CAS) uses cryptographic hashes to create unique identifiers for data. Unlike location-based addressing (URLs, file paths), the address IS the content.
-
-**Key benefits:**
-- Immutability: changing content changes the ID
-- Deduplication: identical content = identical ID
-- Verification: recalculate hash to verify integrity
-
-TREF blocks use SHA-256 hashes, providing 2^256 possible addresses.</textarea>
-
-    <h3 style="margin-top: 15px; margin-bottom: 10px;">References (one URL per line)</h3>
-    <textarea id="refs-input" rows="3" placeholder="https://en.wikipedia.org/wiki/Content-addressable_storage
-https://ipfs.tech/">https://en.wikipedia.org/wiki/Content-addressable_storage
-https://ipfs.tech/</textarea>
-
-    <div class="actions">
-      <button onclick="createBlock()">Create Block</button>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="embed.html">Embed</a></li>
+        <li><a href="builder.html">Builder</a></li>
+        <li><a href="demo.html">Demo</a></li>
+        <li><a href="release.html">Download</a></li>
+      </ul>
     </div>
-  </div>
+  </nav>
 
-  <div class="section" id="block-section" style="display: none;">
-    <h2>Block Preview</h2>
-    <div id="html-output"></div>
-    <div class="actions">
-      <button onclick="copyJSON()">Copy JSON</button>
-      <button onclick="copyContent()">Copy Content</button>
-      <button onclick="downloadBlock()">Download .tref</button>
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Traceable Reference Format</h1>
+    <p class="hero-subtitle">
+      Knowledge blocks you can verify, share, and trust. Content-addressed, self-contained, and always traceable to source.
+    </p>
+    <div class="hero-cta">
+      <a href="builder.html" class="btn btn-primary">
+        <span>🔨</span> Build a Block
+      </a>
+      <a href="#install" class="btn btn-secondary">
+        <span>⬇️</span> Install CLI
+      </a>
     </div>
-  </div>
+  </section>
 
-  <div class="section" id="icon-section" style="display: none;">
-    <h2>Standalone Icon (for websites)</h2>
-    <p>Hover over the icon for options:</p>
-    <div id="standalone-icon"></div>
-    <div class="info" style="margin-top: 15px;">
-      This is how the icon appears on websites. Drag it directly, or hover for menu.
-    </div>
-  </div>
+  <!-- What is TREF -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">What is TREF?</h2>
 
-  <div class="section">
-    <h2>JSON Output</h2>
-    <pre id="json-output">// Block JSON will appear here</pre>
-  </div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <h3>Content-Addressed</h3>
+          <p>Every block has a unique ID derived from its content using SHA-256. Change the content, change the ID. Verify integrity instantly.</p>
+        </div>
 
-  <div class="section">
-    <h2>TREF Receiver (Chat Simulation)</h2>
-    <p>Drag a TREF block into the chat to cite it:</p>
-    <div class="chat-simulation">
-      <h3>💬 AI Chat</h3>
-      <div class="chat-messages" id="chat-messages">
-        <div class="chat-message">Hello! Drag a TREF block here to cite it in our conversation.</div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <h3>Self-Contained</h3>
+          <p>A .tref file contains everything: content, metadata, license, references, and lineage. No external dependencies.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🌳</div>
+          <h3>Traceable Lineage</h3>
+          <p>Derive new blocks from existing ones. The parent chain is preserved, so you always know where knowledge came from.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⚖️</div>
+          <h3>License Preserved</h3>
+          <p>Attribution travels with the content. CC-BY-4.0 by default. Original creators always get credit.</p>
+        </div>
       </div>
-      <div id="chat-receiver" data-placeholder="📎 Drop TREF here to cite">
-        📎 Drop TREF here to cite
-      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="section">
-    <h2>Simple Drop Zone</h2>
-    <p>Basic receiver for testing:</p>
-    <div id="drop-zone" class="drop-zone">
-      Drop TREF block here
-    </div>
-    <div id="dropped-output" style="margin-top: 15px; display: none;">
-      <strong>Dropped Block ID:</strong> <code id="dropped-id"></code>
-    </div>
-    <div class="actions" style="margin-top: 15px;">
-      <button onclick="resetDemo()">Reset Demo</button>
-    </div>
-  </div>
+  <!-- Quick Start -->
+  <section class="section" style="background: white;">
+    <div class="container">
+      <h2 class="section-title">Quick Start</h2>
 
-  <div class="toast" id="toast"></div>
-
-  <!-- Hidden drag image -->
-  <div id="drag-icon" style="position: absolute; top: -100px; left: -100px; width: 40px; height: 40px; background: #2D1B4E; border-radius: 8px; border: 2px solid #5CCCCC; display: flex; align-items: center; justify-content: center;">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
-      <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
-      <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
-        <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
-          <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
-          <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
-          <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
-        </g>
-      </g>
-    </svg>
-  </div>
-
-  <script type="module">
-    // ===== Standalone TREF implementation for browser =====
-
-    const TREF_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
-      <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
-      <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
-        <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
-          <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
-          <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
-          <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
-        </g>
-      </g>
-    </svg>`;
-
-    const TREF_MIME_TYPE = 'application/vnd.aiblocks.tref+json';
-
-    // Sort object keys recursively
-    function sortKeys(obj) {
-      if (Array.isArray(obj)) {
-        return obj.map(sortKeys);
-      }
-      if (obj !== null && typeof obj === 'object') {
-        const sorted = {};
-        for (const key of Object.keys(obj).sort()) {
-          sorted[key] = sortKeys(obj[key]);
-        }
-        return sorted;
-      }
-      return obj;
-    }
-
-    // Generate canonical JSON (sorted keys, no whitespace)
-    function toCanonicalJson(block) {
-      const copy = { ...block };
-      delete copy.id;
-      return JSON.stringify(sortKeys(copy));
-    }
-
-    // SHA-256 hash using Web Crypto API
-    async function sha256(data) {
-      const encoder = new TextEncoder();
-      const buffer = await crypto.subtle.digest('SHA-256', encoder.encode(data));
-      return Array.from(new Uint8Array(buffer))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
-    }
-
-    // Generate block ID
-    async function generateId(block) {
-      const canonical = toCanonicalJson(block);
-      const hash = await sha256(canonical);
-      return `sha256:${hash}`;
-    }
-
-    // Create draft block
-    function createDraft(content, options = {}) {
-      return {
-        v: 1,
-        content,
-        meta: {
-          author: options.author,
-          created: new Date().toISOString(),
-          license: options.license || 'AIBlocks-1.0',
-        },
-        refs: options.refs || [],
-      };
-    }
-
-    // Publish draft (add ID)
-    async function publish(draft) {
-      const id = await generateId(draft);
-      return { ...draft, id };
-    }
-
-    // Escape HTML
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    // TrefWrapper class
-    class TrefWrapper {
-      #block;
-
-      constructor(block) {
-        this.#block = block;
-      }
-
-      get block() { return this.#block; }
-      get id() { return this.#block.id; }
-      get shortId() { return this.#block.id.replace('sha256:', '').slice(0, 8); }
-      get content() { return this.#block.content; }
-
-      toJSON(options = {}) {
-        return options.pretty
-          ? JSON.stringify(this.#block, null, 2)
-          : JSON.stringify(this.#block);
-      }
-
-      getFilename() {
-        return this.#block.id.replace('sha256:', '') + '.tref';
-      }
-
-      toBlob() {
-        return new Blob([this.toJSON()], { type: TREF_MIME_TYPE });
-      }
-
-      toObjectURL() {
-        return URL.createObjectURL(this.toBlob());
-      }
-
-      async copyToClipboard() {
-        await navigator.clipboard.writeText(this.toJSON());
-      }
-
-      async copyContentToClipboard() {
-        await navigator.clipboard.writeText(this.#block.content);
-      }
-
-      getDragData() {
-        // All formats get the same JSON - drag = .tref file content
-        const json = this.toJSON();
-        return [
-          { type: TREF_MIME_TYPE, data: json },
-          { type: 'application/json', data: json },
-          { type: 'text/plain', data: json },
-        ];
-      }
-
-      setDragData(dataTransfer) {
-        for (const { type, data } of this.getDragData()) {
-          dataTransfer.setData(type, data);
-        }
-      }
-
-      toHTML(options = {}) {
-        const { maxContentLength = 200 } = options;
-        const preview = this.#block.content.length > maxContentLength
-          ? this.#block.content.slice(0, maxContentLength) + '...'
-          : this.#block.content;
-
-        const refsHtml = this.#block.refs && this.#block.refs.length > 0
-          ? `<div class="tref-refs">
-              <strong>Refs:</strong> ${this.#block.refs.map(r =>
-                `<a href="${r.url}" target="_blank" rel="noopener">${r.label || r.url}</a>`
-              ).join(', ')}
-            </div>`
-          : '';
-
-        return `<div class="tref-wrapper" data-tref-id="${this.#block.id}">
-          <div class="tref-header">
-            <span class="tref-icon">${TREF_ICON_SVG}</span>
-            <span class="tref-id">${this.shortId}</span>
-            <span class="tref-meta">${this.#block.meta.created.split('T')[0]}</span>
-          </div>
-          <div class="tref-content">${escapeHtml(preview)}</div>
-          ${refsHtml}
-        </div>`;
-      }
-    }
-
-    // ===== TREF Receiver Component =====
-    class TrefReceiver {
-      #element;
-      #onReceive;
-      #onError;
-
-      constructor(element, options = {}) {
-        this.#element = element;
-        this.#onReceive = options.onReceive || (() => {});
-        this.#onError = options.onError || (() => {});
-        this.#setup();
-      }
-
-      #setup() {
-        const el = this.#element;
-        el.classList.add('tref-receiver');
-
-        el.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'copy';
-          el.classList.add('tref-receiver-active');
-        });
-
-        el.addEventListener('dragleave', () => {
-          el.classList.remove('tref-receiver-active');
-        });
-
-        el.addEventListener('drop', (e) => {
-          e.preventDefault();
-          el.classList.remove('tref-receiver-active');
-
-          const wrapper = unwrap(e.dataTransfer);
-          if (wrapper) {
-            el.classList.add('tref-receiver-success');
-            setTimeout(() => el.classList.remove('tref-receiver-success'), 1000);
-            this.#onReceive(wrapper);
-          } else {
-            el.classList.add('tref-receiver-error');
-            setTimeout(() => el.classList.remove('tref-receiver-error'), 1000);
-            this.#onError(new Error('Invalid TREF data'));
-          }
-        });
-      }
-
-      // Render received block inside the receiver
-      showBlock(wrapper) {
-        this.#element.innerHTML = wrapper.toHTML();
-      }
-
-      // Clear the receiver
-      clear() {
-        this.#element.innerHTML = this.#element.dataset.placeholder || 'Drop TREF here';
-        this.#element.classList.remove('tref-receiver-has-block');
-      }
-    }
-
-    // Unwrap from DataTransfer or string
-    function unwrap(source) {
-      try {
-        let json;
-        if (typeof source === 'string') {
-          json = source;
-        } else if (source && typeof source.getData === 'function') {
-          json = source.getData(TREF_MIME_TYPE) ||
-                 source.getData('application/json') ||
-                 source.getData('text/plain');
-        }
-        if (!json) return null;
-        const data = JSON.parse(json);
-        if (data.v === 1 && data.id && data.content) {
-          return new TrefWrapper(data);
-        }
-        return null;
-      } catch {
-        return null;
-      }
-    }
-
-    // ===== Demo App =====
-
-    let currentWrapper = null;
-
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
-    }
-
-    window.createBlock = async function() {
-      const content = document.getElementById('content-input').value.trim();
-      if (!content) {
-        showToast('Please enter some content');
-        return;
-      }
-
-      // Parse refs from textarea
-      const refsText = document.getElementById('refs-input').value.trim();
-      const refs = refsText
-        .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.startsWith('http'))
-        .map(url => ({ type: 'url', url, label: new URL(url).hostname }));
-
-      try {
-        const draft = createDraft(content, { author: 'Demo User', refs });
-        const block = await publish(draft);
-        currentWrapper = new TrefWrapper(block);
-
-        document.getElementById('block-section').style.display = 'block';
-
-        const htmlOutput = document.getElementById('html-output');
-        htmlOutput.innerHTML = currentWrapper.toHTML();
-
-        const wrapper = htmlOutput.querySelector('.tref-wrapper');
-        wrapper.setAttribute('draggable', 'true');
-        wrapper.addEventListener('dragstart', (e) => {
-          currentWrapper.setDragData(e.dataTransfer);
-          e.dataTransfer.effectAllowed = 'copy';
-
-          // Custom drag image - just the icon
-          const dragIcon = document.getElementById('drag-icon');
-          e.dataTransfer.setDragImage(dragIcon, 20, 20);
-        });
-
-        document.getElementById('json-output').textContent = currentWrapper.toJSON({ pretty: true });
-
-        // Show standalone icon with hover menu
-        document.getElementById('icon-section').style.display = 'block';
-        renderStandaloneIcon();
-
-        showToast('Block created: ' + currentWrapper.shortId);
-      } catch (err) {
-        showToast('Error: ' + err.message);
-      }
-    };
-
-    // Render standalone draggable icon with hover menu
-    function renderStandaloneIcon() {
-      const container = document.getElementById('standalone-icon');
-      container.innerHTML = `
-        <div class="tref-icon-container">
-          <div class="tref-drag-icon" draggable="true" title="Drag me!">
-            ${TREF_ICON_SVG.replace('width="24"', 'width="48"').replace('height="24"', 'height="48"')}
-          </div>
-          <div class="tref-icon-menu">
-            <div class="menu-hint">↑ Just drag the icon</div>
-            <button onclick="downloadBlock()">⬇ Download .tref</button>
-            <button onclick="copyJSON()">📋 Copy JSON</button>
+      <div class="steps" style="max-width: 700px; margin: 0 auto;">
+        <div class="step">
+          <div class="step-content">
+            <h4>Create a block</h4>
+            <p>Write your knowledge and publish it as a TREF block.</p>
+            <div class="code-block">
+              <code>tref publish "The speed of light is 299,792,458 m/s"</code>
+            </div>
           </div>
         </div>
-      `;
 
-      // Setup drag on the icon
-      const dragIcon = container.querySelector('.tref-drag-icon');
-      dragIcon.addEventListener('dragstart', (e) => {
-        currentWrapper.setDragData(e.dataTransfer);
-        e.dataTransfer.effectAllowed = 'copy';
+        <div class="step">
+          <div class="step-content">
+            <h4>Share it</h4>
+            <p>The block gets a unique ID. Share the .tref file or embed it in your page.</p>
+            <div class="code-block">
+              <code>sha256:7a4f2c...</code> → <code>7a4f2c...tref</code>
+            </div>
+          </div>
+        </div>
 
-        // Use the hidden drag image
-        const dragImg = document.getElementById('drag-icon');
-        e.dataTransfer.setDragImage(dragImg, 20, 20);
+        <div class="step">
+          <div class="step-content">
+            <h4>Verify & Derive</h4>
+            <p>Anyone can verify the block's integrity. Derive new blocks while preserving lineage.</p>
+            <div class="code-block">
+              <code>tref validate block.tref</code><br>
+              <code>tref derive sha256:7a4f2c... "Updated with source"</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section class="section" id="install">
+    <div class="container">
+      <h2 class="section-title">Install</h2>
+
+      <div class="card-grid" style="max-width: 900px; margin: 0 auto;">
+        <div class="card">
+          <h3>🐧 Linux / 🍎 macOS</h3>
+          <div class="code-block mt-2">
+            <div class="code-block-header">
+              <span class="code-block-label">Terminal</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <code>curl -sSL https://tref.lpmwfx.com/install.sh | bash</code>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🪟 Windows</h3>
+          <div class="code-block mt-2">
+            <div class="code-block-header">
+              <span class="code-block-label">PowerShell</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <code>iwr https://tref.lpmwfx.com/install.ps1 | iex</code>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🤖 Claude Code MCP</h3>
+          <div class="code-block mt-2">
+            <div class="code-block-header">
+              <span class="code-block-label">Terminal</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <code>claude mcp add tref -- tref-mcp</code>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🌐 Browser (CDN)</h3>
+          <div class="code-block mt-2">
+            <div class="code-block-header">
+              <span class="code-block-label">HTML</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <code>&lt;script src="https://tref.lpmwfx.com/js/tref.min.js"&gt;&lt;/script&gt;</code>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center mt-4">
+        <a href="release.html" class="btn btn-primary">View All Downloads</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="section" style="background: white;">
+    <div class="container">
+      <h2 class="section-title">Use Cases</h2>
+
+      <div class="feature-grid" style="max-width: 900px; margin: 0 auto;">
+        <div class="feature">
+          <div class="feature-icon">📚</div>
+          <div>
+            <h4>Knowledge Bases</h4>
+            <p>Build verifiable knowledge graphs with traceable sources.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🤖</div>
+          <div>
+            <h4>AI Context</h4>
+            <p>Give AI assistants verified facts they can cite.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">📝</div>
+          <div>
+            <h4>Documentation</h4>
+            <p>Track changes and preserve attribution in docs.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🔬</div>
+          <div>
+            <h4>Research</h4>
+            <p>Reproducible findings with immutable references.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">💬</div>
+          <div>
+            <h4>Chat Citations</h4>
+            <p>Drag TREF blocks into conversations as citations.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🌐</div>
+          <div>
+            <h4>Dead Link Recovery</h4>
+            <p>Archive snippets survive when URLs die.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/lpmwfx/tref">GitHub</a>
+      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
+      <a href="guide.html">Documentation</a>
+      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
+    </div>
+    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+  </footer>
+
+  <script>
+    function copyCode(btn) {
+      const code = btn.closest('.code-block').querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
       });
     }
-
-    window.copyJSON = async function() {
-      if (!currentWrapper) return;
-      await currentWrapper.copyToClipboard();
-      showToast('JSON copied to clipboard');
-    };
-
-    window.copyContent = async function() {
-      if (!currentWrapper) return;
-      await currentWrapper.copyContentToClipboard();
-      showToast('Content copied to clipboard');
-    };
-
-    window.downloadBlock = function() {
-      if (!currentWrapper) return;
-      const url = currentWrapper.toObjectURL();
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = currentWrapper.getFilename();
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('Downloading ' + currentWrapper.getFilename());
-    };
-
-    // Reset demo
-    window.resetDemo = function() {
-      currentWrapper = null;
-      document.getElementById('block-section').style.display = 'none';
-      document.getElementById('icon-section').style.display = 'none';
-      document.getElementById('json-output').textContent = '// Block JSON will appear here';
-      document.getElementById('content-input').value = `## Understanding Content-Addressed Storage
-
-Content-addressed storage (CAS) uses cryptographic hashes to create unique identifiers for data. Unlike location-based addressing (URLs, file paths), the address IS the content.
-
-**Key benefits:**
-- Immutability: changing content changes the ID
-- Deduplication: identical content = identical ID
-- Verification: recalculate hash to verify integrity
-
-TREF blocks use SHA-256 hashes, providing 2^256 possible addresses.`;
-
-      document.getElementById('refs-input').value = `https://en.wikipedia.org/wiki/Content-addressable_storage
-https://ipfs.tech/`;
-
-      const dropZone = document.getElementById('drop-zone');
-      dropZone.classList.remove('has-content');
-      dropZone.innerHTML = 'Drop TREF block here';
-      document.getElementById('dropped-output').style.display = 'none';
-
-      showToast('Demo reset');
-    };
-
-    // Drop zone
-    const dropZone = document.getElementById('drop-zone');
-
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'copy';
-      dropZone.classList.add('drag-over');
-    });
-
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('drag-over');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('drag-over');
-
-      const wrapper = unwrap(e.dataTransfer);
-      if (wrapper) {
-        dropZone.classList.add('has-content');
-        dropZone.innerHTML = wrapper.toHTML();
-        document.getElementById('dropped-output').style.display = 'block';
-        document.getElementById('dropped-id').textContent = wrapper.id;
-        showToast('Block received: ' + wrapper.shortId);
-      } else {
-        showToast('Invalid TREF data');
-      }
-    });
-
-    // Setup chat receiver
-    const chatReceiver = new TrefReceiver(document.getElementById('chat-receiver'), {
-      onReceive: (wrapper) => {
-        const messages = document.getElementById('chat-messages');
-
-        // Add the TREF block as a chat message
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'chat-message tref-block';
-        msgDiv.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-            ${TREF_ICON_SVG}
-            <strong>Cited TREF [${wrapper.shortId}]</strong>
-          </div>
-          <div style="font-size: 12px; opacity: 0.8;">${wrapper.content.slice(0, 150)}${wrapper.content.length > 150 ? '...' : ''}</div>
-          ${wrapper.block.refs && wrapper.block.refs.length > 0 ? `<div style="font-size: 11px; margin-top: 6px; opacity: 0.6;">📎 ${wrapper.block.refs.length} refs</div>` : ''}
-        `;
-        messages.appendChild(msgDiv);
-
-        // Reset the receiver
-        document.getElementById('chat-receiver').innerHTML = '📎 Drop TREF here to cite';
-
-        showToast('TREF cited in chat!');
-      },
-      onError: () => {
-        showToast('Invalid TREF - not cited');
-      }
-    });
-
-    // Create initial block
-    createBlock();
   </script>
 </body>
 </html>

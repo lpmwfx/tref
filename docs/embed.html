@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embed TREF - Add to Your Website</title>
+  <meta name="description" content="Copy-paste HTML snippets to add TREF blocks to your website.">
+  <link rel="stylesheet" href="css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+  <style>
+    .snippet-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .snippet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .snippet-preview {
+      background: var(--gray-100);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-top: 1rem;
+    }
+    .snippet-label {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    pre.snippet-code {
+      background: var(--gray-900);
+      color: var(--gray-100);
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      position: relative;
+    }
+    pre.snippet-code .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-easy {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .badge-size {
+      background: var(--gray-200);
+      color: var(--gray-600);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="embed.html" class="active">Embed</a></li>
+        <li><a href="builder.html">Builder</a></li>
+        <li><a href="demo.html">Demo</a></li>
+        <li><a href="release.html">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="hero" style="padding: 2rem;">
+    <h1 style="font-size: 2rem;">Embed TREF in Your Website</h1>
+    <p class="hero-subtitle" style="font-size: 1.1rem;">Copy-paste snippets to add TREF blocks in seconds</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Step 1: Add the Script -->
+      <div class="snippet-section">
+        <div class="snippet-header">
+          <h2>Step 1: Add the Script</h2>
+          <span class="badge badge-size">8 KB</span>
+        </div>
+        <p>Add this script tag to your HTML. Include it once, then use TREF anywhere on your page.</p>
+
+        <div class="snippet-label">HTML (head or end of body)</div>
+        <pre class="snippet-code"><code>&lt;script src="https://tref.lpmwfx.com/js/tref.min.js"&gt;&lt;/script&gt;</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+      </div>
+
+      <!-- Step 2: Display a Block -->
+      <div class="snippet-section">
+        <div class="snippet-header">
+          <h2>Step 2: Display a TREF Block</h2>
+          <span class="badge badge-easy">Easy</span>
+        </div>
+        <p>Create a block and display it with automatic styling.</p>
+
+        <div class="snippet-label">JavaScript</div>
+        <pre class="snippet-code"><code>// Create a block
+const block = await TREF.publish("Your knowledge content here", {
+  author: "Your Name",
+  license: "CC-BY-4.0"
+});
+
+// Wrap and display it
+const wrapper = new TREF.TrefWrapper(block);
+document.getElementById("my-block").innerHTML = wrapper.toHTML();</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+        <div class="snippet-label">HTML</div>
+        <pre class="snippet-code"><code>&lt;!-- Container for the block --&gt;
+&lt;div id="my-block"&gt;&lt;/div&gt;
+
+&lt;!-- Include the styles --&gt;
+&lt;style&gt;
+  /* Paste this once in your CSS */
+  .tref-wrapper { font-family: system-ui; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; background: #fafafa; max-width: 400px; }
+  .tref-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .tref-icon { display: inline-flex; width: 24px; height: 24px; }
+  .tref-icon svg { width: 100%; height: 100%; }
+  .tref-id { font-family: monospace; font-size: 12px; color: #6b7280; background: #e5e7eb; padding: 2px 6px; border-radius: 4px; }
+  .tref-meta { font-size: 12px; color: #9ca3af; margin-left: auto; }
+  .tref-content { font-size: 14px; line-height: 1.5; color: #374151; white-space: pre-wrap; }
+&lt;/style&gt;</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+        <div class="snippet-preview">
+          <div class="snippet-label">Preview</div>
+          <div id="preview-block"></div>
+        </div>
+      </div>
+
+      <!-- Step 3: Add a Drop Zone -->
+      <div class="snippet-section">
+        <div class="snippet-header">
+          <h2>Step 3: Receive TREF Blocks (Drop Zone)</h2>
+          <span class="badge badge-easy">Easy</span>
+        </div>
+        <p>Let users drag TREF blocks into your page.</p>
+
+        <div class="snippet-label">HTML + JavaScript</div>
+        <pre class="snippet-code"><code>&lt;!-- The drop zone element --&gt;
+&lt;div id="my-dropzone" data-placeholder="Drop TREF block here"&gt;
+  Drop TREF block here
+&lt;/div&gt;
+
+&lt;script&gt;
+  // Create receiver
+  const receiver = new TREF.TrefReceiver(
+    document.getElementById("my-dropzone"),
+    {
+      onReceive: (wrapper) => {
+        console.log("Received:", wrapper.id);
+        receiver.showBlock(wrapper);
+      },
+      onError: (err) => {
+        console.error("Invalid TREF:", err.message);
+      }
+    }
+  );
+&lt;/script&gt;
+
+&lt;style&gt;
+  /* Paste this once in your CSS */
+  .tref-receiver { border: 2px dashed #5CCCCC; border-radius: 8px; padding: 20px; min-height: 80px; display: flex; align-items: center; justify-content: center; color: #6b7280; background: #f9fafb; transition: all 0.2s; }
+  .tref-receiver-active { border-color: #8B5CF6; background: #f3e8ff; color: #8B5CF6; }
+  .tref-receiver-success { border-color: #10B981; background: #ecfdf5; }
+  .tref-receiver-has-block { border-style: solid; background: white; }
+&lt;/style&gt;</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+        <div class="snippet-preview">
+          <div class="snippet-label">Preview (try dragging the block above here!)</div>
+          <div id="preview-receiver" data-placeholder="Drop TREF block here">Drop TREF block here</div>
+        </div>
+      </div>
+
+      <!-- Make Blocks Draggable -->
+      <div class="snippet-section">
+        <div class="snippet-header">
+          <h2>Bonus: Make Blocks Draggable</h2>
+        </div>
+        <p>Add drag-and-drop to displayed blocks.</p>
+
+        <div class="snippet-label">JavaScript</div>
+        <pre class="snippet-code"><code>// After inserting the HTML
+const element = document.querySelector('.tref-wrapper');
+element.setAttribute('draggable', 'true');
+
+element.addEventListener('dragstart', (e) => {
+  wrapper.setDragData(e.dataTransfer);
+  e.dataTransfer.effectAllowed = 'copy';
+});</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+      </div>
+
+      <!-- All-in-One -->
+      <div class="snippet-section">
+        <div class="snippet-header">
+          <h2>Complete Example</h2>
+        </div>
+
+        <div class="snippet-label">Full HTML page</div>
+        <pre class="snippet-code" style="max-height: 400px;"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;My TREF Page&lt;/title&gt;
+  &lt;script src="https://tref.lpmwfx.com/js/tref.min.js"&gt;&lt;/script&gt;
+  &lt;style&gt;
+    /* Get all styles at once */
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;My Knowledge&lt;/h1&gt;
+
+  &lt;!-- Block display --&gt;
+  &lt;div id="my-block"&gt;&lt;/div&gt;
+
+  &lt;!-- Drop zone --&gt;
+  &lt;div id="dropzone"&gt;Drop TREF here&lt;/div&gt;
+
+  &lt;script&gt;
+    (async () => {
+      // Inject TREF styles
+      const style = document.createElement('style');
+      style.textContent = TREF.getStyles();
+      document.head.appendChild(style);
+
+      // Create and display a block
+      const block = await TREF.publish("The mitochondria is the powerhouse of the cell.", {
+        author: "Biology Teacher",
+        refs: [{ type: "url", url: "https://en.wikipedia.org/wiki/Mitochondrion" }]
+      });
+
+      const wrapper = new TREF.TrefWrapper(block);
+      const container = document.getElementById("my-block");
+      container.innerHTML = wrapper.toHTML();
+
+      // Make it draggable
+      const el = container.querySelector('.tref-wrapper');
+      el.setAttribute('draggable', 'true');
+      el.addEventListener('dragstart', (e) => {
+        wrapper.setDragData(e.dataTransfer);
+      });
+
+      // Set up receiver
+      new TREF.TrefReceiver(document.getElementById("dropzone"), {
+        onReceive: (w) => {
+          document.getElementById("dropzone").innerHTML = w.toHTML();
+        }
+      });
+    })();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/lpmwfx/tref">GitHub</a>
+      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
+      <a href="guide.html">Documentation</a>
+      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
+    </div>
+    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+  </footer>
+
+  <script src="js/tref.min.js"></script>
+  <script>
+    function copyCode(btn) {
+      const code = btn.parentElement.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Live preview
+    (async () => {
+      // Inject styles
+      const style = document.createElement('style');
+      style.textContent = TREF.getStyles();
+      document.head.appendChild(style);
+
+      // Create preview block
+      const block = await TREF.publish("The mitochondria is the powerhouse of the cell. This fact is often cited in biology classes worldwide.", {
+        author: "Demo",
+        refs: [{ type: "url", url: "https://en.wikipedia.org/wiki/Mitochondrion", label: "Wikipedia" }]
+      });
+
+      const wrapper = new TREF.TrefWrapper(block);
+      const container = document.getElementById("preview-block");
+      container.innerHTML = wrapper.toHTML();
+
+      // Make draggable
+      const el = container.querySelector('.tref-wrapper');
+      el.setAttribute('draggable', 'true');
+      el.addEventListener('dragstart', (e) => {
+        wrapper.setDragData(e.dataTransfer);
+        e.dataTransfer.effectAllowed = 'copy';
+      });
+
+      // Set up receiver
+      new TREF.TrefReceiver(document.getElementById("preview-receiver"), {
+        onReceive: (w) => {
+          document.getElementById("preview-receiver").innerHTML = w.toHTML();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

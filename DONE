@@ -52,3 +52,16 @@ Full name: **AIBlocks - Traceable Knowledge Format**
 - [x] wrap() and unwrap() functions
 - [x] Demo page with article, drag, and chat receiver
 - [x] 37 wrapper tests (140 total)
+
+## Phase 4: Publisher CLI (COMPLETE)
+
+- [x] 4a: CLI Foundation - Entry point, argument parsing, subcommands
+- [x] 4b: Publish Command - Content, file, stdin input with refs/license options
+- [x] 4c: Derive Command - Parent derivation with lineage preservation
+- [x] 4d: Validate Command - Integrity check with exit codes
+- [x] 4e: List/Info Commands - Registry browsing
+- [x] 4f: MCP Server - Model Context Protocol server for AI integration
+- [x] Global CLI install via npm link
+- [x] GitHub Pages site at tref.lpmwfx.com
+- [x] v0.1.0 MVP release with cross-platform executables
+- [x] 167 tests total

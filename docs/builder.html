@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TREF Builder - Create Knowledge Blocks</title>
+  <meta name="description" content="Interactive tool to create and download TREF blocks.">
+  <link rel="stylesheet" href="css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+  <style>
+    .builder-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .builder-container { grid-template-columns: 1fr; }
+    }
+    .builder-panel {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .builder-panel h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+      color: var(--dark-purple);
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--gray-700);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .form-group textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+    .refs-list {
+      margin-top: 0.5rem;
+    }
+    .ref-item {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      background: var(--gray-100);
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    .ref-item input {
+      flex: 1;
+      padding: 0.5rem;
+    }
+    .ref-item button {
+      padding: 0.5rem;
+      background: var(--gray-200);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-ref-btn {
+      background: var(--gray-100);
+      border: 1px dashed var(--gray-300);
+      padding: 0.75rem;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      color: var(--gray-600);
+      margin-top: 0.5rem;
+    }
+    .add-ref-btn:hover {
+      background: var(--gray-200);
+    }
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .preview-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .preview-output {
+      background: var(--gray-900);
+      color: var(--gray-100);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      max-height: 300px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+    .block-preview {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+    }
+    .status-bar {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .status-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .status-info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .char-count {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      text-align: right;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="embed.html">Embed</a></li>
+        <li><a href="builder.html" class="active">Builder</a></li>
+        <li><a href="demo.html">Demo</a></li>
+        <li><a href="release.html">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="hero" style="padding: 2rem;">
+    <h1 style="font-size: 2rem;">TREF Builder</h1>
+    <p class="hero-subtitle" style="font-size: 1.1rem;">Create verifiable knowledge blocks in seconds</p>
+  </section>
+
+  <section class="section">
+    <div class="builder-container">
+      <!-- Input Panel -->
+      <div class="builder-panel">
+        <h2>📝 Create Block</h2>
+
+        <div class="form-group">
+          <label for="content">Content *</label>
+          <textarea id="content" placeholder="Enter your knowledge content here...">The mitochondria is often called the "powerhouse of the cell" because it generates most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy.</textarea>
+          <div class="char-count"><span id="char-count">0</span> characters</div>
+        </div>
+
+        <div class="form-group">
+          <label for="author">Author</label>
+          <input type="text" id="author" placeholder="Your name (optional)">
+        </div>
+
+        <div class="form-group">
+          <label for="license">License</label>
+          <select id="license">
+            <option value="CC-BY-4.0">CC-BY-4.0 (Attribution)</option>
+            <option value="CC-BY-SA-4.0">CC-BY-SA-4.0 (Attribution-ShareAlike)</option>
+            <option value="CC0-1.0">CC0-1.0 (Public Domain)</option>
+            <option value="MIT">MIT</option>
+            <option value="All Rights Reserved">All Rights Reserved</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>References</label>
+          <div id="refs-list" class="refs-list"></div>
+          <button class="add-ref-btn" onclick="addRef()">+ Add Reference</button>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%;" onclick="buildBlock()">
+          🔨 Build Block
+        </button>
+
+        <div id="status" class="status-bar status-info" style="display: none;"></div>
+      </div>
+
+      <!-- Preview Panel -->
+      <div class="builder-panel">
+        <div class="preview-header">
+          <h2>📦 Output</h2>
+          <div class="preview-actions">
+            <button class="btn btn-secondary" onclick="copyJson()" style="padding: 0.5rem 1rem;">
+              📋 Copy
+            </button>
+            <button class="btn btn-primary" onclick="downloadBlock()" style="padding: 0.5rem 1rem;">
+              ⬇️ Download
+            </button>
+          </div>
+        </div>
+
+        <pre id="json-output" class="preview-output">// Your TREF block will appear here</pre>
+
+        <div class="block-preview">
+          <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--gray-600);">Visual Preview</h3>
+          <div id="block-preview"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/lpmwfx/tref">GitHub</a>
+      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
+      <a href="guide.html">Documentation</a>
+      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
+    </div>
+    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+  </footer>
+
+  <script src="js/tref.min.js"></script>
+  <script>
+    let currentBlock = null;
+    let currentWrapper = null;
+    let refCount = 0;
+
+    // Inject styles
+    const style = document.createElement('style');
+    style.textContent = TREF.getStyles();
+    document.head.appendChild(style);
+
+    // Character count
+    const contentEl = document.getElementById('content');
+    const charCountEl = document.getElementById('char-count');
+    contentEl.addEventListener('input', () => {
+      charCountEl.textContent = contentEl.value.length;
+    });
+    charCountEl.textContent = contentEl.value.length;
+
+    // Add reference
+    function addRef() {
+      refCount++;
+      const list = document.getElementById('refs-list');
+      const item = document.createElement('div');
+      item.className = 'ref-item';
+      item.id = `ref-${refCount}`;
+      item.innerHTML = `
+        <select style="width: 100px;">
+          <option value="url">URL</option>
+          <option value="search">Search</option>
+          <option value="archive">Archive</option>
+        </select>
+        <input type="text" placeholder="URL or query..." class="ref-value">
+        <input type="text" placeholder="Label (optional)" class="ref-label" style="width: 120px;">
+        <button onclick="removeRef(${refCount})">✕</button>
+      `;
+      list.appendChild(item);
+    }
+
+    function removeRef(id) {
+      document.getElementById(`ref-${id}`)?.remove();
+    }
+
+    // Build the block
+    async function buildBlock() {
+      const content = document.getElementById('content').value.trim();
+      if (!content) {
+        showStatus('Please enter some content', 'error');
+        return;
+      }
+
+      const author = document.getElementById('author').value.trim();
+      const license = document.getElementById('license').value;
+
+      // Collect refs
+      const refs = [];
+      document.querySelectorAll('.ref-item').forEach(item => {
+        const type = item.querySelector('select').value;
+        const value = item.querySelector('.ref-value').value.trim();
+        const label = item.querySelector('.ref-label').value.trim();
+
+        if (value) {
+          if (type === 'url') {
+            refs.push({ type: 'url', url: value, label: label || undefined });
+          } else if (type === 'search') {
+            refs.push({ type: 'search', query: value });
+          } else if (type === 'archive') {
+            refs.push({ type: 'archive', content: value, url: label || undefined });
+          }
+        }
+      });
+
+      try {
+        currentBlock = await TREF.publish(content, {
+          author: author || undefined,
+          license,
+          refs: refs.length > 0 ? refs : undefined
+        });
+
+        currentWrapper = new TREF.TrefWrapper(currentBlock);
+
+        // Show JSON
+        document.getElementById('json-output').textContent = JSON.stringify(currentBlock, null, 2);
+
+        // Show visual preview
+        const preview = document.getElementById('block-preview');
+        preview.innerHTML = currentWrapper.toHTML();
+
+        // Make draggable
+        const el = preview.querySelector('.tref-wrapper');
+        if (el) {
+          el.setAttribute('draggable', 'true');
+          el.addEventListener('dragstart', (e) => {
+            currentWrapper.setDragData(e.dataTransfer);
+          });
+        }
+
+        showStatus(`Block created: ${currentWrapper.shortId}`, 'success');
+      } catch (err) {
+        showStatus('Error: ' + err.message, 'error');
+      }
+    }
+
+    function copyJson() {
+      if (!currentWrapper) return;
+      currentWrapper.copyToClipboard().then(() => {
+        showStatus('Copied to clipboard!', 'success');
+      });
+    }
+
+    function downloadBlock() {
+      if (!currentWrapper) return;
+      const url = currentWrapper.toObjectURL();
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = currentWrapper.getFilename();
+      a.click();
+      URL.revokeObjectURL(url);
+      showStatus(`Downloading ${currentWrapper.getFilename()}`, 'success');
+    }
+
+    function showStatus(msg, type) {
+      const status = document.getElementById('status');
+      status.textContent = msg;
+      status.className = 'status-bar ' + (type === 'success' ? 'status-success' : 'status-info');
+      status.style.display = 'block';
+      setTimeout(() => { status.style.display = 'none'; }, 3000);
+    }
+
+    // Build initial block
+    buildBlock();
+  </script>
+</body>
+</html>

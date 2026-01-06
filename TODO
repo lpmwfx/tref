@@ -2,35 +2,60 @@
 
 Current phase tasks.
 
-## Phase 4: Publisher CLI
+## Phase 5: Website & Documentation
 
-### 4a: CLI Foundation ✅
-- [x] Create CLI entry point (src/cli/index.js)
-- [x] Parse command line arguments (--help, --version)
-- [x] Support subcommands: publish, derive, validate, list
+Goal: Create an easy-to-use, consumer-friendly website at tref.lpmwfx.com
 
-### 4b: Publish Command ✅
-- [x] `tref publish <content>` - create and publish block
-- [x] `tref publish -f <file>` - publish from file
-- [x] `tref publish --stdin` - read content from stdin
-- [x] Options: --refs (add references), --license, --pretty
+### 5a: Landing Page
+- [ ] Modern, clean design with TREF branding
+- [ ] "What is TREF?" - Simple explanation with visual
+- [ ] Installation one-liner for each platform
+- [ ] Quick start example (3 steps)
+- [ ] Links to all other pages
 
-### 4c: Derive Command ✅
-- [x] `tref derive <parent-id> <content>` - derive from parent
-- [x] `tref derive -f <parent.tref> <content>` - derive from file
-- [x] Preserve parent refs automatically
+### 5b: Embed Snippets Page
+- [ ] Copy-paste HTML snippet for TrefWrapper
+- [ ] Copy-paste HTML snippet for TrefReceiver
+- [ ] CDN link for tref.js browser bundle
+- [ ] Live preview of each snippet
+- [ ] Minimal CSS included
 
-### 4d: Validate Command ✅
-- [x] `tref validate <file.tref>` - validate block integrity
-- [x] Check ID matches content hash
-- [x] Check schema compliance
-- [x] Exit codes: 0=valid, 1=invalid
+### 5c: Format Guide Page
+- [ ] Anatomy of a .tref file (visual)
+- [ ] Field explanations with examples
+- [ ] Reference types explained
+- [ ] License handling
+- [ ] Derivation/lineage explanation
 
-### 4e: List/Info Commands ✅
-- [x] `tref list` - list all published blocks
-- [x] `tref info <id>` - show block details
-- [x] `tref cat <id>` - output block content
+### 5d: CLI Guide Page
+- [ ] Installation instructions
+- [ ] Command reference with examples
+- [ ] Common workflows (publish, derive, validate)
+- [ ] MCP setup for Claude Code
 
-### 4f: MCP Server ✅
-- [x] MCP server wrapper for AI integration
-- [x] Tools: tref_publish, tref_derive, tref_validate, tref_list, tref_info, tref_cat
+### 5e: Builder Page
+- [ ] Interactive TREF block builder
+- [ ] Content input with preview
+- [ ] Add references (URL, search, archive)
+- [ ] Set license
+- [ ] Download/copy result
+- [ ] Page itself uses TREF for its content
+
+### 5f: Demo Page
+- [ ] Article with embedded TREF blocks
+- [ ] Drag-and-drop playground
+- [ ] Chat simulation with TREF citations
+- [ ] Knowledge graph visualization
+- [ ] Each demo uses real TREF blocks
+
+### 5g: Release Page
+- [ ] Links to GitHub release
+- [ ] Download buttons with icons
+- [ ] Version info
+- [ ] Changelog summary
+
+### 5h: Browser Bundle
+- [ ] Create tref.min.js CDN bundle
+- [ ] Exports: TrefWrapper, TrefReceiver, wrap, unwrap
+- [ ] Self-contained (no dependencies)
+- [ ] Document usage in embed page

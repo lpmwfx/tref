@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TREF Guide - Format & CLI Documentation</title>
+  <meta name="description" content="Complete guide to the TREF format and command-line interface.">
+  <link rel="stylesheet" href="css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+  <style>
+    .guide-nav {
+      position: sticky;
+      top: 60px;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .guide-nav a {
+      display: block;
+      padding: 0.5rem 0;
+      color: var(--gray-600);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .guide-nav a:hover {
+      color: var(--purple);
+    }
+    .guide-content {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .guide-content h2 {
+      color: var(--dark-purple);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .guide-content h3 {
+      color: var(--gray-700);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    .field-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    .field-table th, .field-table td {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .field-table th {
+      background: var(--gray-100);
+      font-weight: 600;
+    }
+    .field-table code {
+      background: var(--gray-100);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .json-example {
+      background: var(--gray-900);
+      color: var(--gray-100);
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .json-key { color: #f472b6; }
+    .json-string { color: #34d399; }
+    .json-number { color: #60a5fa; }
+    .anatomy-diagram {
+      background: var(--gray-100);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+    }
+    .cli-command {
+      background: var(--gray-900);
+      color: var(--mint);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-family: monospace;
+      margin: 0.5rem 0;
+    }
+    .cli-output {
+      background: var(--gray-800);
+      color: var(--gray-300);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      margin: 0.5rem 0;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+      .guide-nav {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="guide.html" class="active">Guide</a></li>
+        <li><a href="embed.html">Embed</a></li>
+        <li><a href="builder.html">Builder</a></li>
+        <li><a href="demo.html">Demo</a></li>
+        <li><a href="release.html">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      <div class="two-col">
+        <!-- Side Navigation -->
+        <aside>
+          <nav class="guide-nav">
+            <strong style="color: var(--dark-purple);">Guide</strong>
+            <a href="#format">Block Format</a>
+            <a href="#fields">Field Reference</a>
+            <a href="#refs">Reference Types</a>
+            <a href="#derivation">Derivation</a>
+            <a href="#cli">CLI Commands</a>
+            <a href="#mcp">MCP Server</a>
+          </nav>
+        </aside>
+
+        <!-- Content -->
+        <main>
+          <!-- Format Section -->
+          <div class="guide-content" id="format">
+            <h2>The TREF Block Format</h2>
+            <p>A TREF block is a JSON file with the <code>.tref</code> extension. Each block is self-contained, content-addressed, and verifiable.</p>
+
+            <div class="anatomy-diagram">
+              <div class="json-example">
+{
+  <span class="json-key">"v"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"id"</span>: <span class="json-string">"sha256:7a4f2c..."</span>,
+  <span class="json-key">"content"</span>: <span class="json-string">"Your knowledge here"</span>,
+  <span class="json-key">"meta"</span>: {
+    <span class="json-key">"author"</span>: <span class="json-string">"Your Name"</span>,
+    <span class="json-key">"created"</span>: <span class="json-string">"2026-01-06T12:00:00Z"</span>,
+    <span class="json-key">"license"</span>: <span class="json-string">"CC-BY-4.0"</span>
+  },
+  <span class="json-key">"refs"</span>: [...],
+  <span class="json-key">"parent"</span>: <span class="json-string">"sha256:abc123..."</span>
+}
+              </div>
+            </div>
+          </div>
+
+          <!-- Fields Section -->
+          <div class="guide-content" id="fields">
+            <h2>Field Reference</h2>
+
+            <table class="field-table">
+              <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+              <tr>
+                <td><code>v</code></td>
+                <td>number</td>
+                <td>Yes</td>
+                <td>Format version (always <code>1</code>)</td>
+              </tr>
+              <tr>
+                <td><code>id</code></td>
+                <td>string</td>
+                <td>Yes</td>
+                <td>SHA-256 hash of content. Format: <code>sha256:hex...</code></td>
+              </tr>
+              <tr>
+                <td><code>content</code></td>
+                <td>string</td>
+                <td>Yes</td>
+                <td>The actual knowledge content</td>
+              </tr>
+              <tr>
+                <td><code>meta.author</code></td>
+                <td>string</td>
+                <td>No</td>
+                <td>Creator name</td>
+              </tr>
+              <tr>
+                <td><code>meta.created</code></td>
+                <td>string</td>
+                <td>Yes</td>
+                <td>ISO 8601 timestamp</td>
+              </tr>
+              <tr>
+                <td><code>meta.license</code></td>
+                <td>string</td>
+                <td>Yes</td>
+                <td>License identifier (default: CC-BY-4.0)</td>
+              </tr>
+              <tr>
+                <td><code>refs</code></td>
+                <td>array</td>
+                <td>No</td>
+                <td>Array of reference objects</td>
+              </tr>
+              <tr>
+                <td><code>parent</code></td>
+                <td>string</td>
+                <td>No</td>
+                <td>ID of parent block (for derived blocks)</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Reference Types -->
+          <div class="guide-content" id="refs">
+            <h2>Reference Types</h2>
+
+            <h3>URL Reference</h3>
+            <p>Link to a web resource.</p>
+            <div class="json-example">
+{ <span class="json-key">"type"</span>: <span class="json-string">"url"</span>, <span class="json-key">"url"</span>: <span class="json-string">"https://example.com/source"</span>, <span class="json-key">"label"</span>: <span class="json-string">"Source"</span> }
+            </div>
+
+            <h3>Archive Reference</h3>
+            <p>Preserved content snippet (survives dead links).</p>
+            <div class="json-example">
+{ <span class="json-key">"type"</span>: <span class="json-string">"archive"</span>, <span class="json-key">"content"</span>: <span class="json-string">"Archived text..."</span>, <span class="json-key">"url"</span>: <span class="json-string">"https://original.url"</span> }
+            </div>
+
+            <h3>Search Reference</h3>
+            <p>Query to refind the information.</p>
+            <div class="json-example">
+{ <span class="json-key">"type"</span>: <span class="json-string">"search"</span>, <span class="json-key">"query"</span>: <span class="json-string">"mitochondria powerhouse cell"</span> }
+            </div>
+
+            <h3>Hash Reference</h3>
+            <p>Integrity checksum for external data.</p>
+            <div class="json-example">
+{ <span class="json-key">"type"</span>: <span class="json-string">"hash"</span>, <span class="json-key">"algorithm"</span>: <span class="json-string">"sha256"</span>, <span class="json-key">"value"</span>: <span class="json-string">"abc123..."</span> }
+            </div>
+          </div>
+
+          <!-- Derivation -->
+          <div class="guide-content" id="derivation">
+            <h2>Derivation & Lineage</h2>
+            <p>When you derive a new block from an existing one, the parent's ID is recorded. This creates an immutable chain of provenance.</p>
+
+            <div class="json-example">
+<span style="color: var(--gray-500);">// Original block</span>
+{ "id": "sha256:parent123...", "content": "Original fact" }
+
+<span style="color: var(--gray-500);">// Derived block</span>
+{
+  "id": "sha256:child456...",
+  "content": "Updated fact with more detail",
+  "parent": "sha256:parent123...",  <span style="color: var(--gray-500);">// ← Links to original</span>
+  "refs": [...]  <span style="color: var(--gray-500);">// Parent's refs are inherited</span>
+}
+            </div>
+          </div>
+
+          <!-- CLI Commands -->
+          <div class="guide-content" id="cli">
+            <h2>CLI Commands</h2>
+
+            <h3>tref publish</h3>
+            <p>Create and publish a new block.</p>
+            <div class="cli-command">tref publish "Your content here"</div>
+            <div class="cli-command">tref publish -f article.txt</div>
+            <div class="cli-command">echo "Content" | tref publish --stdin</div>
+            <p><strong>Options:</strong></p>
+            <ul>
+              <li><code>--refs '[{"type":"url","url":"..."}]'</code> - Add references</li>
+              <li><code>--license CC-BY-4.0</code> - Set license</li>
+              <li><code>--dir ./published</code> - Output directory</li>
+              <li><code>--pretty</code> - Pretty-print JSON</li>
+            </ul>
+
+            <h3>tref derive</h3>
+            <p>Derive a new block from a parent.</p>
+            <div class="cli-command">tref derive sha256:parent... "New content"</div>
+            <div class="cli-command">tref derive -f parent.tref "Updated content"</div>
+
+            <h3>tref validate</h3>
+            <p>Verify block integrity.</p>
+            <div class="cli-command">tref validate block.tref</div>
+            <div class="cli-output">✓ Valid: sha256:7a4f2c...</div>
+
+            <h3>tref list</h3>
+            <p>List published blocks.</p>
+            <div class="cli-command">tref list</div>
+            <div class="cli-output">sha256:7a4f2c... - 2026-01-06
+sha256:abc123... - 2026-01-05</div>
+
+            <h3>tref info</h3>
+            <p>Show block details.</p>
+            <div class="cli-command">tref info sha256:7a4f2c...</div>
+
+            <h3>tref cat</h3>
+            <p>Output block content.</p>
+            <div class="cli-command">tref cat sha256:7a4f2c...</div>
+          </div>
+
+          <!-- MCP Server -->
+          <div class="guide-content" id="mcp">
+            <h2>MCP Server (Claude Code)</h2>
+            <p>The TREF MCP server integrates with Claude Code, giving AI assistants direct access to TREF tools.</p>
+
+            <h3>Installation</h3>
+            <div class="cli-command">claude mcp add --scope user --transport stdio tref -- tref-mcp</div>
+
+            <h3>Available Tools</h3>
+            <table class="field-table">
+              <tr>
+                <th>Tool</th>
+                <th>Description</th>
+              </tr>
+              <tr>
+                <td><code>tref_publish</code></td>
+                <td>Create and publish a block</td>
+              </tr>
+              <tr>
+                <td><code>tref_derive</code></td>
+                <td>Derive from a parent block</td>
+              </tr>
+              <tr>
+                <td><code>tref_validate</code></td>
+                <td>Validate block integrity</td>
+              </tr>
+              <tr>
+                <td><code>tref_list</code></td>
+                <td>List published blocks</td>
+              </tr>
+              <tr>
+                <td><code>tref_info</code></td>
+                <td>Get block details</td>
+              </tr>
+              <tr>
+                <td><code>tref_cat</code></td>
+                <td>Read block content</td>
+              </tr>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/lpmwfx/tref">GitHub</a>
+      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
+      <a href="guide.html">Documentation</a>
+      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
+    </div>
+    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+  </footer>
+</body>
+</html>

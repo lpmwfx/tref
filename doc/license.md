@@ -1,4 +1,4 @@
-# AIBlocks License Model
+# TRef License Model
 
 ## The Principle
 
