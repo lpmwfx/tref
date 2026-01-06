@@ -21,7 +21,7 @@ Draft markdown ───► │   PUBLISHER  │
                            │
            ┌───────────────┴───────────────┐
            ▼                               ▼
-    AIBlock (.aiblock)           HTML article + wrapper
+    AIBlock (.tref)              HTML article + wrapper
     - pure JSON data             - rendered markdown
     - transportable              - embedded block data
     - AI-readable                - drag/copy/download
@@ -153,7 +153,7 @@ The wrapper is a small JS component that:
 1. **Displays** an AI-Block icon
 2. **Enables** drag-and-drop of block data
 3. **Enables** copy to clipboard
-4. **Enables** download as .aiblock file
+4. **Enables** download as .tref file
 
 ### Interactions
 
@@ -170,7 +170,7 @@ On drag/copy, the wrapper provides:
 
 * `application/json` – full block JSON
 * `text/plain` – markdown content only
-* `text/uri-list` – link to .aiblock file
+* `text/uri-list` – link to .tref file
 
 ---
 
@@ -198,8 +198,8 @@ For static site generators and pipelines:
 
 For terminal and AI integration:
 
-* `aiblock publish < draft.md > block.aiblock`
-* `aiblock render < block.aiblock > article.html`
+* `tref publish < draft.md > block.tref`
+* `tref render < block.tref > article.html`
 * MCP server for Claude/AI tools
 * Pipe-friendly
 

@@ -225,24 +225,26 @@ The `content` field contains Markdown following CommonMark specification.
 
 ## File Extension
 
-AIBlocks files use the `.aiblock` extension:
+The format uses the `.tref` extension (Traceable Reference):
 
 ```
-my-article.aiblock
+my-article.tref
 ```
 
-Or `.aiblock.json` for explicit JSON:
+Or `.tref.json` for explicit JSON:
 
 ```
-my-article.aiblock.json
+my-article.tref.json
 ```
+
+Note: The project is called "AIBlocks" but the file format is generic and not AI-specific.
 
 ---
 
 ## MIME Type
 
 ```
-application/vnd.aiblock+json
+application/vnd.tref+json
 ```
 
 ---
