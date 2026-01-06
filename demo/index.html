@@ -415,10 +415,18 @@ https://ipfs.tech/</textarea>
       }
 
       getDragData() {
+        // Build readable text with content + refs
+        let text = this.#block.content;
+        if (this.#block.refs && this.#block.refs.length > 0) {
+          text += '\n\n---\nReferences:\n';
+          text += this.#block.refs.map(r => `- ${r.label || r.url}: ${r.url}`).join('\n');
+        }
+        text += `\n\n[TREF: ${this.shortId}]`;
+
         return [
           { type: TREF_MIME_TYPE, data: this.toJSON() },
           { type: 'application/json', data: this.toJSON() },
-          { type: 'text/plain', data: this.#block.content },  // Content only for chat apps
+          { type: 'text/plain', data: text },
         ];
       }
 
