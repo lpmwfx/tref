@@ -10,6 +10,83 @@ AI-Blocks is not a CMS, a social network, or an AI model. It is a **knowledge-be
 
 ---
 
+## The Core Idea
+
+### From Reference Block to Article Block
+
+The original idea was simple: a small data package (AIBlock) embedded in a website article containing:
+
+* A link back to the article it's embedded in
+* References to all source materials mentioned in the article
+* Draggable/copyable from its wrapper to anywhere else
+
+Then came the insight: **why not put the entire article in the block?**
+
+Now the article on the website IS the block. The block is the source, not an attachment.
+
+### Two Modes, One Format
+
+| | Reference Block | Article Block |
+|---|---|---|
+| `content` | Empty/minimal | Full markdown article |
+| `refs` | The main payload | Sources for the article |
+| Use case | Attach to existing content | Block IS the content |
+| Wrapper | Icon next to article | Renders the article |
+
+Both use the same format. The difference is what you put in `content`.
+
+---
+
+## License as Format
+
+### The Problem with Traditional Licenses
+
+Traditional open content licenses rely on:
+
+* Legal text that users must read
+* Manual attribution that users must remember
+* Trust that users will comply
+* Difficult enforcement after the fact
+
+### The AIBlocks Solution
+
+**The format IS the license.**
+
+When you use an AIBlock correctly:
+
+* References cannot be removed without breaking the format
+* Attribution is automatic and structural
+* Lineage is preserved by the Publisher
+* AI can verify compliance
+
+**Simple license principle:**
+> Use freely. Preserve the format. References follow automatically.
+
+### How It Works
+
+1. You write an article → run through Publisher → Block A
+2. Someone rewrites your article → runs through Publisher → Block B
+3. Block B automatically contains:
+   * New content-based ID
+   * `parent` pointing to Block A
+   * All original `refs` preserved
+   * Their additions clearly marked
+
+The reference tree grows automatically. No manual citation needed.
+
+### AI as Enforcer
+
+AI systems can:
+
+* Validate that refs are intact
+* Follow lineage to original source
+* Reject "broken" blocks with missing refs
+* Produce correctly formatted blocks themselves
+
+This makes legitimate reuse trivial and illegitimate use detectable.
+
+---
+
 ## Core Principles
 
 ### 1. The Block is the Atom of Truth
@@ -60,11 +137,11 @@ The format is designed for:
 * Machine parsing
 * Automatic source control
 
-…but remains readable and editable by humans (JSON / YAML / MD).
+…but remains readable and editable by humans (JSON / YAML / Markdown).
 
 AI-Blocks can be used directly as:
 
-* Chat input
+* Chat input (drag and drop)
 * RAG sources
 * Documentation
 * Articles
@@ -98,70 +175,25 @@ Use *as-is* provides automatic correct attribution and backlinks.
 
 ---
 
-## Conceptual Design
+## Workflow
 
-### Block Types
+### Creating a Block
 
-AI-Blocks is type-agnostic but not structure-less.
-Examples:
+```
+Write markdown → Publisher → AIBlock with ID
+```
 
-* Article block
-* Data block
-* Reference node
-* Prompt block
-* Summary / abstract
+### Using Someone's Block
 
-All share the same core principles.
+```
+Their block → Edit markdown → Publisher → New block with lineage
+```
 
----
+### AI Interaction
 
-### Wrapper & Visual Representation
-
-On websites, the block is represented by:
-
-* A simple AI-Block icon (SVG or other)
-* A JS wrapper that:
-
-  * Loads block data
-  * Allows drag / copy / download
-  * Delivers data file (not icon)
-
-The user interacts visually – the system delivers semantics.
-
----
-
-### Transportability
-
-An AI-Block can move between:
-
-* Website → chat
-* Chat → editor
-* Editor → repo
-* Repo → site
-
-Without changing the content's identity.
-
----
-
-## Intentions
-
-### For Humans
-
-* Easy correct source attribution
-* Simple knowledge reuse
-* No complex license handling
-
-### For AI Systems
-
-* Machine-readable references
-* Verifiable statements
-* Clear origin
-
-### For Publishers
-
-* Built-in attribution
-* Backlinks with correct use
-* Less scraping, more citation
+```
+Drag block to chat → AI reads markdown + refs → AI creates new block → Publisher
+```
 
 ---
 
@@ -187,6 +219,8 @@ If AI-Blocks is widely used:
 * AI can cross-check AI
 * Knowledge regains origin
 * References survive rewriting
+* Legitimate reuse becomes frictionless
+* Attribution becomes automatic
 
 AI-Blocks is an attempt to give knowledge **backbone** in a world of probabilistic models.
 
@@ -194,5 +228,5 @@ AI-Blocks is an attempt to give knowledge **backbone** in a world of probabilist
 
 ## Status
 
-AI-Blocks is an open, experimental format under active conceptual development.
+AI-Blocks is an open, experimental format under active development.
 Standardization emerges through use – not through prior committees.

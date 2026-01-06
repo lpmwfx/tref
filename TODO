@@ -1,54 +1,36 @@
 # TODO
 
-Current phase tasks only (Phase 1 + Phase 2).
-
-## Phase 1: Block Format Specification
-
-### Block Schema
-- [ ] Define Block base schema (id, type, content, metadata)
-- [ ] Define block types enum (article, data, reference, prompt, summary)
-- [ ] Add license field for attribution preservation
-- [ ] Add timestamps (createdAt, updatedAt)
-
-### Lineage Structure
-- [ ] Add parentId field (derivedFrom reference)
-- [ ] Add version field for block versioning
-- [ ] Add childIds array (derived blocks tracking)
-- [ ] Define lineage rules: modification creates new block, not overwrite
-
-### Reference Types
-- [ ] URL reference type (classic links)
-- [ ] Archive snippet type (RAG-snippets for dead link recovery)
-- [ ] Search prompt type (query for refinding)
-- [ ] Hash/checksum type (integrity verification)
-
-### Serialization Spec
-- [ ] Define canonical field order for deterministic output
-- [ ] Define encoding rules (UTF-8, no BOM)
-- [ ] Document JSON serialization format
-- [ ] Create Zod schemas with JSDoc types
-
-### Tests
-- [ ] Write tests for Block schema validation
-- [ ] Write tests for reference types
-- [ ] Write tests for serialization determinism
-
----
+Current phase tasks.
 
 ## Phase 2: Publisher Core
 
-### 2a: Lineage Engine
-- [ ] Implement content-based ID generation (hash of normalized content)
-- [ ] Create new block version on content change
-- [ ] Link old version as parent in lineage tree
-- [ ] Generate cryptographic hash for integrity
+### 2a: ID Generation
+- [ ] Implement content-based ID generation (sha256 of canonical JSON)
+- [ ] Canonical JSON serialization (sorted keys, no whitespace)
+- [ ] Test ID generation determinism
 
-### 2b: Package Generator
-- [ ] Single-file bundle output (JSON block)
-- [ ] Static file export to PUBLISH_DIR (`/ai-blocks/<id>.json`)
-- [ ] Minimal embeddable format specification
+### 2b: Publishing Functions
+- [ ] Publish draft → AIBlock (add ID)
+- [ ] Derive block (set parent, preserve refs)
+- [ ] Validate block integrity (ID matches content)
 
-### Tests
-- [ ] Test ID generation determinism (same input = same ID)
-- [ ] Test lineage linking on modification
-- [ ] Test package output format
+### 2c: File I/O
+- [ ] Save block to .aiblock file
+- [ ] Load block from .aiblock file
+- [ ] Export to PUBLISH_DIR
+
+---
+
+## Phase 3: Wrapper JS
+
+- [ ] Design wrapper component
+- [ ] Drag/copy/download interactions
+- [ ] Visual AI-Block icon (SVG)
+
+---
+
+## Phase 4: Publisher CLI (stdio/MCP)
+
+- [ ] CLI interface for publishing
+- [ ] MCP server for AI integration
+- [ ] stdin/stdout for piping

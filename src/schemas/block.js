@@ -1,100 +1,107 @@
 import { z } from 'zod';
-import { ReferenceSchema } from './reference.js';
+import { RefSchema } from './reference.js';
 
 /**
- * Block types enum - all supported block categories
+ * Block ID format: sha256:<hex>
  */
-export const BlockType = /** @type {const} */ ({
-  ARTICLE: 'article',
-  DATA: 'data',
-  REFERENCE: 'reference',
-  PROMPT: 'prompt',
-  SUMMARY: 'summary',
-});
+const BlockIdSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
 
 /**
- * Metadata schema with timestamps
+ * Metadata schema
  */
-export const MetadataSchema = z.object({
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date().optional(),
+export const MetaSchema = z.object({
   author: z.string().optional(),
-  source: z.string().optional(),
+  created: z.string().datetime(),
+  modified: z.string().datetime().optional(),
+  license: z.string().default('AIBlocks-1.0'),
+  lang: z.string().length(2).optional(), // ISO 639-1
 });
 
 /**
- * License schema for attribution preservation
+ * Origin schema - where block is published
  */
-export const LicenseSchema = z.object({
-  type: z.string(), // e.g., 'CC-BY-4.0', 'MIT', 'proprietary'
-  url: z.string().url().optional(),
-  attribution: z.string().optional(),
-});
-
-/**
- * Lineage schema for block versioning and parent/child tracking
- */
-export const LineageSchema = z.object({
-  parentId: z.string().uuid().optional(), // derivedFrom reference
-  version: z.number().int().positive().default(1),
-  childIds: z.array(z.string().uuid()).default([]),
-});
-
-/**
- * Core Block schema - the fundamental unit of knowledge
- *
- * A block is self-contained with content, metadata, license,
- * references, and lineage information.
- */
-export const BlockSchema = z.object({
-  // Identity
-  id: z.string().uuid(),
-  type: z.enum(['article', 'data', 'reference', 'prompt', 'summary']),
-
-  // Content
-  content: z.string(),
+export const OriginSchema = z.object({
+  url: z.string().url(),
   title: z.string().optional(),
-
-  // Attribution
-  license: LicenseSchema.optional(),
-  metadata: MetadataSchema,
-
-  // Lineage (parent/child relationships)
-  lineage: LineageSchema.default({ version: 1, childIds: [] }),
-
-  // References (URLs, archive snippets, search prompts, hashes)
-  references: z.array(ReferenceSchema).default([]),
 });
 
-/** @typedef {z.infer<typeof BlockSchema>} Block */
-/** @typedef {z.infer<typeof MetadataSchema>} Metadata */
-/** @typedef {z.infer<typeof LicenseSchema>} License */
-/** @typedef {z.infer<typeof LineageSchema>} Lineage */
+/**
+ * AIBlock schema v1
+ *
+ * A self-contained unit of knowledge with content, metadata,
+ * references, and lineage.
+ */
+export const AIBlockSchema = z.object({
+  v: z.literal(1),
+  id: BlockIdSchema,
+  content: z.string().min(1),
+  meta: MetaSchema,
+  origin: OriginSchema.optional(),
+  refs: z.array(RefSchema).default([]),
+  parent: BlockIdSchema.optional(),
+});
+
+/** @typedef {z.infer<typeof AIBlockSchema>} AIBlock */
+/** @typedef {z.infer<typeof MetaSchema>} Meta */
+/** @typedef {z.infer<typeof OriginSchema>} Origin */
 
 /**
- * Create a new block with validation
- * @param {unknown} data - Raw input data
- * @returns {Block}
- * @throws {z.ZodError} If validation fails
+ * Parse and validate a block
+ * @param {unknown} data
+ * @returns {AIBlock}
+ * @throws {z.ZodError}
  */
-export function createBlock(data) {
-  return BlockSchema.parse(data);
+export function parseBlock(data) {
+  return AIBlockSchema.parse(data);
 }
 
 /**
- * Safely parse block data without throwing
- * @param {unknown} data - Raw input data
- * @returns {{ success: true, data: Block } | { success: false, error: z.ZodError }}
+ * Safely parse a block without throwing
+ * @param {unknown} data
+ * @returns {{ success: true, data: AIBlock } | { success: false, error: z.ZodError }}
  */
-export function safeCreateBlock(data) {
-  return BlockSchema.safeParse(data);
+export function safeParseBlock(data) {
+  return AIBlockSchema.safeParse(data);
 }
 
 /**
- * Validate block data
- * @param {unknown} data - Data to validate
+ * Check if data is a valid block
+ * @param {unknown} data
  * @returns {boolean}
  */
 export function isValidBlock(data) {
-  return BlockSchema.safeParse(data).success;
+  return AIBlockSchema.safeParse(data).success;
+}
+
+/**
+ * Schema for block without ID (before publishing)
+ */
+export const DraftBlockSchema = AIBlockSchema.omit({ id: true });
+
+/** @typedef {z.infer<typeof DraftBlockSchema>} DraftBlock */
+
+/**
+ * Create a draft block (without ID)
+ * @param {string} content - Markdown content
+ * @param {object} [options]
+ * @param {string} [options.author]
+ * @param {string} [options.license]
+ * @param {string} [options.lang]
+ * @param {import('./reference.js').Ref[]} [options.refs]
+ * @param {string} [options.parent]
+ * @returns {DraftBlock}
+ */
+export function createDraft(content, options = {}) {
+  return DraftBlockSchema.parse({
+    v: 1,
+    content,
+    meta: {
+      author: options.author,
+      created: new Date().toISOString(),
+      license: options.license ?? 'AIBlocks-1.0',
+      lang: options.lang,
+    },
+    refs: options.refs ?? [],
+    parent: options.parent,
+  });
 }

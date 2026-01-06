@@ -1,106 +1,105 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { createBlock, safeCreateBlock, isValidBlock } from './block.js';
-import {
-  createUrlReference,
-  createArchiveReference,
-  createSearchReference,
-  createHashReference,
-} from './reference.js';
+import { parseBlock, safeParseBlock, isValidBlock, createDraft } from './block.js';
+import { urlRef, archiveRef, searchRef, hashRef } from './reference.js';
 
-describe('Block Schema', () => {
-  describe('createBlock', () => {
-    it('creates a valid block with minimal required fields', () => {
-      const block = createBlock({
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        type: 'article',
-        content: 'Test content',
-        metadata: {
-          createdAt: new Date(),
+// Valid block ID for testing
+const validId = 'sha256:' + 'a'.repeat(64);
+const validParentId = 'sha256:' + 'b'.repeat(64);
+
+describe('AIBlock Schema', () => {
+  describe('parseBlock', () => {
+    it('parses a minimal valid block', () => {
+      const block = parseBlock({
+        v: 1,
+        id: validId,
+        content: '# Hello\n\nWorld',
+        meta: {
+          created: '2025-01-06T12:00:00Z',
+          license: 'AIBlocks-1.0',
         },
       });
 
-      assert.strictEqual(block.type, 'article');
-      assert.strictEqual(block.content, 'Test content');
-      assert.strictEqual(block.lineage.version, 1);
-      assert.deepStrictEqual(block.lineage.childIds, []);
+      assert.strictEqual(block.v, 1);
+      assert.strictEqual(block.id, validId);
+      assert.strictEqual(block.content, '# Hello\n\nWorld');
+      assert.strictEqual(block.meta.license, 'AIBlocks-1.0');
     });
 
-    it('creates a block with all fields', () => {
-      const parentId = '550e8400-e29b-41d4-a716-446655440001';
-      const block = createBlock({
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        type: 'data',
-        content: 'Full block content',
-        title: 'Test Block',
-        license: {
-          type: 'CC-BY-4.0',
-          url: 'https://creativecommons.org/licenses/by/4.0/',
-          attribution: 'Test Author',
-        },
-        metadata: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
+    it('parses a full block with all fields', () => {
+      const block = parseBlock({
+        v: 1,
+        id: validId,
+        content: '# Full Article\n\nContent here...',
+        meta: {
           author: 'Test Author',
-          source: 'https://example.com',
+          created: '2025-01-06T12:00:00Z',
+          modified: '2025-01-06T14:00:00Z',
+          license: 'AIBlocks-1.0',
+          lang: 'en',
         },
-        lineage: {
-          parentId,
-          version: 2,
-          childIds: [],
+        origin: {
+          url: 'https://example.com/article',
+          title: 'Full Article',
         },
-        references: [],
+        refs: [{ type: 'url', url: 'https://source.com' }],
+        parent: validParentId,
       });
 
-      assert.strictEqual(block.title, 'Test Block');
-      assert.strictEqual(block.license?.type, 'CC-BY-4.0');
-      assert.strictEqual(block.lineage.parentId, parentId);
-      assert.strictEqual(block.lineage.version, 2);
+      assert.strictEqual(block.meta.author, 'Test Author');
+      assert.strictEqual(block.origin?.url, 'https://example.com/article');
+      assert.strictEqual(block.refs.length, 1);
+      assert.strictEqual(block.parent, validParentId);
     });
 
-    it('throws on invalid block type', () => {
+    it('throws on invalid version', () => {
       assert.throws(() => {
-        createBlock({
-          id: '550e8400-e29b-41d4-a716-446655440000',
-          type: 'invalid',
+        parseBlock({
+          v: 2,
+          id: validId,
           content: 'Test',
-          metadata: { createdAt: new Date() },
+          meta: { created: '2025-01-06T12:00:00Z' },
         });
       });
     });
 
-    it('throws on invalid UUID', () => {
+    it('throws on invalid ID format', () => {
       assert.throws(() => {
-        createBlock({
-          id: 'not-a-uuid',
-          type: 'article',
+        parseBlock({
+          v: 1,
+          id: 'invalid-id',
           content: 'Test',
-          metadata: { createdAt: new Date() },
+          meta: { created: '2025-01-06T12:00:00Z' },
+        });
+      });
+    });
+
+    it('throws on empty content', () => {
+      assert.throws(() => {
+        parseBlock({
+          v: 1,
+          id: validId,
+          content: '',
+          meta: { created: '2025-01-06T12:00:00Z' },
         });
       });
     });
   });
 
-  describe('safeCreateBlock', () => {
+  describe('safeParseBlock', () => {
     it('returns success for valid block', () => {
-      const result = safeCreateBlock({
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        type: 'prompt',
-        content: 'Test prompt',
-        metadata: { createdAt: new Date() },
+      const result = safeParseBlock({
+        v: 1,
+        id: validId,
+        content: '# Test',
+        meta: { created: '2025-01-06T12:00:00Z' },
       });
 
       assert.strictEqual(result.success, true);
-      if (result.success) {
-        assert.strictEqual(result.data.type, 'prompt');
-      }
     });
 
     it('returns error for invalid block', () => {
-      const result = safeCreateBlock({
-        id: 'invalid',
-        type: 'unknown',
-      });
+      const result = safeParseBlock({ invalid: 'data' });
 
       assert.strictEqual(result.success, false);
     });
@@ -110,10 +109,10 @@ describe('Block Schema', () => {
     it('returns true for valid block', () => {
       assert.strictEqual(
         isValidBlock({
-          id: '550e8400-e29b-41d4-a716-446655440000',
-          type: 'summary',
-          content: 'Summary content',
-          metadata: { createdAt: new Date() },
+          v: 1,
+          id: validId,
+          content: '# Test',
+          meta: { created: '2025-01-06T12:00:00Z' },
         }),
         true
       );
@@ -124,163 +123,160 @@ describe('Block Schema', () => {
     });
   });
 
-  describe('Block types', () => {
-    const types = ['article', 'data', 'reference', 'prompt', 'summary'];
+  describe('createDraft', () => {
+    it('creates a draft block without ID', () => {
+      const draft = createDraft('# My Article\n\nContent...');
 
-    for (const type of types) {
-      it(`accepts type: ${type}`, () => {
-        const result = safeCreateBlock({
-          id: '550e8400-e29b-41d4-a716-446655440000',
-          type,
-          content: `${type} content`,
-          metadata: { createdAt: new Date() },
-        });
-        assert.strictEqual(result.success, true);
-      });
-    }
-  });
-
-  describe('Lineage', () => {
-    it('defaults version to 1', () => {
-      const block = createBlock({
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        type: 'article',
-        content: 'Test',
-        metadata: { createdAt: new Date() },
-      });
-
-      assert.strictEqual(block.lineage.version, 1);
+      assert.strictEqual(draft.v, 1);
+      assert.strictEqual(draft.content, '# My Article\n\nContent...');
+      assert.strictEqual(draft.meta.license, 'AIBlocks-1.0');
+      assert.ok(draft.meta.created);
+      // @ts-expect-error - draft should not have id
+      assert.strictEqual(draft.id, undefined);
     });
 
-    it('defaults childIds to empty array', () => {
-      const block = createBlock({
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        type: 'article',
-        content: 'Test',
-        metadata: { createdAt: new Date() },
+    it('creates draft with options', () => {
+      const draft = createDraft('# Test', {
+        author: 'Test Author',
+        license: 'CC-BY-4.0',
+        lang: 'da',
+        parent: validParentId,
       });
 
-      assert.deepStrictEqual(block.lineage.childIds, []);
-    });
-
-    it('accepts parentId for derived blocks', () => {
-      const parentId = '550e8400-e29b-41d4-a716-446655440001';
-      const block = createBlock({
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        type: 'article',
-        content: 'Derived content',
-        metadata: { createdAt: new Date() },
-        lineage: {
-          parentId,
-          version: 2,
-          childIds: [],
-        },
-      });
-
-      assert.strictEqual(block.lineage.parentId, parentId);
-      assert.strictEqual(block.lineage.version, 2);
+      assert.strictEqual(draft.meta.author, 'Test Author');
+      assert.strictEqual(draft.meta.license, 'CC-BY-4.0');
+      assert.strictEqual(draft.meta.lang, 'da');
+      assert.strictEqual(draft.parent, validParentId);
     });
   });
 });
 
 describe('Reference Types', () => {
-  describe('URL Reference', () => {
+  describe('urlRef', () => {
     it('creates valid URL reference', () => {
-      const ref = createUrlReference('https://example.com', 'Example');
+      const ref = urlRef('https://example.com', 'Example');
+
       assert.strictEqual(ref.type, 'url');
       assert.strictEqual(ref.url, 'https://example.com');
       assert.strictEqual(ref.title, 'Example');
-      assert.ok(ref.accessedAt instanceof Date);
+      assert.ok(ref.accessed);
     });
 
     it('throws on invalid URL', () => {
       assert.throws(() => {
-        createUrlReference('not-a-url');
+        urlRef('not-a-url');
       });
     });
   });
 
-  describe('Archive Reference', () => {
+  describe('archiveRef', () => {
     it('creates valid archive reference', () => {
-      const ref = createArchiveReference(
-        'Archived content snippet',
-        'https://dead-link.com',
-        'Context around the snippet'
-      );
+      const ref = archiveRef('Archived content...', 'https://dead-link.com', 'Context');
+
       assert.strictEqual(ref.type, 'archive');
-      assert.strictEqual(ref.snippet, 'Archived content snippet');
-      assert.strictEqual(ref.originalUrl, 'https://dead-link.com');
-      assert.ok(ref.archivedAt instanceof Date);
+      assert.strictEqual(ref.snippet, 'Archived content...');
+      assert.strictEqual(ref.from, 'https://dead-link.com');
+      assert.strictEqual(ref.context, 'Context');
+      assert.ok(ref.archived);
     });
 
     it('works without optional fields', () => {
-      const ref = createArchiveReference('Just the snippet');
+      const ref = archiveRef('Just the snippet');
+
       assert.strictEqual(ref.type, 'archive');
       assert.strictEqual(ref.snippet, 'Just the snippet');
     });
   });
 
-  describe('Search Reference', () => {
+  describe('searchRef', () => {
     it('creates valid search reference', () => {
-      const ref = createSearchReference('how to validate blocks', {
-        engine: 'google',
-        expectedTitle: 'Block Validation Guide',
-        expectedDomain: 'example.com',
-      });
+      const ref = searchRef('how to validate blocks', { engine: 'google', expect: 'Guide' });
+
       assert.strictEqual(ref.type, 'search');
       assert.strictEqual(ref.query, 'how to validate blocks');
       assert.strictEqual(ref.engine, 'google');
+      assert.strictEqual(ref.expect, 'Guide');
     });
 
     it('works with just query', () => {
-      const ref = createSearchReference('find this content');
+      const ref = searchRef('find this content');
+
       assert.strictEqual(ref.type, 'search');
       assert.strictEqual(ref.query, 'find this content');
     });
   });
 
-  describe('Hash Reference', () => {
+  describe('hashRef', () => {
     it('creates valid hash reference', () => {
-      const ref = createHashReference('abc123def456', 'sha256', 'https://example.com/doc');
+      const ref = hashRef('abc123def456', 'sha256', 'https://example.com/doc');
+
       assert.strictEqual(ref.type, 'hash');
-      assert.strictEqual(ref.algorithm, 'sha256');
+      assert.strictEqual(ref.alg, 'sha256');
       assert.strictEqual(ref.value, 'abc123def456');
-      assert.strictEqual(ref.target, 'https://example.com/doc');
+      assert.strictEqual(ref.of, 'https://example.com/doc');
     });
 
     it('defaults to sha256', () => {
-      const ref = createHashReference('abc123');
-      assert.strictEqual(ref.algorithm, 'sha256');
+      const ref = hashRef('abc123');
+
+      assert.strictEqual(ref.alg, 'sha256');
     });
 
     it('accepts sha384 and sha512', () => {
-      const ref384 = createHashReference('hash384', 'sha384');
-      const ref512 = createHashReference('hash512', 'sha512');
-      assert.strictEqual(ref384.algorithm, 'sha384');
-      assert.strictEqual(ref512.algorithm, 'sha512');
+      const ref384 = hashRef('hash384', 'sha384');
+      const ref512 = hashRef('hash512', 'sha512');
+
+      assert.strictEqual(ref384.alg, 'sha384');
+      assert.strictEqual(ref512.alg, 'sha512');
     });
   });
 });
 
 describe('Block with References', () => {
   it('creates block with multiple reference types', () => {
-    const block = createBlock({
-      id: '550e8400-e29b-41d4-a716-446655440000',
-      type: 'article',
-      content: 'Article with references',
-      metadata: { createdAt: new Date() },
-      references: [
+    const block = parseBlock({
+      v: 1,
+      id: validId,
+      content: '# Article with refs',
+      meta: { created: '2025-01-06T12:00:00Z' },
+      refs: [
         { type: 'url', url: 'https://source.com' },
-        { type: 'archive', snippet: 'Backup content', archivedAt: new Date() },
+        { type: 'archive', snippet: 'Backup content' },
         { type: 'search', query: 'find original' },
-        { type: 'hash', algorithm: 'sha256', value: 'abc123' },
+        { type: 'hash', alg: 'sha256', value: 'abc123' },
       ],
     });
 
-    assert.strictEqual(block.references.length, 4);
-    assert.strictEqual(block.references[0]?.type, 'url');
-    assert.strictEqual(block.references[1]?.type, 'archive');
-    assert.strictEqual(block.references[2]?.type, 'search');
-    assert.strictEqual(block.references[3]?.type, 'hash');
+    assert.strictEqual(block.refs.length, 4);
+    assert.strictEqual(block.refs[0]?.type, 'url');
+    assert.strictEqual(block.refs[1]?.type, 'archive');
+    assert.strictEqual(block.refs[2]?.type, 'search');
+    assert.strictEqual(block.refs[3]?.type, 'hash');
+  });
+});
+
+describe('Lineage', () => {
+  it('accepts parent ID for derived blocks', () => {
+    const block = parseBlock({
+      v: 1,
+      id: validId,
+      content: '# Derived Article',
+      meta: { created: '2025-01-06T12:00:00Z' },
+      parent: validParentId,
+    });
+
+    assert.strictEqual(block.parent, validParentId);
+  });
+
+  it('rejects invalid parent ID format', () => {
+    assert.throws(() => {
+      parseBlock({
+        v: 1,
+        id: validId,
+        content: '# Test',
+        meta: { created: '2025-01-06T12:00:00Z' },
+        parent: 'invalid-parent',
+      });
+    });
   });
 });

@@ -1,119 +1,104 @@
 import { z } from 'zod';
 
 /**
- * Reference types enum
- */
-export const ReferenceType = /** @type {const} */ ({
-  URL: 'url',
-  ARCHIVE: 'archive',
-  SEARCH: 'search',
-  HASH: 'hash',
-});
-
-/**
  * URL reference - classic web link
  */
-export const UrlReferenceSchema = z.object({
+export const UrlRefSchema = z.object({
   type: z.literal('url'),
   url: z.string().url(),
   title: z.string().optional(),
-  accessedAt: z.coerce.date().optional(),
+  accessed: z.string().datetime().optional(),
 });
 
 /**
- * Archive reference - RAG snippet for dead link recovery
- * Preserves content when links die
+ * Archive reference - preserved content for dead links (RAG snippet)
  */
-export const ArchiveReferenceSchema = z.object({
+export const ArchiveRefSchema = z.object({
   type: z.literal('archive'),
-  originalUrl: z.string().url().optional(),
-  snippet: z.string(), // archived text content
-  archivedAt: z.coerce.date(),
-  context: z.string().optional(), // surrounding context
+  snippet: z.string(),
+  from: z.string().url().optional(),
+  archived: z.string().datetime().optional(),
+  context: z.string().optional(),
 });
 
 /**
- * Search reference - query for refinding content
- * Allows reconstruction of reference via search
+ * Search reference - query to refind content
  */
-export const SearchReferenceSchema = z.object({
+export const SearchRefSchema = z.object({
   type: z.literal('search'),
-  query: z.string(), // search prompt
-  engine: z.string().optional(), // e.g., 'google', 'duckduckgo'
-  expectedTitle: z.string().optional(),
-  expectedDomain: z.string().optional(),
+  query: z.string(),
+  engine: z.string().optional(),
+  expect: z.string().optional(),
 });
 
 /**
- * Hash reference - integrity verification
- * Cryptographic proof of content
+ * Hash reference - cryptographic verification
  */
-export const HashReferenceSchema = z.object({
+export const HashRefSchema = z.object({
   type: z.literal('hash'),
-  algorithm: z.enum(['sha256', 'sha384', 'sha512']),
+  alg: z.enum(['sha256', 'sha384', 'sha512']),
   value: z.string(),
-  target: z.string().optional(), // what was hashed (URL, content ID, etc.)
+  of: z.string().optional(),
 });
 
 /**
  * Union of all reference types
  */
-export const ReferenceSchema = z.discriminatedUnion('type', [
-  UrlReferenceSchema,
-  ArchiveReferenceSchema,
-  SearchReferenceSchema,
-  HashReferenceSchema,
+export const RefSchema = z.discriminatedUnion('type', [
+  UrlRefSchema,
+  ArchiveRefSchema,
+  SearchRefSchema,
+  HashRefSchema,
 ]);
 
-/** @typedef {z.infer<typeof ReferenceSchema>} Reference */
-/** @typedef {z.infer<typeof UrlReferenceSchema>} UrlReference */
-/** @typedef {z.infer<typeof ArchiveReferenceSchema>} ArchiveReference */
-/** @typedef {z.infer<typeof SearchReferenceSchema>} SearchReference */
-/** @typedef {z.infer<typeof HashReferenceSchema>} HashReference */
+/** @typedef {z.infer<typeof RefSchema>} Ref */
+/** @typedef {z.infer<typeof UrlRefSchema>} UrlRef */
+/** @typedef {z.infer<typeof ArchiveRefSchema>} ArchiveRef */
+/** @typedef {z.infer<typeof SearchRefSchema>} SearchRef */
+/** @typedef {z.infer<typeof HashRefSchema>} HashRef */
 
 /**
  * Create a URL reference
  * @param {string} url
  * @param {string} [title]
- * @returns {UrlReference}
+ * @returns {UrlRef}
  */
-export function createUrlReference(url, title) {
-  return UrlReferenceSchema.parse({
+export function urlRef(url, title) {
+  return UrlRefSchema.parse({
     type: 'url',
     url,
     title,
-    accessedAt: new Date(),
+    accessed: new Date().toISOString(),
   });
 }
 
 /**
  * Create an archive reference (RAG snippet)
- * @param {string} snippet - Archived text content
- * @param {string} [originalUrl] - Original URL if known
- * @param {string} [context] - Surrounding context
- * @returns {ArchiveReference}
+ * @param {string} snippet
+ * @param {string} [from]
+ * @param {string} [context]
+ * @returns {ArchiveRef}
  */
-export function createArchiveReference(snippet, originalUrl, context) {
-  return ArchiveReferenceSchema.parse({
+export function archiveRef(snippet, from, context) {
+  return ArchiveRefSchema.parse({
     type: 'archive',
     snippet,
-    originalUrl,
+    from,
     context,
-    archivedAt: new Date(),
+    archived: new Date().toISOString(),
   });
 }
 
 /**
  * Create a search reference
- * @param {string} query - Search query for refinding
+ * @param {string} query
  * @param {object} [options]
  * @param {string} [options.engine]
- * @param {string} [options.expectedTitle]
- * @param {string} [options.expectedDomain]
- * @returns {SearchReference}
+ * @param {string} [options.expect]
+ * @returns {SearchRef}
  */
-export function createSearchReference(query, options = {}) {
-  return SearchReferenceSchema.parse({
+export function searchRef(query, options = {}) {
+  return SearchRefSchema.parse({
     type: 'search',
     query,
     ...options,
@@ -122,16 +107,16 @@ export function createSearchReference(query, options = {}) {
 
 /**
  * Create a hash reference
- * @param {string} value - Hash value
- * @param {'sha256' | 'sha384' | 'sha512'} [algorithm='sha256']
- * @param {string} [target] - What was hashed
- * @returns {HashReference}
+ * @param {string} value
+ * @param {'sha256' | 'sha384' | 'sha512'} [alg='sha256']
+ * @param {string} [of]
+ * @returns {HashRef}
  */
-export function createHashReference(value, algorithm = 'sha256', target) {
-  return HashReferenceSchema.parse({
+export function hashRef(value, alg = 'sha256', of) {
+  return HashRefSchema.parse({
     type: 'hash',
-    algorithm,
+    alg,
     value,
-    target,
+    of,
   });
 }
