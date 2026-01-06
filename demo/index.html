@@ -249,6 +249,9 @@ Try dragging this block or copying it!</textarea>
     <div id="dropped-output" style="margin-top: 15px; display: none;">
       <strong>Dropped Block ID:</strong> <code id="dropped-id"></code>
     </div>
+    <div class="actions" style="margin-top: 15px;">
+      <button onclick="resetDemo()">Reset Demo</button>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -379,7 +382,7 @@ Try dragging this block or copying it!</textarea>
         return [
           { type: TREF_MIME_TYPE, data: this.toJSON() },
           { type: 'application/json', data: this.toJSON() },
-          { type: 'text/plain', data: this.#block.content },
+          { type: 'text/plain', data: this.toJSON() },  // Full JSON for cross-app drag
         ];
       }
 
@@ -491,6 +494,28 @@ Try dragging this block or copying it!</textarea>
       a.click();
       URL.revokeObjectURL(url);
       showToast('Downloading ' + currentWrapper.getFilename());
+    };
+
+    // Reset demo
+    window.resetDemo = function() {
+      currentWrapper = null;
+      document.getElementById('block-section').style.display = 'none';
+      document.getElementById('json-output').textContent = '// Block JSON will appear here';
+      document.getElementById('content-input').value = `## Hello AIBlocks!
+
+This is a **TREF block** - a self-contained knowledge unit with:
+- Content-addressed ID (SHA-256)
+- Metadata (author, license, timestamps)
+- References and lineage tracking
+
+Try dragging this block or copying it!`;
+
+      const dropZone = document.getElementById('drop-zone');
+      dropZone.classList.remove('has-content');
+      dropZone.innerHTML = 'Drop TREF block here';
+      document.getElementById('dropped-output').style.display = 'none';
+
+      showToast('Demo reset');
     };
 
     // Drop zone

@@ -150,7 +150,7 @@ describe('getDragData', () => {
     assert.ok(jsonData);
   });
 
-  it('includes text/plain with content', () => {
+  it('includes text/plain with full JSON', () => {
     const block = publish(createDraft('My content'));
     const wrapper = new TrefWrapper(block);
 
@@ -158,7 +158,7 @@ describe('getDragData', () => {
     const textData = dragData.find(d => d.type === 'text/plain');
 
     assert.ok(textData);
-    assert.equal(textData.data, 'My content');
+    assert.ok(textData.data.includes(block.id)); // Full JSON, not just content
   });
 });
 

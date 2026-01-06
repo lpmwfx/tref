@@ -161,7 +161,7 @@ export class TrefWrapper {
     return [
       { type: TREF_MIME_TYPE, data: this.toJSON() },
       { type: 'application/json', data: this.toJSON() },
-      { type: 'text/plain', data: this.#block.content },
+      { type: 'text/plain', data: this.toJSON() }, // Full JSON for cross-app drag
     ];
   }
 
