@@ -340,14 +340,10 @@
       setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
-    function makeDraggable(container, wrapper) {
+    function attachWrapper(container, wrapper) {
       const el = container.querySelector('.tref-wrapper');
       if (el) {
-        el.setAttribute('draggable', 'true');
-        el.addEventListener('dragstart', (e) => {
-          wrapper.setDragData(e.dataTransfer);
-          e.dataTransfer.effectAllowed = 'copy';
-        });
+        wrapper.attachEvents(el);
       }
     }
 
@@ -360,7 +356,7 @@
       });
       const wrap1 = new TREF.TrefWrapper(blocks.mito);
       document.getElementById('citation-1').innerHTML = wrap1.toHTML({ maxContentLength: 100 });
-      makeDraggable(document.getElementById('citation-1'), wrap1);
+      attachWrapper(document.getElementById('citation-1'), wrap1);
 
       // Citation 2
       blocks.atp = await TREF.publish("ATP (adenosine triphosphate) is the primary energy carrier in all living organisms. It stores and transports chemical energy within cells.", {
@@ -369,14 +365,14 @@
       });
       const wrap2 = new TREF.TrefWrapper(blocks.atp);
       document.getElementById('citation-2').innerHTML = wrap2.toHTML({ maxContentLength: 100 });
-      makeDraggable(document.getElementById('citation-2'), wrap2);
+      attachWrapper(document.getElementById('citation-2'), wrap2);
 
       // Source blocks for playground
       const sourceContainer = document.getElementById('source-blocks');
       blocks.fact1 = await TREF.publish("Water covers about 71% of Earth's surface.", { author: "Geography" });
       const wrapFact1 = new TREF.TrefWrapper(blocks.fact1);
       sourceContainer.innerHTML = wrapFact1.toHTML();
-      makeDraggable(sourceContainer, wrapFact1);
+      attachWrapper(sourceContainer, wrapFact1);
 
       // Drop zone
       new TREF.TrefReceiver(document.getElementById('drop-zone'), {
@@ -397,8 +393,8 @@
 
       document.getElementById('original-block').innerHTML = wrapOrig.toHTML();
       document.getElementById('derived-block').innerHTML = wrapDerived.toHTML();
-      makeDraggable(document.getElementById('original-block'), wrapOrig);
-      makeDraggable(document.getElementById('derived-block'), wrapDerived);
+      attachWrapper(document.getElementById('original-block'), wrapOrig);
+      attachWrapper(document.getElementById('derived-block'), wrapDerived);
 
       document.getElementById('parent-node').textContent = wrapOrig.shortId;
       document.getElementById('child-node').textContent = wrapDerived.shortId;

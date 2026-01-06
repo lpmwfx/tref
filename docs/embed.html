@@ -321,14 +321,7 @@ element.addEventListener('dragstart', (e) => {
       const wrapper = new TREF.TrefWrapper(block);
       const container = document.getElementById("preview-block");
       container.innerHTML = wrapper.toHTML();
-
-      // Make draggable
-      const el = container.querySelector('.tref-wrapper');
-      el.setAttribute('draggable', 'true');
-      el.addEventListener('dragstart', (e) => {
-        wrapper.setDragData(e.dataTransfer);
-        e.dataTransfer.effectAllowed = 'copy';
-      });
+      wrapper.attachEvents(container.querySelector('.tref-wrapper'));
 
       // Set up receiver
       new TREF.TrefReceiver(document.getElementById("preview-receiver"), {
