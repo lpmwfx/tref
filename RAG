@@ -15,7 +15,18 @@ All searches, findings, links for AIBlocks project.
 ### ESLint typescript-eslint
 - https://typescript-eslint.io/ - Type-aware linting for JavaScript
 
+### Model Context Protocol (MCP)
+- https://modelcontextprotocol.io/ - Official MCP documentation
+- https://modelcontextprotocol.io/docs/getting-started/intro - Introduction
+- https://modelcontextprotocol.io/docs/develop/build-server - Build server guide
+- npm package: @modelcontextprotocol/sdk
+- McpServer class for server creation
+- StdioServerTransport for stdio communication
+- registerTool() with Zod schemas for input validation
+- IMPORTANT: Use console.error() not console.log() in stdio servers
+
 ## Search Terms
 - "JSDoc TypeScript checking JavaScript"
 - "Zod runtime validation"
 - "eslint typescript-eslint checkJs"
+- "MCP Model Context Protocol server"

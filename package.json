@@ -5,7 +5,8 @@
   "type": "module",
   "main": "src/index.js",
   "bin": {
-    "tref": "./src/cli/index.js"
+    "tref": "./src/cli/index.js",
+    "tref-mcp": "./src/mcp/server.js"
   },
   "scripts": {
     "typecheck": "tsc $(find src -name '*.js' ! -name '*.test.js') --noEmit --checkJs --strict --target ES2024 --module NodeNext --moduleResolution NodeNext --skipLibCheck --types node",
@@ -32,6 +33,7 @@
     "typescript-eslint": "^8.52.0"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.1",
     "zod": "^3.25.76"
   }
 }

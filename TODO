@@ -31,6 +31,6 @@ Current phase tasks.
 - [x] `tref info <id>` - show block details
 - [x] `tref cat <id>` - output block content
 
-### 4f: MCP Server (Optional)
-- [ ] MCP server wrapper for AI integration
-- [ ] Tools: publish, derive, validate, list
+### 4f: MCP Server ✅
+- [x] MCP server wrapper for AI integration
+- [x] Tools: tref_publish, tref_derive, tref_validate, tref_list, tref_info, tref_cat
