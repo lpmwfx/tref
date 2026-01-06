@@ -285,10 +285,10 @@ export class TrefWrapper {
   }
 
   /**
-   * @param {{ maxContentLength?: number }} [options]
+   * @param {{ maxContentLength?: number, interactive?: boolean }} [options]
    */
   toHTML(options = {}) {
-    const { maxContentLength = 200 } = options;
+    const { maxContentLength = 200, interactive = true } = options;
     const preview =
       this.#block.content.length > maxContentLength
         ? this.#block.content.slice(0, maxContentLength) + '...'
@@ -304,15 +304,97 @@ export class TrefWrapper {
       </div>`
         : '';
 
+    const menuHtml = interactive
+      ? `<div class="tref-menu">
+        <button class="tref-menu-btn" title="Actions">⋮</button>
+        <div class="tref-menu-dropdown">
+          <button class="tref-action" data-action="copy-content">📋 Copy Content</button>
+          <button class="tref-action" data-action="copy-json">📄 Copy JSON</button>
+          <button class="tref-action" data-action="download">⬇️ Download .tref</button>
+          <button class="tref-action" data-action="verify">✓ Verify Block</button>
+        </div>
+      </div>`
+      : '';
+
     return `<div class="tref-wrapper" data-tref-id="${this.#block.id}">
   <div class="tref-header">
     <span class="tref-icon">${TREF_ICON_SVG}</span>
     <span class="tref-id">${this.shortId}</span>
     <span class="tref-meta">${this.#block.meta.created.split('T')[0]}</span>
+    ${menuHtml}
   </div>
   <div class="tref-content">${escapeHtml(preview)}</div>
   ${refsHtml}
 </div>`;
+  }
+
+  /**
+   * Attach interactive event listeners to a rendered wrapper element
+   * @param {HTMLElement} element - The .tref-wrapper element
+   */
+  attachEvents(element) {
+    const menuBtn = element.querySelector('.tref-menu-btn');
+    const dropdown = element.querySelector('.tref-menu-dropdown');
+    const wrapper = this;
+
+    if (menuBtn && dropdown) {
+      menuBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+      });
+
+      // Close on outside click
+      document.addEventListener('click', () => {
+        dropdown.classList.remove('show');
+      });
+    }
+
+    element.querySelectorAll('.tref-action').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        e.stopPropagation();
+        const action = /** @type {HTMLElement} */ (e.currentTarget).dataset.action;
+        const statusEl = element.querySelector('.tref-id');
+        const originalText = statusEl?.textContent || '';
+
+        try {
+          switch (action) {
+            case 'copy-content':
+              await wrapper.copyContentToClipboard();
+              if (statusEl) statusEl.textContent = 'Copied!';
+              break;
+            case 'copy-json':
+              await wrapper.copyToClipboard();
+              if (statusEl) statusEl.textContent = 'Copied!';
+              break;
+            case 'download': {
+              const url = wrapper.toObjectURL();
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = wrapper.getFilename();
+              a.click();
+              URL.revokeObjectURL(url);
+              if (statusEl) statusEl.textContent = 'Downloaded!';
+              break;
+            }
+            case 'verify': {
+              const valid = await validate(wrapper.block);
+              if (statusEl) statusEl.textContent = valid ? '✓ Valid!' : '✗ Invalid';
+              break;
+            }
+          }
+          setTimeout(() => {
+            if (statusEl) statusEl.textContent = originalText;
+          }, 1500);
+        } catch (err) {
+          if (statusEl) statusEl.textContent = 'Error';
+          setTimeout(() => {
+            if (statusEl) statusEl.textContent = originalText;
+          }, 1500);
+        }
+
+        if (dropdown) dropdown.classList.remove('show');
+      });
+    });
   }
 
   static getStyles() {
@@ -324,6 +406,7 @@ export class TrefWrapper {
   padding: 12px;
   background: #fafafa;
   max-width: 400px;
+  position: relative;
 }
 .tref-header {
   display: flex;
@@ -340,8 +423,48 @@ export class TrefWrapper {
   background: #e5e7eb;
   padding: 2px 6px;
   border-radius: 4px;
+  transition: all 0.2s;
 }
-.tref-meta { font-size: 12px; color: #9ca3af; margin-left: auto; }
+.tref-meta { font-size: 12px; color: #9ca3af; }
+.tref-menu { margin-left: auto; position: relative; }
+.tref-menu-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #6b7280;
+  line-height: 1;
+}
+.tref-menu-btn:hover { background: #e5e7eb; }
+.tref-menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 160px;
+  z-index: 100;
+  overflow: hidden;
+}
+.tref-menu-dropdown.show { display: block; }
+.tref-action {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  color: #374151;
+}
+.tref-action:hover { background: #f3f4f6; }
+.tref-action:not(:last-child) { border-bottom: 1px solid #f3f4f6; }
 .tref-content {
   font-size: 14px;
   line-height: 1.5;

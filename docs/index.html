@@ -36,12 +36,16 @@
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero">
+  <!-- Hero with live TREF block -->
+  <section class="hero" style="padding-bottom: 2rem;">
     <h1>Traceable Reference Format</h1>
     <p class="hero-subtitle">
       Knowledge blocks you can verify, share, and trust. Content-addressed, self-contained, and always traceable to source.
     </p>
+
+    <!-- THIS IS A REAL TREF BLOCK - Try the menu! -->
+    <div id="hero-block" style="display: flex; justify-content: center; margin: 2rem 0;"></div>
+
     <div class="hero-cta">
       <a href="builder.html" class="btn btn-primary">
         <span>🔨</span> Build a Block
@@ -250,6 +254,7 @@
     <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
   </footer>
 
+  <script src="js/tref.min.js"></script>
   <script>
     function copyCode(btn) {
       const code = btn.closest('.code-block').querySelector('code').textContent;
@@ -262,6 +267,52 @@
         }, 2000);
       });
     }
+
+    // Create the hero TREF block
+    (async function() {
+      // Inject styles
+      const style = document.createElement('style');
+      style.textContent = TREF.getStyles();
+      document.head.appendChild(style);
+
+      // The content of this page as a TREF block
+      const pageContent = `TREF - Traceable Reference Format
+
+What is TREF?
+A small package of knowledge that anyone can verify. Each block has:
+• Content-addressed ID (SHA-256 hash)
+• Self-contained data (no external dependencies)
+• Traceable lineage (know where it came from)
+• Preserved license (attribution travels with content)
+
+Quick Start:
+1. tref publish "Your knowledge here"
+2. Share the .tref file or embed it
+3. Anyone can verify and derive from it
+
+This block is draggable. Try the ⋮ menu for copy/download options.`;
+
+      const block = await TREF.publish(pageContent, {
+        author: 'TREF Website',
+        license: 'CC-BY-4.0',
+        refs: [{ type: 'url', url: 'https://tref.lpmwfx.com', label: 'TREF Homepage' }]
+      });
+
+      const wrapper = new TREF.TrefWrapper(block);
+      const container = document.getElementById('hero-block');
+      container.innerHTML = wrapper.toHTML();
+
+      const el = container.querySelector('.tref-wrapper');
+      el.style.background = 'white';
+      el.style.maxWidth = '450px';
+
+      // Attach interactive events
+      wrapper.attachEvents(el);
+
+      // Make draggable
+      el.setAttribute('draggable', 'true');
+      el.addEventListener('dragstart', e => wrapper.setDragData(e.dataTransfer));
+    })();
   </script>
 </body>
 </html>
