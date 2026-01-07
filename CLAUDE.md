@@ -127,6 +127,60 @@ npm install tref-block
 import { TrefWrapper } from 'tref-block';
 ```
 
+## CSS Architecture
+
+**Single source for CSS too.** All site styles live in `docs/css/tref-site.css`. No inline `<style>` blocks in HTML.
+
+### Principles
+
+1. **Grouped selectors** - Multiple class names can share one definition:
+   ```css
+   .card,
+   .explainer,
+   .builder-form,
+   .result-preview {
+     background: var(--site-card-bg);
+     border-radius: 12px;
+     padding: 2rem;
+   }
+   ```
+
+2. **CSS variables for theming** - All colors via custom properties:
+   ```css
+   :root {
+     --site-card-bg: #fff;
+   }
+   html.dark {
+     --site-card-bg: #1e293b;
+   }
+   ```
+
+3. **Cascade, not duplication** - Base patterns → modifiers → component-specific
+
+4. **No inline styles in HTML** - Use utility classes (.mt-2, .text-center) or add to CSS file
+
+### File Structure
+
+```
+docs/css/tref-site.css    ← ALL site styles (single file)
+    1. Variables (:root, html.dark)
+    2. Base reset
+    3. Layout (.container, .section)
+    4. Navigation
+    5. Hero
+    6. Box pattern (.card, .explainer, etc.)
+    7. Badge pattern (.card-icon, .list-icon)
+    8. Grid pattern (.card-grid, .comparison)
+    9. Lists
+   10. Buttons
+   11. Code blocks
+   12. Forms
+   13. Component-specific
+   14. Footer
+   15. Responsive
+   16. Utilities
+```
+
 ## Language Rule
 
 **All content in English before push.** Translate any Danish text in code, docs, and project files to English before committing/pushing.

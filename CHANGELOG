@@ -36,6 +36,16 @@ Finished changes for TREF project.
 
 ### Added
 - TrefWrapper dropdown menu with Copy Content, Copy JSON, Download actions
+- Auto TREF block generation from markdown at commit time (bin/build-docs.js)
+- Git pre-commit hook for automatic block builds
+
+### Changed
+- CSS refactored to single unified stylesheet (docs/css/tref-site.css)
+  - Removed all inline `<style>` blocks from HTML (was 377 lines across 5 files)
+  - Grouped selectors for shared patterns (.card, .explainer, .builder-form share base)
+  - Dark mode works automatically via CSS custom properties
+  - Eliminated duplicate definitions (.article-tref-card, .mini-receiver)
+- npm package published as tref-block@0.1.0 (16KB, was 138MB before fixing files array)
 - Documentation site (tref.lpmwfx.com)
   - index.html: Homepage with promo TREF block
   - builder.html: No-code block builder with embed code copy button
