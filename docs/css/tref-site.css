@@ -209,6 +209,14 @@ body {
   background-clip: text;
 }
 
+.hero-eyebrow {
+  color: var(--teal-400);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .hero-subtitle {
   font-size: 1.5rem;
   color: var(--gray-300);
@@ -801,11 +809,13 @@ textarea.form-input {
    ========================================================================== */
 
 .mini-receiver {
-  width: 40px;
-  height: 40px;
-  min-height: 40px;
-  padding: 8px;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
+  padding: 0;
   border-radius: 8px;
+  aspect-ratio: 1;
 }
 
 .mini-receiver.tref-receiver-has-block {
@@ -813,7 +823,7 @@ textarea.form-input {
 }
 
 .mini-receiver .tref-wrapper {
-  max-width: 40px;
+  max-width: 48px;
   padding: 0;
   background: transparent;
   border: none;
@@ -824,8 +834,8 @@ textarea.form-input {
 }
 
 .mini-receiver .tref-icon {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
 }
 
 .mini-receiver .tref-icon svg {

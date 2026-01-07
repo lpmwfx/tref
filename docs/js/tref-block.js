@@ -36,19 +36,17 @@ var u=".tref",g=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" w
   --tref-receiver-error-bg: #fef2f2;
   --tref-receiver-block-bg: #ffffff;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tref-menu-bg: #1f2937;
-    --tref-menu-text: #e5e7eb;
-    --tref-menu-hover: #374151;
-    --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    --tref-receiver-bg: #1f2937;
-    --tref-receiver-text: #9ca3af;
-    --tref-receiver-active-bg: #3b2d5e;
-    --tref-receiver-success-bg: #064e3b;
-    --tref-receiver-error-bg: #450a0a;
-    --tref-receiver-block-bg: #111827;
-  }
+.dark {
+  --tref-menu-bg: #1f2937;
+  --tref-menu-text: #e5e7eb;
+  --tref-menu-hover: #374151;
+  --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  --tref-receiver-bg: #1f2937;
+  --tref-receiver-text: #9ca3af;
+  --tref-receiver-active-bg: #3b2d5e;
+  --tref-receiver-success-bg: #064e3b;
+  --tref-receiver-error-bg: #450a0a;
+  --tref-receiver-block-bg: #111827;
 }
 .tref-wrapper {
   display: inline-block;
