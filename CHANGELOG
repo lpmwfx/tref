@@ -5,6 +5,7 @@ Finished changes for AIBlocks project.
 ## [Unreleased]
 
 ### Added
+- TrefWrapper dropdown menu (⋯) with Copy Content, Copy JSON, Download actions
 - Documentation site (tref.lpmwfx.com)
   - index.html: Homepage with promo TREF block
   - builder.html: No-code block builder with embed code copy button
