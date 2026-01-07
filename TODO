@@ -25,35 +25,36 @@ Single source architecture: `src/` → `dist/` → CDN/npm
 - [x] Update demo/index.html to import from dist/
 - [x] Test demo with built dist/
 
-### Docs Site Refactor
+### Docs Site Refactor ✓ COMPLETE
 
 Konverter /docs til single-source arkitektur som /demo.
 Målgruppe: lægfolk 12-13 år og derover.
 
-#### Teknisk migration
+#### Teknisk migration ✓
 
-- [ ] Fjern docs/js/wrapper.js (duplikat)
-- [ ] Fjern docs/js/tref.min.js (duplikat)
-- [ ] Opret docs/js/browser.js som importerer fra CDN
-- [ ] Opdater index.html til at importere fra CDN
-- [ ] Opdater builder.html til at importere fra CDN
-- [ ] Opdater guide.html til at importere fra CDN
-- [ ] Opdater about-cli.html til at importere fra CDN
-- [ ] Opdater examples.html til at importere fra CDN
-- [ ] Opdater examples/drag-drop.html til at importere fra CDN
-- [ ] Opdater examples/ai-chat.html til at importere fra CDN
-- [ ] Tilføj theme toggle til alle sider (som demo/)
-- [ ] Test alle sider lokalt
-- [ ] Test med tref.lpmwfx.com
+- [x] Fjern docs/js/wrapper.js (duplikat)
+- [x] Fjern docs/js/tref.min.js (duplikat)
+- [x] Opret docs/js/browser.js som importerer fra CDN
+- [x] Opdater alle HTML sider til at importere fra CDN
+- [x] Tilføj theme toggle til alle sider
+- [x] Test alle sider lokalt
+- [x] Publicer tref-block@0.1.0 til npm
+- [x] Test med tref.lpmwfx.com
 
-#### Indhold til målgruppe (12-13 år)
+#### Auto TREF Block Generation ✓
 
-- [ ] Omskriv index.html med enkle analogier (som about-cli.html)
-- [ ] Fjern teknisk jargon fra forsiden (SHA-256, content-addressed)
-- [ ] Tilføj "faktakort" og "fingeraftryk" analogier
-- [ ] Forenkl use cases til konkrete eksempler
-- [ ] Mærk guide.html tydeligt som "For udviklere"
-- [ ] Gennemgå builder.html for klarhed
+- [x] Opret content/*.md source filer
+- [x] Opret bin/build-docs.js build script
+- [x] Opret .githooks/pre-commit hook
+- [x] Konfigurer git til at bruge hooks
+- [x] Test automatisk build ved commit
+- [x] Dokumenter i doc/auto-tref-blocks.md
+
+#### Indhold til målgruppe (12-13 år) ✓
+
+- [x] Omskriv index.html med enkle analogier
+- [x] Tilføj "faktakort" og "fingeraftryk" analogier
+- [x] Forenkl use cases til konkrete eksempler
 
 ### Documentation
 

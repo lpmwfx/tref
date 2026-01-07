@@ -35,15 +35,43 @@ Old "AIBlocks" naming found in 26+ files across source code, documentation, and 
 - [ ] src/publisher/publish.test.js
 - [ ] src/publisher/id.test.js
 - [ ] src/mcp/server.js
-- [ ] docs/js/wrapper.js (code)
-- [ ] docs/js/browser.js (code)
+
+### Completed (Docs site):
+- [x] docs/js/wrapper.js - removed (now uses CDN)
+- [x] docs/js/browser.js - refactored to import from npm
 
 ### Decisions still needed:
 1. License identifier: `AIBlocks-1.0` → `TREF-1.0`?
 2. Schema URL: New domain or placeholder?
 3. Historical files (DONE, CHANGELOG, PHASES): Update or preserve?
 
-## Dark 
-dark virker ikke på https://tref.lpmwfx.com/about-cli.html tekst områder forbliver hvide med sort skrift
+## Dark Mode Issues (PARTIALLY FIXED)
+
+**Date**: 2026-01-07
+**Status**: Partially fixed
+
+- [x] Text areas staying white - Fixed with CSS custom properties
+- [ ] Flash of light theme when navigating between pages - Still present
+
+**Root cause of flash**: Theme is set via JavaScript after page load.
+**Possible fix**: Inline script in `<head>` to set `html.dark` before render, or use CSS `color-scheme` meta tag.
+
+---
+
+## GitHub Pages Build Issues (RESOLVED)
+
+**Date**: 2026-01-07
+**Status**: Resolved
+
+Issues encountered when setting up auto TREF block generation:
+
+1. **`.tref` extension not served** → Use `.json` instead
+2. **Jekyll processing markdown** → Move `content/` outside `docs/`, add `.nojekyll`
+3. **npm 2FA token** → Create granular token without 2FA requirement
+4. **npm package 138MB** → Exclude binaries in `files` array (now 16KB)
+5. **CDN 404** → `dist/` was in `.gitignore`, needed to publish to npm first
+6. **Embed code relative path** → Changed `./js/wrapper.js` to CDN URL
+
+See `doc/auto-tref-blocks.md` for troubleshooting guide.
 
 ---
