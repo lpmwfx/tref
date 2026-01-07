@@ -1,124 +1,26 @@
 # TODO
 
-Current phase tasks.
+Remaining tasks for v1.0 release.
 
-## Repo Refactoring (ACTIVE)
+## Documentation
 
-Single source architecture: `src/` → `dist/` → CDN/npm
+- [ ] Add CONTRIBUTING.md with dev setup instructions
+- [ ] Add UI/UX Build Guide to docs site (tref.lpmwfx.com/ui-guide)
 
-### Build Setup
+## Accessibility
 
-- [x] Add esbuild as dev dependency
-- [x] Add `npm run build` script (src/ → dist/)
-- [x] Add `npm run dev` script (serve demo/)
-- [x] Create dist/ folder structure
-
-### Package Config
-
-- [x] Update package.json with exports field
-- [x] Add "main" and "module" fields
-- [x] Configure for npm publish
-- [x] Add .npmignore (exclude demo/, doc/)
-
-### Demo Refactor
-
-- [x] Update demo/index.html to import from dist/
-- [x] Test demo with built dist/
-
-### Docs Site Refactor ✓ COMPLETE
-
-Konverter /docs til single-source arkitektur som /demo.
-Målgruppe: lægfolk 12-13 år og derover.
-
-#### Teknisk migration ✓
-
-- [x] Fjern docs/js/wrapper.js (duplikat)
-- [x] Fjern docs/js/tref.min.js (duplikat)
-- [x] Opret docs/js/browser.js som importerer fra CDN
-- [x] Opdater alle HTML sider til at importere fra CDN
-- [x] Tilføj theme toggle til alle sider
-- [x] Test alle sider lokalt
-- [x] Publicer tref-block@0.1.0 til npm
-- [x] Test med tref.lpmwfx.com
-
-#### Auto TREF Block Generation ✓
-
-- [x] Opret content/*.md source filer
-- [x] Opret bin/build-docs.js build script
-- [x] Opret .githooks/pre-commit hook
-- [x] Konfigurer git til at bruge hooks
-- [x] Test automatisk build ved commit
-- [x] Dokumenter i doc/auto-tref-blocks.md
-
-#### Indhold til målgruppe (12-13 år) ✓
-
-- [x] Omskriv index.html med enkle analogier
-- [x] Tilføj "faktakort" og "fingeraftryk" analogier
-- [x] Forenkl use cases til konkrete eksempler
-
-### Documentation
-
-- [x] Document architecture in doc/project.md
-- [x] Update CLAUDE.md with build workflow
-- [ ] Add CONTRIBUTING.md with dev setup
-
----
-
-## Wrapper UX Adaptation
-
-Align `src/wrapper/wrapper.js` with `doc/TrefBlockUIUX.md` specification.
-Test in `/demo` folder. Goal: wrapper.js as reusable library.
-
-### Typedef
-
-- [x] Rename `AIBlock` to `TrefBlock` throughout
-
-### Accessibility
-
-- [x] Add `role="button"` to icon
-- [x] Add `aria-label` to icon and action buttons
-- [x] Add `tabindex="0"` to icon for keyboard focus
-- [x] Fix focus styles (`:focus-visible` instead of removing outline)
-- [x] Add keyboard handlers (Enter/Space to activate)
-
-### Mobile / Touch
-
-- [x] Add tap-to-toggle for action menu on touch devices
-- [x] Add long-press (500ms) to start drag
-- [x] Add responsive sizing (32px → 48px on mobile)
-- [x] Add `@media (pointer: coarse)` styles for touch hit areas
-
-### Compact Receiver
-
-- [x] Add `.tref-receiver-compact` class (32x32)
-- [x] Add `compact: true` option to TrefReceiver
-- [x] Keep large mode for standalone drop zones
-
-### Demo Page
-
-- [x] Create `/demo/wrapper-test.html` for visual testing
-- [ ] Test all states: hover, focus, active, drag, drop
-- [ ] Test accessibility with keyboard only
-- [ ] Test on mobile/touch device
-
-### Screen Reader
-
-- [ ] Add live region for status announcements
+- [ ] Add live region for screen reader status announcements
 - [ ] Announce copy success/failure
 - [ ] Announce drop success/failure
 
-### Theme Support (Light/Dark/Custom)
+## Testing
 
-- [x] Convert hardcoded colors to CSS custom properties
-- [x] Add `@media (prefers-color-scheme: dark)` styles
-- [x] Document custom theme override pattern
-- [x] Test in light and dark contexts
+- [ ] Test all wrapper states: hover, focus, active, drag, drop
+- [ ] Test accessibility with keyboard only
+- [ ] Test on mobile/touch device
 
-### UI/UX Build Guide
+## Nice to Have (Post v1.0)
 
-- [ ] Add `/doc/TrefBlockUIUX.md` to docs site (tref.lpmwfx.com)
-- [ ] Create visual examples in `/docs/ui-guide/`
-- [ ] Add interactive component demos
-- [ ] Include copy-paste code snippets
-- [ ] Document all CSS classes with visual examples
-- [ ] Show correct vs incorrect implementations
+- [ ] Interactive component demos on docs site
+- [ ] Visual examples of all CSS classes
+- [ ] Correct vs incorrect implementation guide

@@ -1,84 +1,57 @@
 # PHASES
 
-Dynamic phase description for AIBlocks project.
+Dynamic phase description for TREF project.
 
-## Current Phase: 2 - Publisher Core
+## Current Phase: 7 - Polish & Documentation
 
-Build the publishing mechanism for blocks.
+Final polish, testing, and documentation.
 
-### 2a: ID Generation
-- Content-based ID generation (sha256 of canonical JSON)
-- Canonical JSON serialization (sorted keys, no whitespace)
-- Test ID generation determinism
-
-### 2b: Publishing Functions
-- Publish draft → AIBlock (add ID)
-- Derive block (set parent, preserve refs)
-- Validate block integrity (ID matches content)
-
-### 2c: File I/O
-- Save block to .aiblock file
-- Load block from .aiblock file
-- Export to PUBLISH_DIR
+### Remaining Tasks
+- Screen reader support (live regions for status announcements)
+- Manual testing (keyboard-only, mobile/touch)
+- CONTRIBUTING.md for new developers
+- UI/UX Build Guide on docs site
 
 ---
 
-## Completed: Phase 1 - Block Format Specification
+## Completed Phases
 
-Format spec v1.0 complete. Full name: **AIBlocks - Traceable Knowledge Format**
+### Phase 6: CSS Architecture ✓
+- Unified stylesheet (docs/css/tref-site.css)
+- Removed all inline styles from HTML
+- Dark mode via CSS custom properties
+- Grouped selectors for maintainability
 
-Deliverables (done):
+### Phase 5: Documentation Site ✓
+- Live site at tref.lpmwfx.com
+- Builder (no-code block creation)
+- Guide (CLI, API, MCP)
+- Examples (drag-drop, AI chat)
+- Auto TREF block generation from markdown
+
+### Phase 4: CLI & MCP ✓
+- `tref publish` - create blocks
+- `tref validate` - verify integrity
+- `tref derive` - create child blocks
+- `tref-mcp` - Claude Code integration
+
+### Phase 3: Wrapper JS ✓
+- TrefWrapper component (display, drag, copy, download)
+- TrefReceiver component (drop zones)
+- Accessibility (ARIA, keyboard, focus-visible)
+- Touch support (tap-to-toggle, long-press)
+- Theme support (light/dark via CSS variables)
+- Published to npm as tref-block@0.1.0
+
+### Phase 2: Publisher Core ✓
+- Content-based ID generation (sha256)
+- Canonical JSON serialization
+- Publish, derive, validate functions
+- File I/O (.tref files)
+
+### Phase 1: Block Format Specification ✓
 - Block schema (v, id, content, meta, origin, refs, parent)
 - Reference types (url, archive, search, hash)
 - ID format: sha256:<64 hex chars>
-- Canonical JSON spec for ID generation
 - Zod schemas with JSDoc types
-- Security section (safe by construction)
 - License-as-format philosophy
-
----
-
-## Phase 3: Wrapper JS
-
-Runtime component for browser/website integration.
-
-Deliverables:
-- Visual AIBlock icon (SVG)
-- Drag/copy/download interactions
-- Data transfer (JSON, text/plain, uri-list)
-- Zero dependencies, minimal footprint
-
----
-
-## Phase 4: Publisher CLI (stdio/MCP)
-
-Terminal and AI integration.
-
-Deliverables:
-- CLI interface: `aiblock publish < draft.md > block.aiblock`
-- MCP server for Claude/AI tools
-- stdin/stdout for piping
-- Batch processing
-
----
-
-## Phase 5: Python Publisher
-
-Build-time publishing for pipelines and static sites.
-
-Deliverables:
-- Block generation from markdown files
-- Batch export for static site generators
-- CI/CD integration patterns
-
----
-
-## Phase 6: Validation & Verification
-
-Cross-block integrity and reference checking.
-
-Deliverables:
-- Reference validation (URL alive, hash match)
-- Lineage tree verification
-- Duplicate/conflict detection
-- Comparison across publishers
