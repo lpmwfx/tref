@@ -1,11 +1,16 @@
-/* TREF Site Styles */
+/* TREF Site Styles - Unified */
+
+/* ==========================================================================
+   1. CSS VARIABLES
+   ========================================================================== */
 
 :root {
+  /* Brand colors */
   --purple: #8B5CF6;
   --mint: #5CCCCC;
   --dark-purple: #2D1B4E;
-  --light-bg: #f8fafc;
-  --white: #fff;
+
+  /* Grays */
   --gray-100: #f1f5f9;
   --gray-200: #e2e8f0;
   --gray-300: #cbd5e1;
@@ -15,42 +20,21 @@
   --gray-700: #334155;
   --gray-800: #1e293b;
   --gray-900: #0f172a;
+
+  /* Semantic */
   --success: #10B981;
   --error: #ef4444;
 
-  /* Site theme vars */
-  --site-bg: var(--light-bg);
+  /* Theme (light mode defaults) */
+  --site-bg: #f8fafc;
   --site-text: var(--gray-800);
-  --site-card-bg: var(--white);
+  --site-text-muted: var(--gray-600);
+  --site-card-bg: #fff;
   --site-card-shadow: 0 4px 12px rgb(0 0 0 / 5%);
-  --site-section-alt: var(--white);
-}
+  --site-section-alt: #fff;
+  --site-highlight-bg: rgb(92 204 204 / 15%);
 
-/* Dark mode site vars + TREF component vars */
-html.dark {
-  --site-bg: #0f172a;
-  --site-text: #e2e8f0;
-  --site-card-bg: #1e293b;
-  --site-card-shadow: 0 4px 12px rgb(0 0 0 / 30%);
-  --site-section-alt: #1e293b;
-  --gray-100: #1e293b;
-  --gray-200: #334155;
-  --gray-600: #94a3b8;
-  --gray-800: #f1f5f9;
-  --tref-menu-bg: #1f2937;
-  --tref-menu-text: #e5e7eb;
-  --tref-menu-hover: #374151;
-  --tref-menu-shadow: 0 4px 12px rgb(0 0 0 / 40%);
-  --tref-receiver-bg: #1f2937;
-  --tref-receiver-text: #9ca3af;
-  --tref-receiver-active-bg: #3b2d5e;
-  --tref-receiver-success-bg: #064e3b;
-  --tref-receiver-error-bg: #450a0a;
-  --tref-receiver-block-bg: #111827;
-}
-
-/* Light mode TREF component vars */
-html:not(.dark) {
+  /* TREF component vars (light) */
   --tref-menu-bg: #fff;
   --tref-menu-text: #374151;
   --tref-menu-hover: #f3f4f6;
@@ -63,25 +47,34 @@ html:not(.dark) {
   --tref-receiver-block-bg: #fff;
 }
 
-/* Theme toggle button */
-.theme-toggle {
-  background: transparent;
-  border: 1px solid rgb(255 255 255 / 20%);
-  border-radius: 8px;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--gray-300);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s;
+/* Dark mode overrides */
+html.dark {
+  --site-bg: #0f172a;
+  --site-text: #e2e8f0;
+  --site-text-muted: #94a3b8;
+  --site-card-bg: #1e293b;
+  --site-card-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+  --site-section-alt: #1e293b;
+  --site-highlight-bg: rgb(92 204 204 / 10%);
+  --gray-100: #1e293b;
+  --gray-200: #334155;
+
+  /* TREF component vars (dark) */
+  --tref-menu-bg: #1f2937;
+  --tref-menu-text: #e5e7eb;
+  --tref-menu-hover: #374151;
+  --tref-menu-shadow: 0 4px 12px rgb(0 0 0 / 40%);
+  --tref-receiver-bg: #1f2937;
+  --tref-receiver-text: #9ca3af;
+  --tref-receiver-active-bg: #3b2d5e;
+  --tref-receiver-success-bg: #064e3b;
+  --tref-receiver-error-bg: #450a0a;
+  --tref-receiver-block-bg: #111827;
 }
 
-.theme-toggle:hover {
-  border-color: var(--mint);
-  color: var(--mint);
-}
+/* ==========================================================================
+   2. BASE RESET
+   ========================================================================== */
 
 * {
   box-sizing: border-box;
@@ -97,7 +90,35 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-/* Navigation */
+/* ==========================================================================
+   3. LAYOUT
+   ========================================================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+.section-alt {
+  background: var(--site-section-alt);
+}
+
+.section-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--site-text);
+}
+
+/* ==========================================================================
+   4. NAVIGATION
+   ========================================================================== */
+
 .nav {
   background: var(--dark-purple);
   padding: 1rem 2rem;
@@ -148,7 +169,29 @@ body {
   color: var(--mint);
 }
 
-/* Hero Section */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--gray-300);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+/* ==========================================================================
+   5. HERO
+   ========================================================================== */
+
 .hero {
   background: linear-gradient(135deg, var(--dark-purple) 0%, #4C1D95 100%);
   color: white;
@@ -160,7 +203,7 @@ body {
   font-size: 3rem;
   margin-bottom: 1rem;
   background: linear-gradient(135deg, var(--purple) 0%, var(--mint) 100%);
-  /* stylelint-disable-next-line property-no-vendor-prefix -- Safari gradient text */
+  /* stylelint-disable-next-line property-no-vendor-prefix */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -180,7 +223,239 @@ body {
   flex-wrap: wrap;
 }
 
-/* Buttons */
+/* ==========================================================================
+   6. BOX PATTERN - All containers with bg/radius/padding/shadow
+   ========================================================================== */
+
+.card,
+.explainer,
+.builder-form,
+.result-preview,
+.comparison-box,
+.article-tref-card,
+.chat-box {
+  background: var(--site-card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--site-card-shadow);
+  transition: background 0.3s;
+}
+
+/* Card hover effect */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
+}
+
+/* Box with highlight border */
+.analogy,
+.article-tref-card {
+  border-left: 4px solid var(--mint);
+}
+
+.analogy {
+  background: var(--site-highlight-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* Comparison box uses gray bg */
+.comparison-box {
+  background: var(--gray-100);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+/* Chat box specific */
+.chat-box {
+  padding: 0;
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  background: var(--gray-100);
+}
+
+/* ==========================================================================
+   7. BOX CONTENT - Headings and text inside boxes
+   ========================================================================== */
+
+.card h3,
+.explainer h2,
+.comparison-box h4 {
+  color: var(--site-text);
+  margin-bottom: 1rem;
+}
+
+.explainer h2 {
+  color: var(--purple);
+}
+
+.card p,
+.explainer p,
+.analogy p,
+.step-content p,
+.feature p,
+.article-tref-content p {
+  color: var(--site-text-muted);
+  font-size: 0.95rem;
+}
+
+.analogy-title {
+  font-weight: 600;
+  color: var(--purple);
+  margin-bottom: 0.5rem;
+}
+
+/* Spacing */
+.explainer {
+  margin-bottom: 2rem;
+}
+
+/* ==========================================================================
+   8. BADGE PATTERN - Icon circles/squares
+   ========================================================================== */
+
+.card-icon,
+.list-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--purple), var(--mint));
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.list-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--purple);
+  font-size: 0.8rem;
+}
+
+/* Step numbers (auto-generated) */
+.steps {
+  counter-reset: step;
+}
+
+.step {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--purple), var(--mint));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.step-content h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--site-text);
+}
+
+/* ==========================================================================
+   9. GRID PATTERN - All grid layouts
+   ========================================================================== */
+
+.card-grid,
+.feature-grid,
+.comparison,
+.form-row {
+  display: grid;
+  gap: 2rem;
+}
+
+.card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.feature-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.comparison {
+  grid-template-columns: 1fr 1fr;
+  margin: 2rem 0;
+}
+
+.form-row {
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (width <= 600px) {
+  .comparison,
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   10. LIST PATTERN
+   ========================================================================== */
+
+.simple-list {
+  list-style: none;
+  padding: 0;
+}
+
+.simple-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  color: var(--site-text);
+}
+
+.simple-list li:last-child {
+  border-bottom: none;
+}
+
+/* Feature list */
+.feature {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.feature-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--mint);
+  flex-shrink: 0;
+}
+
+.feature h4 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ==========================================================================
+   11. BUTTONS
+   ========================================================================== */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -215,71 +490,18 @@ body {
   background: rgb(255 255 255 / 20%);
 }
 
-/* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+.btn-build {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
 }
 
-/* Sections */
-.section {
-  padding: 4rem 0;
-}
+/* ==========================================================================
+   12. CODE BLOCKS
+   ========================================================================== */
 
-.section-title {
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 3rem;
-  color: var(--site-text);
-}
-
-/* Cards */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.card {
-  background: var(--site-card-bg);
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: var(--site-card-shadow);
-  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
-}
-
-.card-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, var(--purple), var(--mint));
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  color: white;
-  font-size: 1.5rem;
-}
-
-.card h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-  color: var(--site-text);
-}
-
-.card p {
-  color: var(--gray-600);
-  font-size: 0.95rem;
-}
-
-/* Code Blocks */
-.code-block {
+.code-block,
+.embed-code {
   background: var(--gray-900);
   color: var(--gray-100);
   border-radius: 8px;
@@ -287,7 +509,21 @@ body {
   font-family: 'Fira Code', Consolas, monospace;
   font-size: 0.9rem;
   overflow-x: auto;
+}
+
+.code-block {
   position: relative;
+}
+
+.code-block code {
+  color: var(--mint);
+}
+
+.embed-code {
+  color: var(--mint);
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .code-block-header {
@@ -304,11 +540,9 @@ body {
   letter-spacing: 0.05em;
 }
 
-.code-block code {
-  color: var(--mint);
-}
-
-.copy-btn {
+/* Copy buttons */
+.copy-btn,
+.btn-copy-code {
   background: var(--gray-700);
   color: var(--gray-300);
   border: none;
@@ -319,88 +553,312 @@ body {
   transition: all 0.2s;
 }
 
-.copy-btn:hover {
+.btn-copy-code {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: 1px solid var(--gray-600);
+}
+
+.copy-btn:hover,
+.btn-copy-code:hover {
   background: var(--gray-600);
-}
-
-.copy-btn.copied {
-  background: var(--success);
   color: white;
 }
 
-/* Steps */
-.steps {
-  counter-reset: step;
+.copy-btn.copied,
+.btn-copy-code.copied {
+  background: var(--mint);
+  color: var(--dark-purple);
 }
 
-.step {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+/* ==========================================================================
+   13. FORMS
+   ========================================================================== */
+
+.builder-container {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.step::before {
-  counter-increment: step;
-  content: counter(step);
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--purple), var(--mint));
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
-.step-content h4 {
-  font-size: 1.1rem;
+.form-group label {
+  display: block;
+  font-weight: 600;
   margin-bottom: 0.5rem;
   color: var(--site-text);
 }
 
-.step-content p {
-  color: var(--gray-600);
-  margin-bottom: 0.5rem;
+.form-group small {
+  display: block;
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
 }
 
-/* Section alternating backgrounds */
-.section-alt {
-  background: var(--site-section-alt);
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--site-card-bg);
+  color: var(--site-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Feature Grid */
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+.form-input:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgb(139 92 246 / 10%);
 }
 
-.feature {
+textarea.form-input {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* ==========================================================================
+   14. RESULT/PREVIEW SECTION
+   ========================================================================== */
+
+.result-section {
+  margin-top: 2rem;
+  display: none;
+}
+
+.result-section.visible {
+  display: block;
+}
+
+.result-preview {
+  margin-bottom: 1.5rem;
+}
+
+.result-actions {
   display: flex;
   gap: 1rem;
-  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
-.feature-icon {
-  width: 24px;
-  height: 24px;
-  color: var(--mint);
+/* Step indicator dots */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gray-300);
+  transition: background 0.3s;
+}
+
+.step-dot.active {
+  background: var(--purple);
+}
+
+.step-dot.done {
+  background: var(--mint);
+}
+
+/* ==========================================================================
+   15. ARTICLE TREF CARD
+   ========================================================================== */
+
+.article-tref-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+}
+
+.article-tref-card .tref-wrapper {
   flex-shrink: 0;
 }
 
-.feature h4 {
+.article-tref-content {
+  flex: 1;
+}
+
+.article-tref-content h4 {
+  margin: 0 0 4px;
+  color: var(--site-text);
   font-size: 1rem;
-  margin-bottom: 0.25rem;
 }
 
-.feature p {
+.article-tref-hint {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   16. CHAT DEMO (examples/ai-chat.html)
+   ========================================================================== */
+
+.chat-messages {
+  height: 250px;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat-msg {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  max-width: 85%;
   font-size: 0.9rem;
-  color: var(--gray-600);
+  overflow-wrap: break-word;
 }
 
-/* Footer */
+.chat-msg.ai {
+  background: var(--site-card-bg);
+  align-self: flex-start;
+}
+
+.chat-msg.user {
+  background: var(--purple);
+  color: white;
+  align-self: flex-end;
+}
+
+.chat-msg.tref-context {
+  background: var(--site-highlight-bg);
+  border: 1px solid var(--mint);
+  align-self: flex-end;
+  font-size: 0.8rem;
+  color: var(--site-text-muted);
+}
+
+.chat-tref-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgb(92 204 204 / 10%);
+  border-top: 1px solid var(--gray-200);
+  align-items: center;
+}
+
+.chat-input-row {
+  display: flex;
+  border-top: 1px solid var(--gray-200);
+}
+
+.chat-input {
+  flex: 1;
+  border: none;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  outline: none;
+  background: var(--site-card-bg);
+  color: var(--site-text);
+}
+
+.chat-send {
+  background: var(--purple);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.chat-send:hover {
+  background: #7c3aed;
+}
+
+.add-slot-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px dashed var(--gray-300);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gray-400);
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-slot-btn:hover {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+/* ==========================================================================
+   17. MINI RECEIVER (compact TREF receiver)
+   ========================================================================== */
+
+.mini-receiver {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.mini-receiver.tref-receiver-has-block {
+  padding: 0;
+}
+
+.mini-receiver .tref-wrapper {
+  max-width: 40px;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.mini-receiver .tref-header {
+  margin: 0;
+}
+
+.mini-receiver .tref-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.mini-receiver .tref-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mini-receiver .tref-id,
+.mini-receiver .tref-meta,
+.mini-receiver .tref-menu,
+.mini-receiver .tref-content,
+.mini-receiver .tref-refs {
+  display: none;
+}
+
+/* Receiver row for drag-drop demo */
+.receiver-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.received-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   18. FOOTER
+   ========================================================================== */
+
 .footer {
   background: var(--gray-900);
   color: var(--gray-400);
@@ -408,7 +866,7 @@ body {
   text-align: center;
 }
 
-/* stylelint-disable-next-line no-descending-specificity -- .footer a and .nav-links a are separate */
+/* stylelint-disable-next-line no-descending-specificity */
 .footer a {
   color: var(--mint);
   text-decoration: none;
@@ -426,7 +884,10 @@ body {
   flex-wrap: wrap;
 }
 
-/* Responsive */
+/* ==========================================================================
+   19. RESPONSIVE
+   ========================================================================== */
+
 @media (width <= 768px) {
   .hero h1 {
     font-size: 2rem;
@@ -445,15 +906,28 @@ body {
   }
 }
 
-/* TREF Component Styles - injected from bundle via getStyles() */
+/* ==========================================================================
+   20. UTILITIES
+   ========================================================================== */
 
-/* Utility classes */
 .text-center { text-align: center; }
+.text-muted { color: var(--site-text-muted); }
+
 .mt-1 { margin-top: 0.5rem; }
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
 .mt-4 { margin-top: 2rem; }
+
 .mb-1 { margin-bottom: 0.5rem; }
 .mb-2 { margin-bottom: 1rem; }
 .mb-3 { margin-bottom: 1.5rem; }
 .mb-4 { margin-bottom: 2rem; }
+
+.max-w-sm { max-width: 500px; }
+.max-w-md { max-width: 800px; }
+.max-w-lg { max-width: 900px; }
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
