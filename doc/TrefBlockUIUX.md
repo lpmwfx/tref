@@ -254,35 +254,51 @@ The icon uses a fixed purple-mint scheme that works in both light and dark conte
 
 ### Light / Dark / Custom Modes
 
-UI elements (action buttons, receivers) adapt to context via CSS custom properties:
+UI elements (action buttons, receivers) adapt automatically via CSS custom properties and `prefers-color-scheme`:
 
 ```css
 :root {
   /* Light mode (default) */
-  --tref-action-bg: #f3f4f6;
-  --tref-action-bg-hover: #e5e7eb;
-  --tref-action-text: #374151;
+  --tref-accent: #5CCCCC;
+  --tref-accent-hover: #8B5CF6;
+  --tref-success: #10B981;
+  --tref-error: #ef4444;
+  --tref-menu-bg: #1f2937;
+  --tref-menu-text: #e5e7eb;
+  --tref-menu-hover: #374151;
   --tref-receiver-bg: #f9fafb;
-  --tref-receiver-border: #5CCCCC;
   --tref-receiver-text: #6b7280;
+  --tref-receiver-active-bg: #f3e8ff;
+  --tref-receiver-success-bg: #ecfdf5;
+  --tref-receiver-error-bg: #fef2f2;
+  --tref-receiver-block-bg: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --tref-action-bg: #374151;
-    --tref-action-bg-hover: #4b5563;
-    --tref-action-text: #e5e7eb;
+    --tref-menu-bg: #374151;
+    --tref-menu-text: #f3f4f6;
+    --tref-menu-hover: #4b5563;
     --tref-receiver-bg: #1f2937;
-    --tref-receiver-border: #5CCCCC;
     --tref-receiver-text: #9ca3af;
+    --tref-receiver-active-bg: #3b2d5e;
+    --tref-receiver-success-bg: #064e3b;
+    --tref-receiver-error-bg: #450a0a;
+    --tref-receiver-block-bg: #111827;
   }
 }
+```
 
-/* Custom theme override */
-.theme-custom {
-  --tref-action-bg: /* your color */;
-  --tref-action-bg-hover: /* your color */;
-  /* etc. */
+### Custom Theme Override
+
+Override any variable on a parent element:
+
+```css
+/* Custom brand theme */
+.my-app {
+  --tref-accent: #ff6600;
+  --tref-accent-hover: #cc5500;
+  --tref-menu-bg: #222;
 }
 ```
 
@@ -290,14 +306,16 @@ UI elements (action buttons, receivers) adapt to context via CSS custom properti
 
 | Variable | Purpose | Light | Dark |
 |----------|---------|-------|------|
-| `--tref-action-bg` | Action button background | #f3f4f6 | #374151 |
-| `--tref-action-bg-hover` | Action button hover | #e5e7eb | #4b5563 |
-| `--tref-action-text` | Action button text | #374151 | #e5e7eb |
-| `--tref-receiver-bg` | Receiver background | #f9fafb | #1f2937 |
-| `--tref-receiver-border` | Receiver border | #5CCCCC | #5CCCCC |
-| `--tref-receiver-text` | Receiver placeholder | #6b7280 | #9ca3af |
+| `--tref-accent` | Primary accent (borders, focus) | #5CCCCC | #5CCCCC |
+| `--tref-accent-hover` | Active/hover accent | #8B5CF6 | #8B5CF6 |
 | `--tref-success` | Success state | #10B981 | #10B981 |
 | `--tref-error` | Error state | #ef4444 | #ef4444 |
+| `--tref-menu-bg` | Action menu background | #1f2937 | #374151 |
+| `--tref-menu-text` | Action menu text | #e5e7eb | #f3f4f6 |
+| `--tref-menu-hover` | Action button hover | #374151 | #4b5563 |
+| `--tref-receiver-bg` | Receiver background | #f9fafb | #1f2937 |
+| `--tref-receiver-text` | Receiver placeholder | #6b7280 | #9ca3af |
+| `--tref-receiver-block-bg` | Receiver with block | #ffffff | #111827 |
 
 ### Icon Consistency
 

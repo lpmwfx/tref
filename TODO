@@ -18,12 +18,12 @@ Single source architecture: `src/` → `dist/` → CDN/npm
 - [x] Update package.json with exports field
 - [x] Add "main" and "module" fields
 - [x] Configure for npm publish
-- [ ] Add .npmignore (exclude demo/, doc/)
+- [x] Add .npmignore (exclude demo/, doc/)
 
 ### Demo Refactor
 
 - [x] Update demo/index.html to import from dist/
-- [ ] Test demo with built dist/
+- [x] Test demo with built dist/
 
 ### Docs Site Refactor
 
@@ -83,10 +83,10 @@ Test in `/demo` folder. Goal: wrapper.js as reusable library.
 
 ### Theme Support (Light/Dark/Custom)
 
-- [ ] Convert hardcoded colors to CSS custom properties
-- [ ] Add `@media (prefers-color-scheme: dark)` styles
-- [ ] Document custom theme override pattern
-- [ ] Test in light and dark contexts
+- [x] Convert hardcoded colors to CSS custom properties
+- [x] Add `@media (prefers-color-scheme: dark)` styles
+- [x] Document custom theme override pattern
+- [x] Test in light and dark contexts
 
 ### UI/UX Build Guide
 

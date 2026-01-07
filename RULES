@@ -1,6 +1,6 @@
 # RULES
 
-Cross-AI model rules for AIBlocks project.
+Cross-AI model rules for TREF project.
 
 ## Code Style
 - Pure JavaScript with JSDoc type annotations (no TypeScript files)

@@ -1,8 +1,8 @@
-# AI-Blocks – Publisher
+# TREF Publisher
 
 ## Role and Purpose
 
-An **AI-Blocks Publisher** is the minimal software layer that makes it possible to **publish, distribute, and preserve AI-Blocks**, without controlling their content or use.
+A **TREF Publisher** is the minimal software layer that makes it possible to **publish, distribute, and preserve TREF blocks**, without controlling their content or use.
 
 The publisher is not a platform and not a gatekeeper. It is a **publishing mechanism**.
 
@@ -21,13 +21,13 @@ Draft markdown ───► │   PUBLISHER  │
                            │
            ┌───────────────┴───────────────┐
            ▼                               ▼
-    AIBlock (.tref)              HTML article + wrapper
+    TREF block (.tref)           HTML article + wrapper
     - pure JSON data             - rendered markdown
     - transportable              - embedded block data
     - AI-readable                - drag/copy/download
 ```
 
-### Output 1: AIBlock File
+### Output 1: TREF Block File
 
 Pure JSON data for transport and AI consumption:
 
@@ -52,20 +52,20 @@ Pure JSON data for transport and AI consumption:
 Website-ready article with embedded block:
 
 ```html
-<article class="aiblock-article">
+<article class="tref-article">
   <!-- Rendered markdown as HTML -->
   <h1>Article</h1>
   <p>Content...</p>
 </article>
 
-<div class="aiblock-wrapper" data-block-id="sha256:...">
-  <svg class="aiblock-icon">...</svg>
-  <script type="application/json" class="aiblock-data">
+<div class="tref-wrapper" data-block-id="sha256:...">
+  <svg class="tref-icon">...</svg>
+  <script type="application/json" class="tref-data">
     { "v": 1, "id": "sha256:...", ... }
   </script>
 </div>
 
-<script src="aiblock-wrapper.js"></script>
+<script src="tref-wrapper.js"></script>
 ```
 
 - Text is 1:1 identical to block content
@@ -81,10 +81,10 @@ Website-ready article with embedded block:
 
 | Function | Input | Output |
 |----------|-------|--------|
-| `publish(draft)` | Draft block | AIBlock with ID |
-| `render(block)` | AIBlock | HTML article |
-| `wrap(block)` | AIBlock | HTML wrapper snippet |
-| `bundle(block)` | AIBlock | Complete HTML file |
+| `publish(draft)` | Draft block | TREF block with ID |
+| `render(block)` | TREF block | HTML article |
+| `wrap(block)` | TREF block | HTML wrapper snippet |
+| `bundle(block)` | TREF block | Complete HTML file |
 
 ### ID Generation
 
@@ -150,7 +150,7 @@ It **exposes** – it does not edit.
 
 The wrapper is a small JS component that:
 
-1. **Displays** an AI-Block icon
+1. **Displays** a TREF block icon
 2. **Enables** drag-and-drop of block data
 3. **Enables** copy to clipboard
 4. **Enables** download as .tref file

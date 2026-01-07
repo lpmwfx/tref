@@ -1,4 +1,4 @@
-# TRef License Model
+# TREF License Model
 
 ## The Principle
 
@@ -10,7 +10,7 @@ This is not a traditional license with legal text you must interpret. The format
 
 ## How It Works
 
-### When You Use an AIBlock
+### When You Use a TREF Block
 
 1. **You CAN:**
    * Read the content
@@ -42,7 +42,7 @@ Content + Legal Text → Reader must comply manually
                     → Easy to ignore
 ```
 
-### AIBlocks Format-as-License
+### TREF Format-as-License
 ```
 Content + Format → Publisher enforces structure
                → AI can verify compliance
@@ -54,7 +54,7 @@ Content + Format → Publisher enforces structure
 
 ## For Authors
 
-When you publish content as an AIBlock:
+When you publish content as a TREF block:
 
 * Your article lives in `content` as markdown
 * Your identity is in `origin` (URL to your published block)
@@ -72,7 +72,7 @@ When you publish content as an AIBlock:
 
 ## For Users
 
-When you use someone's AIBlock:
+When you use someone's TREF block:
 
 * Edit the markdown however you want
 * Run through Publisher
@@ -106,7 +106,7 @@ This enables AI to be a **trust layer** for content verification.
 
 ## Comparison to Traditional Licenses
 
-| Aspect | CC-BY | MIT | AIBlocks |
+| Aspect | CC-BY | MIT | TREF |
 |--------|-------|-----|----------|
 | Attribution | Manual | Manual | Automatic |
 | Verification | Hard | Hard | Machine-verifiable |
@@ -118,7 +118,7 @@ This enables AI to be a **trust layer** for content verification.
 
 ## Summary
 
-AIBlocks doesn't rely on legal enforcement. It relies on:
+TREF doesn't rely on legal enforcement. It relies on:
 
 1. **Format structure** – refs can't be accidentally removed
 2. **Publisher** – ensures new blocks have correct lineage
@@ -134,7 +134,7 @@ The license is the format. Use the format correctly, and you're compliant.
 For compatibility with existing systems:
 
 ```
-SPDX-License-Identifier: AIBlocks-1.0
+SPDX-License-Identifier: TREF-1.0
 ```
 
 Full terms: Use freely with format preservation. Attribution via `parent` and `refs` fields.

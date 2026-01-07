@@ -280,8 +280,8 @@ export class TrefWrapper {
       const action = btn.dataset.action;
       const originalHtml = btn.innerHTML;
 
-      const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-      const iconError = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+      const iconCheck = `<svg class="tref-icon-success" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      const iconError = `<svg class="tref-icon-error" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
       try {
         if (action === 'copy-content') {
@@ -317,6 +317,36 @@ export class TrefWrapper {
 
   static getStyles() {
     return `
+:root {
+  --tref-accent: #5CCCCC;
+  --tref-accent-hover: #8B5CF6;
+  --tref-success: #10B981;
+  --tref-error: #ef4444;
+  --tref-menu-bg: #ffffff;
+  --tref-menu-text: #374151;
+  --tref-menu-hover: #f3f4f6;
+  --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  --tref-receiver-bg: #f9fafb;
+  --tref-receiver-text: #6b7280;
+  --tref-receiver-active-bg: #f3e8ff;
+  --tref-receiver-success-bg: #ecfdf5;
+  --tref-receiver-error-bg: #fef2f2;
+  --tref-receiver-block-bg: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tref-menu-bg: #1f2937;
+    --tref-menu-text: #e5e7eb;
+    --tref-menu-hover: #374151;
+    --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    --tref-receiver-bg: #1f2937;
+    --tref-receiver-text: #9ca3af;
+    --tref-receiver-active-bg: #3b2d5e;
+    --tref-receiver-success-bg: #064e3b;
+    --tref-receiver-error-bg: #450a0a;
+    --tref-receiver-block-bg: #111827;
+  }
+}
 .tref-wrapper {
   display: inline-block;
   position: relative;
@@ -340,9 +370,9 @@ export class TrefWrapper {
   align-items: center;
   gap: 2px;
   padding: 4px;
-  background: #1f2937;
+  background: var(--tref-menu-bg);
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: var(--tref-menu-shadow);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s, visibility 0.15s;
@@ -360,7 +390,7 @@ export class TrefWrapper {
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  color: #e5e7eb;
+  color: var(--tref-menu-text);
   transition: background 0.15s;
   display: inline-flex;
   align-items: center;
@@ -370,18 +400,20 @@ export class TrefWrapper {
   width: 16px;
   height: 16px;
 }
-.tref-action:hover { background: #374151; }
+.tref-action:hover { background: var(--tref-menu-hover); }
 .tref-action:focus { outline: none; }
 .tref-action:focus-visible {
-  outline: 2px solid #5CCCCC;
+  outline: 2px solid var(--tref-accent);
   outline-offset: 1px;
 }
 .tref-icon:focus { outline: none; }
 .tref-icon:focus-visible {
-  outline: 2px solid #5CCCCC;
+  outline: 2px solid var(--tref-accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
+.tref-icon-success { color: var(--tref-success); }
+.tref-icon-error { color: var(--tref-error); }
 `;
   }
 }
@@ -476,33 +508,33 @@ export class TrefReceiver {
   static getStyles() {
     return `
 .tref-receiver {
-  border: 2px dashed #5CCCCC;
+  border: 2px dashed var(--tref-accent);
   border-radius: 8px;
   padding: 20px;
   min-height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
-  background: #f9fafb;
+  color: var(--tref-receiver-text);
+  background: var(--tref-receiver-bg);
   transition: all 0.2s;
 }
 .tref-receiver-active {
-  border-color: #8B5CF6;
-  background: #f3e8ff;
-  color: #8B5CF6;
+  border-color: var(--tref-accent-hover);
+  background: var(--tref-receiver-active-bg);
+  color: var(--tref-accent-hover);
 }
 .tref-receiver-success {
-  border-color: #10B981;
-  background: #ecfdf5;
+  border-color: var(--tref-success);
+  background: var(--tref-receiver-success-bg);
 }
 .tref-receiver-error {
-  border-color: #ef4444;
-  background: #fef2f2;
+  border-color: var(--tref-error);
+  background: var(--tref-receiver-error-bg);
 }
 .tref-receiver-has-block {
   border-style: solid;
-  background: white;
+  background: var(--tref-receiver-block-bg);
 }
 .tref-receiver-compact {
   width: 32px;

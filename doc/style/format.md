@@ -1,6 +1,6 @@
-# AIBlocks Format Specification v1.0
+# TREF Format Specification v1.0
 
-**AIBlocks - Traceable Knowledge Format**
+**TREF - Traceable Reference Format**
 
 A JSON-based format for knowledge exchange where references are structural, not optional.
 
@@ -8,7 +8,7 @@ A JSON-based format for knowledge exchange where references are structural, not 
 
 ## Overview
 
-An AIBlock is a JSON object containing:
+A TREF block is a JSON object containing:
 
 * **Content** – Markdown text (the article/document)
 * **Metadata** – Author, timestamps, license
@@ -29,7 +29,7 @@ An AIBlock is a JSON object containing:
     "author": "Name or identifier",
     "created": "2025-01-06T12:00:00Z",
     "modified": "2025-01-06T14:30:00Z",
-    "license": "AIBlocks-1.0",
+    "license": "TREF-1.0",
     "lang": "en"
   },
   "origin": {
@@ -237,7 +237,7 @@ Or `.tref.json` for explicit JSON:
 my-article.tref.json
 ```
 
-Note: The project is called "AIBlocks" but the file format is generic and not AI-specific.
+Note: TREF (Traceable Reference Format) is a generic format not tied to any specific implementation.
 
 ---
 
@@ -251,7 +251,7 @@ application/vnd.tref+json
 
 ## Security
 
-AIBlocks is designed to be safe by construction:
+TREF is designed to be safe by construction:
 
 ### No Executable Code
 
@@ -283,7 +283,7 @@ AIBlocks is designed to be safe by construction:
 * Include binary data
 * Run scripts
 
-This makes AIBlocks safe for:
+This makes TREF safe for:
 
 * Drag-and-drop between applications
 * AI ingestion and generation
@@ -294,13 +294,13 @@ This makes AIBlocks safe for:
 
 ## Validation Rules
 
-A valid AIBlock must:
+A valid TREF block must:
 
 1. Have `v` equal to `1`
 2. Have `id` matching content hash
 3. Have non-empty `content`
 4. Have `meta.created` as valid ISO 8601
-5. Have `meta.license` (recommend `AIBlocks-1.0`)
+5. Have `meta.license` (recommend `TREF-1.0`)
 6. Have valid reference objects if `refs` present
 7. Have valid block ID format if `parent` present
 
@@ -333,7 +333,7 @@ A valid AIBlock must:
     "author": "Jane Researcher",
     "created": "2025-01-06T12:00:00Z",
     "modified": "2025-01-06T18:00:00Z",
-    "license": "AIBlocks-1.0",
+    "license": "TREF-1.0",
     "lang": "en"
   },
   "origin": {
@@ -365,7 +365,7 @@ A valid AIBlock must:
   "meta": {
     "author": "Bob Writer",
     "created": "2025-01-07T10:00:00Z",
-    "license": "AIBlocks-1.0",
+    "license": "TREF-1.0",
     "lang": "en"
   },
   "refs": [
