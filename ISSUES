@@ -45,12 +45,14 @@ Old "AIBlocks" naming found in 26+ files across source code, documentation, and 
 2. Schema URL: New domain or placeholder?
 3. Historical files (DONE, CHANGELOG, PHASES): Update or preserve?
 
-## Dark Mode Issues (PARTIALLY FIXED)
+## Dark Mode Issues (MOSTLY FIXED)
 
 **Date**: 2026-01-07
-**Status**: Partially fixed
+**Status**: Mostly fixed
 
 - [x] Text areas staying white - Fixed with CSS custom properties
+- [x] White boxes in about-cli.html, builder.html, guide.html - Fixed by replacing hardcoded `background: white` with CSS variables
+- [x] AI chat example white message boxes - Fixed with var(--site-card-bg)
 - [ ] Flash of light theme when navigating between pages - Still present
 
 **Root cause of flash**: Theme is set via JavaScript after page load.
