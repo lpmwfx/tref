@@ -48,6 +48,14 @@
   ],
   "author": "lpmwfx",
   "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lpmwfx/tref.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lpmwfx/tref/issues"
+  },
+  "homepage": "https://tref.lpmwfx.com",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@types/node": "^25.0.3",
