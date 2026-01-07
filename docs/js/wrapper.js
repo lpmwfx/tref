@@ -361,15 +361,20 @@ export class TrefWrapper {
   width: 100%;
   padding: 8px 12px;
   border: none;
-  background: transparent;
+  outline: none;
+  background: white;
   text-align: left;
   cursor: pointer;
   font-size: 13px;
   color: #374151;
   transition: background 0.15s;
+  font-family: inherit;
 }
 .tref-action:hover {
   background: #f3f4f6;
+}
+.tref-action:focus {
+  outline: none;
 }
 .tref-content {
   font-size: 14px;
