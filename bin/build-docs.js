@@ -116,7 +116,7 @@ function main() {
 
     // For now, just output the block JSON
     // Full HTML template integration would go here
-    const blockPath = join(OUTPUT_DIR, 'blocks', basename(file, '.md') + '.tref');
+    const blockPath = join(OUTPUT_DIR, 'blocks', basename(file, '.md') + '.json');
     writeFileSync(blockPath, JSON.stringify(block, null, 2));
   }
 

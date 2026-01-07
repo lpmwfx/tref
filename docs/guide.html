@@ -301,7 +301,7 @@ tref_cat       - Read block content</code>
     }
 
     // Load pre-built TREF block (generated from markdown at build time)
-    const response = await fetch('./blocks/guide.tref');
+    const response = await fetch('./blocks/guide.json');
     const block = await response.json();
 
     const container = document.getElementById('article-tref');
