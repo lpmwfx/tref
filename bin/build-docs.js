@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { createHash } from 'crypto';
 import { join, basename } from 'path';
 
-const CONTENT_DIR = 'docs/content';
+const CONTENT_DIR = 'content';
 const OUTPUT_DIR = 'docs';
 
 // Simple markdown to HTML (basic conversion)
