@@ -2,19 +2,54 @@
 
 Current phase tasks.
 
-## Phase 5: Website & Documentation (COMPLETE)
+## Wrapper UX Adaptation (ACTIVE)
 
-All tasks completed and deployed to https://tref.lpmwfx.com
+Align `src/wrapper/wrapper.js` with `doc/TrefBlockUIUX.md` specification.
+Test in `/demo` folder. Goal: wrapper.js as reusable library.
 
-See DONE for full list.
+### Typedef
 
-## Phase 6: Future Enhancements (PLANNING)
+- [ ] Rename `AIBlock` to `TrefBlock` throughout
 
-Potential future work:
+### Accessibility
 
-- [ ] Knowledge graph visualization
-- [ ] TREF browser extension
-- [ ] VSCode extension for .tref files
-- [ ] TREF API service
-- [ ] Multi-language documentation
-- [ ] Block search/discovery
+- [ ] Add `role="button"` to icon
+- [ ] Add `aria-label` to icon and action buttons
+- [ ] Add `tabindex="0"` to icon for keyboard focus
+- [ ] Fix focus styles (`:focus-visible` instead of removing outline)
+- [ ] Add keyboard handlers (Enter/Space to activate)
+
+### Mobile / Touch
+
+- [ ] Add tap-to-toggle for action menu on touch devices
+- [ ] Add long-press (500ms) to start drag
+- [ ] Add responsive sizing (32px → 48px on mobile)
+- [ ] Add `@media (pointer: coarse)` styles for touch hit areas
+
+### Compact Receiver
+
+- [ ] Add `.tref-receiver-compact` class (32x32)
+- [ ] Make compact mode the default for inline use
+- [ ] Keep large mode for standalone drop zones
+
+### Demo Page
+
+- [ ] Create `/demo/wrapper-test.html` for visual testing
+- [ ] Test all states: hover, focus, active, drag, drop
+- [ ] Test accessibility with keyboard only
+- [ ] Test on mobile/touch device
+
+### Screen Reader
+
+- [ ] Add live region for status announcements
+- [ ] Announce copy success/failure
+- [ ] Announce drop success/failure
+
+### UI/UX Build Guide
+
+- [ ] Add `/doc/TrefBlockUIUX.md` to docs site (tref.lpmwfx.com)
+- [ ] Create visual examples in `/docs/ui-guide/`
+- [ ] Add interactive component demos
+- [ ] Include copy-paste code snippets
+- [ ] Document all CSS classes with visual examples
+- [ ] Show correct vs incorrect implementations

@@ -167,50 +167,24 @@ export class TrefWrapper {
   }
 
   /**
-   * Generate HTML
-   * @param {{ includeContent?: boolean, interactive?: boolean, maxContentLength?: number }} [options]
+   * Generate HTML - icon only with hover actions
+   * @param {{ interactive?: boolean }} [options]
    */
   toHTML(options = {}) {
-    const { includeContent = true, interactive = true, maxContentLength = 200 } = options;
+    const { interactive = true } = options;
 
-    const preview =
-      this.#block.content.length > maxContentLength
-        ? this.#block.content.slice(0, maxContentLength) + '...'
-        : this.#block.content;
-
-    const contentHtml = includeContent
-      ? `<div class="tref-content">${escapeHtml(preview)}</div>`
-      : '';
-
-    const refsHtml =
-      this.#block.refs && this.#block.refs.length > 0
-        ? `<div class="tref-refs">${this.#block.refs
-            .filter(r => r.type === 'url' && r.url)
-            .map(r => `<a href="${r.url}" target="_blank">${r.title || r.url}</a>`)
-            .join(', ')}</div>`
-        : '';
-
-    // Menu with dropdown
-    const menuHtml = interactive
-      ? `<div class="tref-menu">
-        <button class="tref-menu-btn" title="Actions">⋯</button>
-        <div class="tref-menu-dropdown">
-          <button class="tref-action" data-action="copy-content">Copy Content</button>
-          <button class="tref-action" data-action="copy-json">Copy JSON</button>
-          <button class="tref-action" data-action="download">Download .tref</button>
-        </div>
-      </div>`
+    // Hover actions appear on hover
+    const actionsHtml = interactive
+      ? `<div class="tref-actions">
+          <button class="tref-action" data-action="copy-content" title="Copy content">📋</button>
+          <button class="tref-action" data-action="copy-json" title="Copy JSON">{ }</button>
+          <button class="tref-action" data-action="download" title="Download .tref">💾</button>
+        </div>`
       : '';
 
     return `<div class="tref-wrapper" data-tref-id="${this.#block.id}">
-  <div class="tref-header">
-    <span class="tref-icon" draggable="true" title="Drag to share">${TREF_ICON_SVG}</span>
-    <span class="tref-id">${this.shortId}</span>
-    <span class="tref-meta">${this.#block.meta.created.split('T')[0]}</span>
-    ${menuHtml}
-  </div>
-  ${contentHtml}
-  ${refsHtml}
+  <span class="tref-icon" draggable="true" title="Drag to share">${TREF_ICON_SVG}</span>
+  ${actionsHtml}
 </div>`;
   }
 
@@ -220,8 +194,6 @@ export class TrefWrapper {
    */
   attachEvents(element) {
     const iconEl = element.querySelector('.tref-icon');
-    const menuBtn = element.querySelector('.tref-menu-btn');
-    const dropdown = element.querySelector('.tref-menu-dropdown');
 
     // Icon is drag handle
     if (iconEl) {
@@ -234,34 +206,20 @@ export class TrefWrapper {
       });
     }
 
-    // Menu toggle
-    if (menuBtn && dropdown) {
-      menuBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        dropdown.classList.toggle('show');
-      });
-
-      // Close on outside click
-      document.addEventListener('click', () => {
-        dropdown.classList.remove('show');
-      });
-    }
-
-    // Action buttons
+    // Action buttons (visible on hover via CSS)
     const handleAction = async (/** @type {Event} */ e) => {
       e.stopPropagation();
-      const action = /** @type {HTMLElement} */ (e.currentTarget).dataset.action;
-      const statusEl = element.querySelector('.tref-id');
-      const originalText = statusEl?.textContent || '';
-      if (dropdown) dropdown.classList.remove('show');
+      const btn = /** @type {HTMLElement} */ (e.currentTarget);
+      const action = btn.dataset.action;
+      const originalText = btn.textContent || '';
 
       try {
         if (action === 'copy-content') {
           await this.copyContentToClipboard();
-          if (statusEl) statusEl.textContent = 'Copied!';
+          btn.textContent = '✓';
         } else if (action === 'copy-json') {
           await this.copyToClipboard();
-          if (statusEl) statusEl.textContent = 'Copied!';
+          btn.textContent = '✓';
         } else if (action === 'download') {
           const url = this.toObjectURL();
           const a = document.createElement('a');
@@ -269,16 +227,16 @@ export class TrefWrapper {
           a.download = this.getFilename();
           a.click();
           URL.revokeObjectURL(url);
-          if (statusEl) statusEl.textContent = 'Saved!';
+          btn.textContent = '✓';
         }
         setTimeout(() => {
-          if (statusEl) statusEl.textContent = originalText;
-        }, 1500);
+          btn.textContent = originalText;
+        }, 1000);
       } catch {
-        if (statusEl) statusEl.textContent = 'Error';
+        btn.textContent = '✗';
         setTimeout(() => {
-          if (statusEl) statusEl.textContent = originalText;
-        }, 1500);
+          btn.textContent = originalText;
+        }, 1000);
       }
     };
 
@@ -290,108 +248,42 @@ export class TrefWrapper {
   static getStyles() {
     return `
 .tref-wrapper {
-  font-family: system-ui, -apple-system, sans-serif;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 12px;
-  background: #fafafa;
-  max-width: 400px;
-}
-.tref-header {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 4px;
+  position: relative;
 }
 .tref-icon {
   display: inline-flex;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   cursor: grab;
   transition: transform 0.15s;
 }
 .tref-icon:hover { transform: scale(1.1); }
 .tref-icon:active { cursor: grabbing; }
 .tref-icon svg { width: 100%; height: 100%; }
-.tref-id {
-  font-family: monospace;
-  font-size: 12px;
-  color: #6b7280;
-  background: #e5e7eb;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.2s;
+.tref-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
 }
-.tref-meta { font-size: 12px; color: #9ca3af; }
-.tref-menu {
-  margin-left: auto;
-  position: relative;
-}
-.tref-menu-btn {
-  background: transparent;
-  border: none;
-  padding: 4px 8px;
-  cursor: pointer;
-  color: #6b7280;
-  border-radius: 4px;
-  font-size: 16px;
-  line-height: 1;
-  transition: all 0.15s;
-}
-.tref-menu-btn:hover {
-  background: #e5e7eb;
-  color: #374151;
-}
-.tref-menu-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  min-width: 140px;
-  z-index: 100;
-  overflow: hidden;
-}
-.tref-menu-dropdown.show { display: block; }
+.tref-wrapper:hover .tref-actions { opacity: 1; }
 .tref-action {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
+  background: #f3f4f6;
   border: none;
   outline: none;
-  background: white;
-  text-align: left;
+  padding: 4px 6px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   color: #374151;
   transition: background 0.15s;
-  font-family: inherit;
 }
-.tref-action:hover {
-  background: #f3f4f6;
-}
-.tref-action:focus {
-  outline: none;
-}
-.tref-content {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #374151;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.tref-refs {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #e5e7eb;
-  font-size: 12px;
-  color: #6b7280;
-}
-.tref-refs a { color: #5CCCCC; text-decoration: none; }
-.tref-refs a:hover { text-decoration: underline; }
+.tref-action:hover { background: #e5e7eb; }
+.tref-action:focus { outline: none; }
 `;
   }
 }

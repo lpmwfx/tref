@@ -1,14 +1,14 @@
-# AIBlocks
+# TREF
 
-**Traceable Knowledge Format**
+**Traceable Reference Format**
 
 ## Purpose
 
-AIBlocks is an open, transportable, and verifiable JSON format designed to solve a core problem in the AI era: **preservation, validation, and reuse of knowledge with traceable source origin** – across websites, editors, chats, LLMs, and tools.
+TREF is an open, transportable, and verifiable JSON format designed to solve a core problem in the AI era: **preservation, validation, and reuse of knowledge with traceable source origin** – across websites, editors, chats, LLMs, and tools.
 
 The format combines content, metadata, license, references, and lineage in a single self-contained unit that can be copied, dragged, shared, and rewritten – without losing origin, context, or accountability.
 
-AIBlocks is not a CMS, a social network, or an AI model. It is a **knowledge exchange format**.
+TREF is not a CMS, a social network, or an AI model. It is a **knowledge exchange format**.
 
 ---
 
@@ -16,7 +16,7 @@ AIBlocks is not a CMS, a social network, or an AI model. It is a **knowledge exc
 
 ### From Reference Block to Article Block
 
-The original idea was simple: a small data package (AIBlock) embedded in a website article containing:
+The original idea was simple: a small data package (TREF block) embedded in a website article containing:
 
 * A link back to the article it's embedded in
 * References to all source materials mentioned in the article
@@ -50,11 +50,11 @@ Traditional open content licenses rely on:
 * Trust that users will comply
 * Difficult enforcement after the fact
 
-### The AIBlocks Solution
+### The TREF Solution
 
 **The format IS the license.**
 
-When you use an AIBlock correctly:
+When you use a TREF block correctly:
 
 * References cannot be removed without breaking the format
 * Attribution is automatic and structural
@@ -93,7 +93,7 @@ This makes legitimate reuse trivial and illegitimate use detectable.
 
 ### 1. The Block is the Atom of Truth
 
-An AIBlock is the smallest meaningful unit of knowledge.
+A TREF block is the smallest meaningful unit of knowledge.
 
 * It can stand alone
 * It can be embedded in other systems
@@ -141,7 +141,7 @@ The format is designed for:
 
 …but remains readable and editable by humans (JSON / YAML / Markdown).
 
-AIBlocks can be used directly as:
+TREF blocks can be used directly as:
 
 * Chat input (drag and drop)
 * RAG sources
@@ -182,7 +182,7 @@ Use *as-is* provides automatic correct attribution and backlinks.
 ### Creating a Block
 
 ```
-Write markdown → Publisher → AIBlock with ID
+Write markdown → Publisher → TREF block with ID
 ```
 
 ### Using Someone's Block
@@ -252,7 +252,7 @@ The format makes AI's work transparent. Missing or incorrect refs reveal where A
 
 ## Non-Goals
 
-AIBlocks is **not**:
+TREF is **not**:
 
 * A payment platform
 * A blockchain
@@ -266,7 +266,7 @@ It is a *format and a practice*.
 
 ## Vision
 
-If AIBlocks is widely used:
+If TREF is widely used:
 
 * Articles become composed of verifiable parts
 * AI can cross-check AI
@@ -275,7 +275,7 @@ If AIBlocks is widely used:
 * Legitimate reuse becomes frictionless
 * Attribution becomes automatic
 
-AIBlocks is an attempt to give knowledge **backbone** in a world of probabilistic models.
+TREF is an attempt to give knowledge **backbone** in a world of probabilistic models.
 
 ---
 
@@ -318,5 +318,5 @@ The chain link represents:
 
 ## Status
 
-AIBlocks is an open, experimental format under active development.
+TREF is an open, experimental format under active development.
 Standardization emerges through use – not through prior committees.
