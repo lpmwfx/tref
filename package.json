@@ -1,9 +1,22 @@
 {
-  "name": "aiblocks",
+  "name": "tref-block",
   "version": "0.1.0",
-  "description": "AI Blocks - JavaScript with TypeScript-level safety",
+  "description": "TREF - Traceable Reference Format for knowledge with origin",
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/tref-block.js",
+  "module": "dist/tref-block.js",
+  "browser": "dist/tref-block.js",
+  "exports": {
+    ".": {
+      "import": "./dist/tref-block.js",
+      "require": "./dist/tref-block.cjs"
+    },
+    "./src": "./src/wrapper/wrapper.js"
+  },
+  "files": [
+    "dist",
+    "src/wrapper"
+  ],
   "bin": {
     "tref": "./src/cli/index.js",
     "tref-mcp": "./src/mcp/server.js"
@@ -17,17 +30,21 @@
     "check": "npm run typecheck && npm run lint && npm run format:check",
     "test": "node --test src/**/*.test.js",
     "start": "node src/index.js",
-    "build": "npm run build:bundle && npm run build:pkg",
-    "build:bundle": "npm run build:bundle:cli && npm run build:bundle:mcp",
-    "build:bundle:cli": "esbuild src/cli/index.js --bundle --platform=node --format=cjs --outfile=build/tref-cli.cjs",
-    "build:bundle:mcp": "esbuild src/mcp/server.js --bundle --platform=node --format=cjs --outfile=build/tref-mcp.cjs",
-    "build:pkg": "npm run build:pkg:cli && npm run build:pkg:mcp",
-    "build:pkg:cli": "pkg build/tref-cli.cjs --targets node18-linux-x64,node18-macos-x64,node18-macos-arm64,node18-win-x64 --output dist/tref",
-    "build:pkg:mcp": "pkg build/tref-mcp.cjs --targets node18-linux-x64,node18-macos-x64,node18-macos-arm64,node18-win-x64 --output dist/tref-mcp"
+    "build": "npm run build:browser && npm run build:cli",
+    "build:browser": "esbuild src/wrapper/wrapper.js --bundle --format=esm --minify --sourcemap --outfile=dist/tref-block.js",
+    "build:browser:cjs": "esbuild src/wrapper/wrapper.js --bundle --format=cjs --minify --outfile=dist/tref-block.cjs",
+    "build:cli": "npm run build:cli:bundle && npm run build:cli:pkg",
+    "build:cli:bundle": "esbuild src/cli/index.js --bundle --platform=node --format=cjs --outfile=build/tref-cli.cjs && esbuild src/mcp/server.js --bundle --platform=node --format=cjs --outfile=build/tref-mcp.cjs",
+    "build:cli:pkg": "pkg build/tref-cli.cjs --targets node18-linux-x64,node18-macos-x64,node18-macos-arm64,node18-win-x64 --output dist/tref && pkg build/tref-mcp.cjs --targets node18-linux-x64,node18-macos-x64,node18-macos-arm64,node18-win-x64 --output dist/tref-mcp",
+    "dev": "python3 -m http.server 8080 --directory ."
   },
   "keywords": [
-    "ai",
-    "blocks"
+    "tref",
+    "traceable",
+    "reference",
+    "knowledge",
+    "provenance",
+    "citation"
   ],
   "author": "lpm",
   "license": "AGPL-3.0-or-later",

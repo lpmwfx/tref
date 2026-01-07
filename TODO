@@ -8,34 +8,32 @@ Single source architecture: `src/` → `dist/` → CDN/npm
 
 ### Build Setup
 
-- [ ] Add esbuild as dev dependency
-- [ ] Add `npm run build` script (src/ → dist/)
-- [ ] Add `npm run dev` script (watch + serve demo/)
-- [ ] Create dist/ folder structure
+- [x] Add esbuild as dev dependency
+- [x] Add `npm run build` script (src/ → dist/)
+- [x] Add `npm run dev` script (serve demo/)
+- [x] Create dist/ folder structure
 
 ### Package Config
 
-- [ ] Update package.json with exports field
-- [ ] Add "main" and "module" fields
-- [ ] Configure for npm publish
+- [x] Update package.json with exports field
+- [x] Add "main" and "module" fields
+- [x] Configure for npm publish
 - [ ] Add .npmignore (exclude demo/, doc/)
 
 ### Demo Refactor
 
-- [ ] Update demo/index.html to import from dist/ (dev) or CDN (prod)
-- [ ] Add environment detection (localhost vs production)
-- [ ] Remove any hardcoded styles/code
+- [x] Update demo/index.html to import from dist/
+- [ ] Test demo with built dist/
 
 ### Docs Site Refactor
 
 - [ ] Update docs/ to import from CDN only
-- [ ] Remove any local copies of wrapper code
 - [ ] Test with tref.lpmwfx.com
 
 ### Documentation
 
 - [x] Document architecture in doc/project.md
-- [ ] Update CLAUDE.md with build workflow
+- [x] Update CLAUDE.md with build workflow
 - [ ] Add CONTRIBUTING.md with dev setup
 
 ---

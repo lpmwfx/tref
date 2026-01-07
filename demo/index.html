@@ -214,12 +214,14 @@ https://en.wikipedia.org/wiki/Content-addressable_storage</textarea>
   <div class="toast" id="toast"></div>
 
   <script type="module">
+    // Import from built dist/ (local dev) or CDN (production)
+    // CDN: import { ... } from 'https://cdn.jsdelivr.net/npm/tref-block';
     import {
       TrefWrapper,
       TrefReceiver,
       wrap,
       TREF_MIME_TYPE
-    } from '../src/wrapper/wrapper.js';
+    } from '../dist/tref-block.js';
 
     // Inject wrapper styles
     document.getElementById('tref-styles').textContent =
