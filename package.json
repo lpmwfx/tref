@@ -1,6 +1,6 @@
 {
   "name": "tref-block",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "TREF - Traceable Reference Format for knowledge with origin",
   "type": "module",
   "main": "dist/tref-block.js",

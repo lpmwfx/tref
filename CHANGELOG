@@ -2,37 +2,7 @@
 
 Finished changes for TREF project.
 
-## [0.1.0] - 2026-01-07
-
-### Added
-- Single-source architecture: src/ → dist/ → CDN/npm
-- npm run build:browser bundles wrapper.js to dist/tref-block.js (10kb)
-- Package exports for ESM and CJS
-- CDN support via jsdelivr/unpkg
-
-### Changed
-- Renamed package from aiblocks to tref-block
-- Renamed AIBlock typedef to TrefBlock
-- Demo imports from dist/ instead of src/
-
-### UI/UX
-- Hover menu as dropdown overlay (not inline)
-- SVG icons for all action buttons (copy, JSON, download)
-- Proper JSON icon with curly braces
-- Accessibility: ARIA roles, keyboard navigation, focus-visible
-- Touch support: tap-to-toggle, long-press (500ms) for drag
-- Compact receiver mode (32x32)
-- Mobile: larger hit areas via @media (pointer: coarse)
-
-### Documentation
-- doc/project.md: Single-source architecture section
-- doc/TrefBlockUIUX.md: Complete UI/UX specification
-- CLAUDE.md: Build workflow and architecture
-- README.md: Install instructions, architecture diagram
-
----
-
-## [Unreleased]
+## [0.2.0] - 2026-01-07
 
 ### Added
 - TrefWrapper dropdown menu with Copy Content, Copy JSON, Download actions
@@ -40,46 +10,45 @@ Finished changes for TREF project.
 - Git pre-commit hook for automatic block builds
 
 ### Changed
+- Renamed AIBlock typedef to TrefBlock throughout source code
+- License identifier changed from AIBlocks-1.0 to TREF-1.0
+- Schema URL updated to https://tref.lpmwfx.com/schema
 - CSS refactored to single unified stylesheet (docs/css/tref-site.css)
-  - Removed all inline `<style>` blocks from HTML (was 377 lines across 5 files)
-  - Grouped selectors for shared patterns (.card, .explainer, .builder-form share base)
+  - Removed all inline `<style>` blocks from HTML
   - Dark mode works automatically via CSS custom properties
-  - Eliminated duplicate definitions (.article-tref-card, .mini-receiver)
-- npm package published as tref-block@0.1.0 (16KB, was 138MB before fixing files array)
-- Documentation site (tref.lpmwfx.com)
-  - index.html: Homepage with promo TREF block
-  - builder.html: No-code block builder with embed code copy button
-  - guide.html: Developer guide (CLI, JS API, MCP) with article TREF block
-  - about-cli.html: Simple explanation of tref and tref-mcp tools
-  - examples.html: Examples overview page
-  - examples/drag-drop.html: Drag & drop demo with mini receivers
-  - examples/ai-chat.html: Side-by-side chat comparison (with/without TREF)
-- ES modules in docs/js/ (wrapper.js, browser.js)
-- Navigation with About link on all pages
-- TREF blocks for articles (guide, about) with dynamic URLs
+- Documentation site complete (tref.lpmwfx.com)
+  - index.html, builder.html, guide.html, about-cli.html
+  - examples.html, examples/drag-drop.html, examples/ai-chat.html
 
-- Phase 1 complete: Block Format Specification v1.0
-- Format name: **AIBlocks - Traceable Knowledge Format**
-- Complete format specification (doc/format.md)
-- License-as-format philosophy (doc/license.md)
-- Publisher two-outputs model (doc/publisher.md)
-- Security section: format is safe by construction (no executable code)
+---
+
+## [0.1.0] - 2026-01-07
+
+### Added
+- Single-source architecture: src/ → dist/ → CDN/npm
+- npm run build:browser bundles wrapper.js to dist/tref-block.js (10kb)
+- Package exports for ESM and CJS
+- CDN support via jsdelivr/unpkg
+- Phase 1: Block Format Specification v1.0
 - Block schema: v, id, content, meta, origin, refs, parent
 - Reference types: url, archive, search, hash
 - ID format: sha256:<64 hex chars> (content-based)
 - Canonical JSON spec for deterministic ID generation
-- Zod schemas with JSDoc types
-- 26 tests passing
+- Phase 2: Publisher Core (publish, derive, validate, file I/O, registry)
+- Phase 3: TrefWrapper and TrefReceiver classes
+- Phase 4: CLI tool (tref) and MCP server (tref-mcp)
+- 167 tests passing
 
-### Changed
-- Simplified schema: removed type, version, childIds (not needed for v1.0)
-- Renamed fields: createdAt → created, updatedAt → modified
-- Renamed fields: parentId → parent
-- Consistent naming: AI-Blocks → AIBlocks (no hyphen)
+### UI/UX
+- Hover menu as dropdown overlay
+- SVG icons for all action buttons
+- Accessibility: ARIA roles, keyboard navigation, focus-visible
+- Touch support: tap-to-toggle, long-press for drag
+- Compact receiver mode (32x32)
 
-### Technical
-- TypeScript-level safety in pure JavaScript
-- JSDoc type annotations throughout
-- ESLint with typescript-eslint type-aware rules
-- Prettier formatting configuration
-- VS Code settings for editor integration
+### Documentation
+- doc/project.md, doc/format.md, doc/license.md, doc/publisher.md
+- doc/TrefBlockUIUX.md: Complete UI/UX specification
+- CLAUDE.md, README.md
+
+---

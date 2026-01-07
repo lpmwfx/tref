@@ -86,3 +86,10 @@ Full name: **AIBlocks - Traceable Knowledge Format**
 - [x] src/publisher/publish.test.js - test description
 - [x] src/publisher/id.test.js - license in test data
 - [x] src/mcp/server.js - default license in description
+
+## Release v0.2.0 (2026-01-07)
+
+- [x] Updated version to 0.2.0 in package.json
+- [x] Updated CHANGELOG with v0.2.0 release notes
+- [x] Built browser bundle and CLI executables
+- [x] Published tref-block@0.2.0 to npm (16.4 kB)
