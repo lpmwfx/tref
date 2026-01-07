@@ -14,13 +14,11 @@
     "./src": "./src/wrapper/wrapper.js"
   },
   "files": [
-    "dist",
-    "src/wrapper"
+    "dist/tref-block.js",
+    "dist/tref-block.js.map",
+    "dist/tref-block.cjs",
+    "src/wrapper/wrapper.js"
   ],
-  "bin": {
-    "tref": "./src/cli/index.js",
-    "tref-mcp": "./src/mcp/server.js"
-  },
   "scripts": {
     "typecheck": "tsc $(find src -name '*.js' ! -name '*.test.js') --noEmit --checkJs --strict --target ES2024 --module NodeNext --moduleResolution NodeNext --skipLibCheck --types node",
     "lint": "eslint src/",
