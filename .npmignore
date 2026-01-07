@@ -1,0 +1,40 @@
+# Development files
+demo/
+doc/
+docs/
+build/
+screenshots/
+assets/
+
+# Config files
+.eslintrc*
+.prettierrc*
+jsconfig.json
+tref.code-workspace
+
+# Git
+.git/
+.gitignore
+
+# Tests
+*.test.js
+coverage/
+
+# Project management
+TODO
+DONE
+ISSUES
+PHASES
+RAG
+RULES
+CHANGELOG
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
