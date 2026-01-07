@@ -35,7 +35,7 @@ import { generateId, verifyId } from './id.js';
  */
 
 /**
- * @typedef {object} AIBlock
+ * @typedef {object} TrefBlock
  * @property {1} v
  * @property {string} id
  * @property {string} content
@@ -84,7 +84,7 @@ function validateDraft(draft) {
 /**
  * Validate complete block structure (with id)
  * @param {unknown} block
- * @returns {{ valid: true, data: AIBlock } | { valid: false, error: string }}
+ * @returns {{ valid: true, data: TrefBlock } | { valid: false, error: string }}
  */
 function validateBlock(block) {
   if (!block || typeof block !== 'object') {
@@ -103,7 +103,7 @@ function validateBlock(block) {
     return draftResult;
   }
 
-  return { valid: true, data: /** @type {AIBlock} */ (block) };
+  return { valid: true, data: /** @type {TrefBlock} */ (block) };
 }
 
 /**
@@ -151,7 +151,7 @@ export function createDraft(content, options = {}) {
  * Publish a draft block by adding a content-based ID
  *
  * @param {DraftBlock} draft - Draft block without ID
- * @returns {AIBlock} - Published block with ID
+ * @returns {TrefBlock} - Published block with ID
  * @throws {Error} If draft is invalid
  */
 export function publish(draft) {
@@ -165,19 +165,19 @@ export function publish(draft) {
   const id = generateId(/** @type {Record<string, unknown>} */ (draft));
 
   // Create published block
-  return /** @type {AIBlock} */ ({ ...draft, id });
+  return /** @type {TrefBlock} */ ({ ...draft, id });
 }
 
 /**
  * Derive a new block from an existing block
  * Sets parent to source block's ID and preserves refs
  *
- * @param {AIBlock} source - Source block to derive from
+ * @param {TrefBlock} source - Source block to derive from
  * @param {string} newContent - New content for derived block
  * @param {object} [options] - Optional overrides
  * @param {string} [options.author] - New author
  * @param {Ref[]} [options.additionalRefs] - Additional refs to add
- * @returns {AIBlock} - New derived block with parent reference
+ * @returns {TrefBlock} - New derived block with parent reference
  * @throws {Error} If source is invalid
  */
 export function derive(source, newContent, options = {}) {

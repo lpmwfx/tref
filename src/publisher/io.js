@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { validate } from './publish.js';
 
 /**
- * @typedef {import('./publish.js').AIBlock} AIBlock
+ * @typedef {import('./publish.js').TrefBlock} TrefBlock
  */
 
 /** Default file extension */
@@ -16,7 +16,7 @@ export const TREF_EXTENSION = '.tref';
 /**
  * Basic structure validation for loaded block
  * @param {unknown} data
- * @returns {AIBlock}
+ * @returns {TrefBlock}
  */
 function parseBlock(data) {
   if (!data || typeof data !== 'object') {
@@ -35,13 +35,13 @@ function parseBlock(data) {
   if (!b.meta || typeof b.meta !== 'object') {
     throw new Error('Invalid meta');
   }
-  return /** @type {AIBlock} */ (data);
+  return /** @type {TrefBlock} */ (data);
 }
 
 /**
  * Save a block to a .tref file
  *
- * @param {AIBlock} block - Block to save
+ * @param {TrefBlock} block - Block to save
  * @param {string} filePath - Path to save to (adds .tref if missing)
  * @param {object} [options] - Save options
  * @param {boolean} [options.pretty] - Pretty print JSON (default: false)
@@ -80,7 +80,7 @@ export async function save(block, filePath, options = {}) {
  * @param {string} filePath - Path to load from
  * @param {object} [options] - Load options
  * @param {boolean} [options.validate] - Validate after loading (default: true)
- * @returns {Promise<AIBlock>} - Loaded block
+ * @returns {Promise<TrefBlock>} - Loaded block
  */
 export async function load(filePath, options = {}) {
   const { validate: shouldValidate = true } = options;
@@ -107,7 +107,7 @@ export async function load(filePath, options = {}) {
  * Export a block to the publish directory
  * Uses block ID as filename: <PUBLISH_DIR>/<id-prefix>/<id>.tref
  *
- * @param {AIBlock} block - Block to export
+ * @param {TrefBlock} block - Block to export
  * @param {string} publishDir - Base directory for published blocks
  * @param {object} [options] - Export options
  * @param {boolean} [options.pretty] - Pretty print JSON (default: false)
@@ -167,7 +167,7 @@ export async function exists(id, publishDir) {
  *
  * @param {string} id - Block ID (sha256:...)
  * @param {string} publishDir - Base directory for published blocks
- * @returns {Promise<AIBlock>} - Loaded block
+ * @returns {Promise<TrefBlock>} - Loaded block
  */
 export async function loadById(id, publishDir) {
   const hash = id.replace('sha256:', '');

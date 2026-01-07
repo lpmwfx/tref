@@ -62,7 +62,7 @@ describe('publish', () => {
     });
   });
 
-  it('returns valid AIBlock', () => {
+  it('returns valid TrefBlock', () => {
     const draft = createDraft('Test content');
     const block = publish(draft);
 

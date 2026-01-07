@@ -26,7 +26,7 @@
     "draft": "2020-12"
   },
   "license": {
-    "default": "AIBlocks-1.0",
+    "default": "TREF-1.0",
     "principle": "Use freely. Preserve the format. References follow automatically."
   },
   "security": {
@@ -37,8 +37,8 @@
     "safe": ["drag-drop", "ai-ingestion", "pipelines", "user-content"]
   },
   "project": {
-    "name": "AIBlocks",
-    "url": "https://github.com/lpmwfx/AiBlocks",
-    "spec": "https://aiblocks.org/spec/tref-v1"
+    "name": "TREF",
+    "url": "https://github.com/lpmwfx/tref",
+    "spec": "https://tref.lpmwfx.com/schema"
   }
 }

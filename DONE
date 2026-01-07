@@ -76,3 +76,13 @@ Full name: **AIBlocks - Traceable Knowledge Format**
 - [x] 5f: Demo Page - Article citations, chat demo, drag-drop playground, validation
 - [x] 5g: Release Page - Download links with icons, changelog, GitHub links
 - [x] 5h: Browser Bundle - tref.min.js (8KB), self-contained, CDN-ready
+
+## AIBlocks → TREF Naming Refactor (2026-01-07)
+
+- [x] src/index.js - Hello message
+- [x] src/tref.manifest.json - license, project name, URLs
+- [x] src/publisher/publish.js - AIBlock typedef → TrefBlock
+- [x] src/publisher/io.js - AIBlock typedef → TrefBlock
+- [x] src/publisher/publish.test.js - test description
+- [x] src/publisher/id.test.js - license in test data
+- [x] src/mcp/server.js - default license in description

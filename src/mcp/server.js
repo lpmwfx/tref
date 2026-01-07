@@ -53,7 +53,7 @@ export function createServer() {
           .array(RefSchema)
           .optional()
           .describe('Optional array of references (url, archive, search, or hash types)'),
-        license: z.string().optional().describe('License identifier (default: AIBlocks-1.0)'),
+        license: z.string().optional().describe('License identifier (default: TREF-1.0)'),
         publishDir: z
           .string()
           .optional()

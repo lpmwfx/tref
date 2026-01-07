@@ -57,7 +57,7 @@ function main() {
   const testData = {
     id: crypto.randomUUID(),
     type: 'text',
-    content: 'Hello, AIBlocks!',
+    content: 'Hello, TREF!',
     metadata: {
       createdAt: new Date(),
     },

@@ -146,7 +146,7 @@ describe('ID generation determinism', () => {
       meta: {
         author: 'Test Author',
         created: '2025-01-06T12:00:00Z',
-        license: 'AIBlocks-1.0',
+        license: 'TREF-1.0',
         lang: 'en',
       },
       refs: [{ type: 'url', url: 'https://example.com', title: 'Example' }],
