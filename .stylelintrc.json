@@ -1,0 +1,12 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "no-descending-specificity": true,
+    "selector-max-specificity": "0,4,0",
+    "selector-max-id": 0,
+    "declaration-no-important": true,
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "keyframes-name-pattern": null
+  }
+}

@@ -1,24 +1,14 @@
 /**
- * @fileoverview Browser bundle entry point for TREF
+ * @fileoverview Browser entry point for TREF (docs site)
  *
- * Use via CDN: <script src="https://tref.lpmwfx.com/js/tref.min.js"></script>
- *
- * Exports to window.TREF
+ * Imports from CDN and adds browser-specific crypto functions.
+ * Single source: all wrapper code comes from the npm package.
  */
 
-/* global window, TextEncoder */
+/* global window, TextEncoder, crypto */
 
-// Re-export everything from wrapper
-export {
-  TrefWrapper,
-  TrefReceiver,
-  wrap,
-  unwrap,
-  TREF_ICON_SVG,
-  TREF_ICON_DATA_URL,
-  TREF_MIME_TYPE,
-} from './wrapper.js';
-
+// Import from CDN (jsdelivr serves from GitHub)
+// After npm publish, change to: https://cdn.jsdelivr.net/npm/tref-block/dist/tref-block.js
 import {
   TrefWrapper,
   TrefReceiver,
@@ -27,12 +17,29 @@ import {
   TREF_ICON_SVG,
   TREF_ICON_DATA_URL,
   TREF_MIME_TYPE,
-} from './wrapper.js';
+} from 'https://cdn.jsdelivr.net/gh/lpmwfx/tref@main/dist/tref-block.js';
 
-// ========== Browser-specific: Crypto functions ==========
+// Re-export wrapper components
+export {
+  TrefWrapper,
+  TrefReceiver,
+  wrap,
+  unwrap,
+  TREF_ICON_SVG,
+  TREF_ICON_DATA_URL,
+  TREF_MIME_TYPE,
+};
+
+// ========== Browser Crypto Functions ==========
 
 /**
- * @typedef {import('./wrapper.js').AIBlock} AIBlock
+ * @typedef {object} TrefBlock
+ * @property {1} v
+ * @property {string} id
+ * @property {string} content
+ * @property {{ author?: string, created: string, license: string }} meta
+ * @property {Array<{ type: string, url?: string, title?: string }>} [refs]
+ * @property {string} [parent]
  */
 
 /**
@@ -41,9 +48,7 @@ import {
  * @returns {unknown}
  */
 function sortKeys(obj) {
-  if (Array.isArray(obj)) {
-    return obj.map(sortKeys);
-  }
+  if (Array.isArray(obj)) return obj.map(sortKeys);
   if (obj !== null && typeof obj === 'object') {
     const sorted = /** @type {Record<string, unknown>} */ ({});
     const record = /** @type {Record<string, unknown>} */ (obj);
@@ -61,8 +66,7 @@ function sortKeys(obj) {
  * @returns {Promise<string>}
  */
 async function sha256(data) {
-  const encoder = new TextEncoder();
-  const buffer = await crypto.subtle.digest('SHA-256', encoder.encode(data));
+  const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(data));
   return Array.from(new Uint8Array(buffer))
     .map(b => b.toString(16).padStart(2, '0'))
     .join('');
@@ -70,13 +74,11 @@ async function sha256(data) {
 
 /**
  * Generate block ID from draft
- * @param {Omit<AIBlock, 'id'>} draft
+ * @param {Omit<TrefBlock, 'id'>} draft
  * @returns {Promise<string>}
  */
 async function generateId(draft) {
-  const canonical = JSON.stringify(sortKeys(draft));
-  const hash = await sha256(canonical);
-  return `sha256:${hash}`;
+  return `sha256:${await sha256(JSON.stringify(sortKeys(draft)))}`;
 }
 
 // ========== Publishing Functions ==========
@@ -89,10 +91,10 @@ async function generateId(draft) {
  * @param {string} [options.license]
  * @param {Array<{ type: string, url?: string, title?: string }>} [options.refs]
  * @param {string} [options.parent]
- * @returns {Omit<AIBlock, 'id'>}
+ * @returns {Omit<TrefBlock, 'id'>}
  */
 export function createDraft(content, options = {}) {
-  /** @type {Omit<AIBlock, 'id'>} */
+  /** @type {Omit<TrefBlock, 'id'>} */
   const draft = {
     v: 1,
     content,
@@ -101,17 +103,9 @@ export function createDraft(content, options = {}) {
       license: options.license || 'CC-BY-4.0',
     },
   };
-
-  if (options.author) {
-    draft.meta.author = options.author;
-  }
-  if (options.refs && options.refs.length > 0) {
-    draft.refs = options.refs;
-  }
-  if (options.parent) {
-    draft.parent = options.parent;
-  }
-
+  if (options.author) draft.meta.author = options.author;
+  if (options.refs?.length) draft.refs = options.refs;
+  if (options.parent) draft.parent = options.parent;
   return draft;
 }
 
@@ -123,23 +117,20 @@ export function createDraft(content, options = {}) {
  * @param {string} [options.license]
  * @param {Array<{ type: string, url?: string, title?: string }>} [options.refs]
  * @param {string} [options.parent]
- * @returns {Promise<AIBlock>}
+ * @returns {Promise<TrefBlock>}
  */
 export async function publish(content, options = {}) {
   const draft = createDraft(content, options);
   const id = await generateId(draft);
-  return /** @type {AIBlock} */ ({ ...draft, id });
+  return /** @type {TrefBlock} */ ({ ...draft, id });
 }
 
 /**
  * Derive a new block from a parent
- * @param {AIBlock} parent
+ * @param {TrefBlock} parent
  * @param {string} content
  * @param {object} [options]
- * @param {string} [options.author]
- * @param {string} [options.license]
- * @param {Array<{ type: string, url?: string, title?: string }>} [options.refs]
- * @returns {Promise<AIBlock>}
+ * @returns {Promise<TrefBlock>}
  */
 export async function derive(parent, content, options = {}) {
   return publish(content, {
@@ -151,13 +142,12 @@ export async function derive(parent, content, options = {}) {
 
 /**
  * Validate a block's integrity
- * @param {AIBlock} block
+ * @param {TrefBlock} block
  * @returns {Promise<boolean>}
  */
 export async function validate(block) {
   const { id, ...rest } = block;
-  const expectedId = await generateId(rest);
-  return id === expectedId;
+  return id === await generateId(rest);
 }
 
 /**
@@ -172,11 +162,8 @@ export function getStyles() {
 
 if (typeof window !== 'undefined') {
   /** @type {any} */ (window).TREF = {
-    // Classes
     TrefWrapper,
     TrefReceiver,
-
-    // Functions
     publish,
     derive,
     validate,
@@ -184,8 +171,6 @@ if (typeof window !== 'undefined') {
     wrap,
     unwrap,
     getStyles,
-
-    // Constants
     TREF_ICON_SVG,
     TREF_ICON_DATA_URL,
     TREF_MIME_TYPE,

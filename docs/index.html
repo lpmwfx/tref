@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TREF - Traceable Reference Format</title>
-  <meta name="description" content="Open, transportable, and verifiable knowledge blocks with traceable source origin.">
+  <title>TREF - Fact Cards You Can Trust</title>
+  <meta name="description" content="Create digital fact cards with sources that travel with them. Share knowledge you can verify.">
   <link rel="stylesheet" href="css/tref-site.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
 </head>
@@ -32,137 +32,141 @@
         <li><a href="guide.html">Guide</a></li>
         <li><a href="about-cli.html">About</a></li>
       </ul>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">&#127769;</span>
+      </button>
     </div>
   </nav>
 
   <!-- Hero -->
   <section class="hero">
-    <h1>Traceable Reference Format</h1>
+    <h1>Fact Cards You Can Trust</h1>
     <p class="hero-subtitle">
-      Knowledge blocks you can verify, share, and trust. Content-addressed, self-contained, and always traceable to source.
+      Ever shared a fact online and wondered "where did this come from?" TREF solves that.
+      It's like a trading card for facts - with proof built in.
     </p>
     <div class="hero-cta">
       <a href="builder.html" class="btn btn-primary">
-        Build a Block
+        Make a Fact Card
       </a>
-      <a href="guide.html" class="btn btn-secondary">
-        Developer Guide
+      <a href="about-cli.html" class="btn btn-secondary">
+        How It Works
       </a>
     </div>
   </section>
 
-  <!-- Promo TREF Block -->
+  <!-- Try It -->
   <section style="padding: 2rem 1rem; display: flex; justify-content: center;">
     <div id="promo-tref" style="max-width: 500px;"></div>
   </section>
 
-  <!-- What is TREF -->
+  <!-- What is TREF - Simple -->
   <section class="section">
     <div class="container">
-      <h2 class="section-title">What is TREF?</h2>
+      <h2 class="section-title">What's a TREF Block?</h2>
 
       <div class="card-grid">
         <div class="card">
           <div class="card-icon">1</div>
-          <h3>Content-Addressed</h3>
-          <p>Every block has a unique ID derived from its content using SHA-256. Change the content, change the ID. Verify integrity instantly.</p>
+          <h3>Your Fact</h3>
+          <p>Write down something you know - a quote, a statistic, a recipe, anything. This is what you want to share.</p>
         </div>
 
         <div class="card">
           <div class="card-icon">2</div>
-          <h3>Self-Contained</h3>
-          <p>A .tref file contains everything: content, metadata, license, references, and lineage. No external dependencies.</p>
+          <h3>Your Source</h3>
+          <p>Add where you learned it. A website, a book, a video. This helps others trust your fact.</p>
         </div>
 
         <div class="card">
           <div class="card-icon">3</div>
-          <h3>Traceable Lineage</h3>
-          <p>Derive new blocks from existing ones. The parent chain is preserved, so you always know where knowledge came from.</p>
+          <h3>A Fingerprint</h3>
+          <p>TREF creates a unique code from your fact. If anyone changes it, the code won't match anymore. Proof it's real!</p>
         </div>
 
         <div class="card">
           <div class="card-icon">4</div>
-          <h3>License Preserved</h3>
-          <p>Attribution travels with the content. CC-BY-4.0 by default. Original creators always get credit.</p>
+          <h3>Share Anywhere</h3>
+          <p>Drag it, copy it, send it. The sources come along for the ride. No more "where did you get that?"</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Get Started -->
-  <section class="section" style="background: white;">
+  <section class="section section-alt">
     <div class="container">
-      <h2 class="section-title">Get Started</h2>
+      <h2 class="section-title">Try It Now</h2>
 
       <div class="card-grid" style="max-width: 800px; margin: 0 auto;">
         <div class="card" style="text-align: center;">
           <div class="card-icon" style="margin: 0 auto 1rem;">A</div>
-          <h3>No-Code Builder</h3>
-          <p>Create blocks visually in your browser. Perfect for writers, researchers, and anyone who wants to share verified knowledge.</p>
-          <a href="builder.html" class="btn btn-primary mt-2" style="margin-top: 1rem;">Open Builder</a>
+          <h3>In Your Browser</h3>
+          <p>No downloads. No sign-up. Just type your fact, add a source, and get your TREF block in seconds.</p>
+          <a href="builder.html" class="btn btn-primary" style="margin-top: 1rem;">Open Builder</a>
         </div>
 
         <div class="card" style="text-align: center;">
           <div class="card-icon" style="margin: 0 auto 1rem;">B</div>
-          <h3>Developer Tools</h3>
-          <p>CLI, JavaScript API, and MCP server for Claude Code. Integrate TREF into your apps and workflows.</p>
-          <a href="guide.html" class="btn btn-primary mt-2" style="margin-top: 1rem;">Read Guide</a>
+          <h3>For Developers</h3>
+          <p>Command line tools and JavaScript API. Build TREF into your own apps and websites.</p>
+          <a href="guide.html" class="btn btn-primary" style="margin-top: 1rem;">Developer Guide</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Use Cases -->
+  <!-- Why It Matters -->
   <section class="section">
     <div class="container">
-      <h2 class="section-title">Use Cases</h2>
+      <h2 class="section-title">Why Does This Matter?</h2>
 
       <div class="feature-grid" style="max-width: 900px; margin: 0 auto;">
         <div class="feature">
           <div class="feature-icon">*</div>
           <div>
-            <h4>Knowledge Bases</h4>
-            <p>Build verifiable knowledge graphs with traceable sources.</p>
+            <h4>Stop Misinformation</h4>
+            <p>When facts have sources attached, it's harder for fake info to spread.</p>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">*</div>
           <div>
-            <h4>AI Context</h4>
-            <p>Give AI assistants verified facts they can cite.</p>
+            <h4>Give Credit</h4>
+            <p>Original creators stay connected to their work, even when it's shared.</p>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">*</div>
           <div>
-            <h4>Documentation</h4>
-            <p>Track changes and preserve attribution in docs.</p>
+            <h4>Build Trust</h4>
+            <p>Anyone can check if a fact is real by verifying the fingerprint.</p>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">*</div>
           <div>
-            <h4>Research</h4>
-            <p>Reproducible findings with immutable references.</p>
+            <h4>AI-Ready</h4>
+            <p>Give AI assistants verified facts they can cite properly.</p>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">*</div>
           <div>
-            <h4>Chat Citations</h4>
-            <p>Drag TREF blocks into conversations as citations.</p>
+            <h4>Dead Links Don't Matter</h4>
+            <p>Your fact survives even if the original website disappears.</p>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">*</div>
           <div>
-            <h4>Dead Link Recovery</h4>
-            <p>Archive snippets survive when URLs die.</p>
+            <h4>100% Free & Open</h4>
+            <p>No company owns TREF. It's open source, free forever.</p>
           </div>
         </div>
       </div>
@@ -172,25 +176,45 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-links">
-      <a href="https://github.com/lpmwfx/TRefBlocks">GitHub</a>
-      <a href="https://github.com/lpmwfx/TRefBlocks/releases">Releases</a>
-      <a href="https://github.com/lpmwfx/TRefBlocks/issues">Issues</a>
+      <a href="https://github.com/lpmwfx/tref">GitHub</a>
+      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
+      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
     </div>
     <p>TREF v0.1.0 | MIT License | <a href="https://github.com/lpmwfx">lpmwfx</a></p>
   </footer>
 
   <script type="module">
-    import { TrefWrapper, publish } from './js/browser.js';
+    import { TrefWrapper, publish, getStyles } from './js/browser.js';
 
-    const content = `Hey! This block right here? It's a TREF block.
+    // Inject TREF styles
+    const style = document.createElement('style');
+    style.textContent = getStyles();
+    document.head.appendChild(style);
 
-Drag it, drop it, share it - the sources come along for the ride. No more "where did this come from?" moments.
+    // Theme toggle
+    window.toggleTheme = function() {
+      const html = document.documentElement;
+      const isDark = html.classList.toggle('dark');
+      document.getElementById('theme-icon').innerHTML = isDark ? '&#9728;' : '&#127769;';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    };
 
-Try building your own - it takes 30 seconds!`;
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.getElementById('theme-icon').innerHTML = '&#9728;';
+    }
+
+    // Create promo block
+    const content = `This is a TREF block!
+
+Drag the chain icon to share it. The source info comes along automatically.
+
+Try making your own - it takes 30 seconds.`;
 
     const block = await publish(content, {
       author: 'TREF',
-      refs: [{ type: 'url', url: window.location.origin + '/', title: 'TREF - Traceable Reference Format' }]
+      refs: [{ type: 'url', url: window.location.origin + '/', title: 'TREF - Fact Cards You Can Trust' }]
     });
 
     const container = document.getElementById('promo-tref');

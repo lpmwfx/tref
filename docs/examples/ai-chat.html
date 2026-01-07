@@ -123,6 +123,9 @@
         <li><a href="../guide.html">Guide</a></li>
         <li><a href="../about-cli.html">About</a></li>
       </ul>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">&#127769;</span>
+      </button>
     </div>
   </nav>
 
@@ -185,7 +188,24 @@
   </footer>
 
   <script type="module">
-    import { TrefWrapper, TrefReceiver, publish } from '../js/browser.js';
+    import { TrefWrapper, TrefReceiver, publish, getStyles } from '../js/browser.js';
+
+    // Inject TREF styles
+    const style = document.createElement('style');
+    style.textContent = getStyles();
+    document.head.appendChild(style);
+
+    // Theme toggle
+    window.toggleTheme = function() {
+      const html = document.documentElement;
+      const isDark = html.classList.toggle('dark');
+      document.getElementById('theme-icon').innerHTML = isDark ? '&#9728;' : '&#127769;';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    };
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.getElementById('theme-icon').innerHTML = '&#9728;';
+    }
 
     // Create source blocks
     const blocks = await Promise.all([
