@@ -5,6 +5,18 @@ Finished changes for AIBlocks project.
 ## [Unreleased]
 
 ### Added
+- Documentation site (tref.lpmwfx.com)
+  - index.html: Homepage with promo TREF block
+  - builder.html: No-code block builder with embed code copy button
+  - guide.html: Developer guide (CLI, JS API, MCP) with article TREF block
+  - about-cli.html: Simple explanation of tref and tref-mcp tools
+  - examples.html: Examples overview page
+  - examples/drag-drop.html: Drag & drop demo with mini receivers
+  - examples/ai-chat.html: Side-by-side chat comparison (with/without TREF)
+- ES modules in docs/js/ (wrapper.js, browser.js)
+- Navigation with About link on all pages
+- TREF blocks for articles (guide, about) with dynamic URLs
+
 - Phase 1 complete: Block Format Specification v1.0
 - Format name: **AIBlocks - Traceable Knowledge Format**
 - Complete format specification (doc/format.md)
