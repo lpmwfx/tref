@@ -86,7 +86,7 @@ Test in `/demo` folder. Goal: wrapper.js as reusable library.
 - [x] Convert hardcoded colors to CSS custom properties
 - [x] Add `@media (prefers-color-scheme: dark)` styles
 - [x] Document custom theme override pattern
-- [ ] Test in light and dark contexts
+- [x] Test in light and dark contexts
 
 ### UI/UX Build Guide
 

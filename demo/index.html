@@ -31,7 +31,21 @@
       --demo-input-border: #4b5563;
     }
 
-    /* Force TREF component dark mode when html.dark */
+    /* Force light mode TREF vars when NOT html.dark (overrides system dark) */
+    html:not(.dark) {
+      --tref-menu-bg: #ffffff;
+      --tref-menu-text: #374151;
+      --tref-menu-hover: #f3f4f6;
+      --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      --tref-receiver-bg: #f9fafb;
+      --tref-receiver-text: #6b7280;
+      --tref-receiver-active-bg: #f3e8ff;
+      --tref-receiver-success-bg: #ecfdf5;
+      --tref-receiver-error-bg: #fef2f2;
+      --tref-receiver-block-bg: #ffffff;
+    }
+
+    /* Force dark mode TREF vars when html.dark (overrides system light) */
     html.dark {
       --tref-menu-bg: #1f2937;
       --tref-menu-text: #e5e7eb;
