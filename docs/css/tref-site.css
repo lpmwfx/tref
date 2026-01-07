@@ -808,7 +808,7 @@ textarea.form-input {
    17. MINI RECEIVER (compact TREF receiver)
    ========================================================================== */
 
-.mini-receiver {
+.mini-receiver.tref-receiver {
   width: 48px;
   height: 48px;
   min-height: 48px;
