@@ -15,6 +15,7 @@ release/
 .idea/
 *.swp
 *.swo
+/screenshot/
 
 # OS
 .DS_Store

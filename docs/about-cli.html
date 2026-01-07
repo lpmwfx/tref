@@ -8,26 +8,35 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
   <style>
     .explainer {
-      background: white;
+      background: var(--site-card-bg);
       border-radius: 12px;
       padding: 2rem;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: var(--site-card-shadow);
     }
     .explainer h2 {
       color: var(--purple);
       margin-bottom: 1rem;
     }
+    .explainer p {
+      color: var(--site-text);
+    }
     .analogy {
-      background: rgba(92, 204, 204, 0.1);
+      background: rgba(92, 204, 204, 0.15);
       border-left: 4px solid var(--mint);
       padding: 1rem;
       margin: 1rem 0;
       border-radius: 0 8px 8px 0;
     }
+    html.dark .analogy {
+      background: rgba(92, 204, 204, 0.1);
+    }
+    .analogy p {
+      color: var(--site-text);
+    }
     .analogy-title {
       font-weight: 600;
-      color: var(--dark-purple);
+      color: var(--purple);
       margin-bottom: 0.5rem;
     }
     .simple-list {
@@ -40,6 +49,7 @@
       display: flex;
       gap: 1rem;
       align-items: flex-start;
+      color: var(--site-text);
     }
     .simple-list li:last-child {
       border-bottom: none;
@@ -230,7 +240,7 @@
   </section>
 
   <!-- Article TREF Block -->
-  <section class="section" style="background: white;">
+  <section class="section" style="background: var(--site-section-alt);">
     <div class="container" style="max-width: 800px;">
       <div id="article-tref" class="article-tref-card"></div>
     </div>
