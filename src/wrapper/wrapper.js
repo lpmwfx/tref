@@ -322,9 +322,10 @@ export class TrefWrapper {
   --tref-accent-hover: #8B5CF6;
   --tref-success: #10B981;
   --tref-error: #ef4444;
-  --tref-menu-bg: #1f2937;
-  --tref-menu-text: #e5e7eb;
-  --tref-menu-hover: #374151;
+  --tref-menu-bg: #ffffff;
+  --tref-menu-text: #374151;
+  --tref-menu-hover: #f3f4f6;
+  --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.15);
   --tref-receiver-bg: #f9fafb;
   --tref-receiver-text: #6b7280;
   --tref-receiver-active-bg: #f3e8ff;
@@ -334,9 +335,10 @@ export class TrefWrapper {
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --tref-menu-bg: #374151;
-    --tref-menu-text: #f3f4f6;
-    --tref-menu-hover: #4b5563;
+    --tref-menu-bg: #1f2937;
+    --tref-menu-text: #e5e7eb;
+    --tref-menu-hover: #374151;
+    --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.4);
     --tref-receiver-bg: #1f2937;
     --tref-receiver-text: #9ca3af;
     --tref-receiver-active-bg: #3b2d5e;
@@ -370,7 +372,7 @@ export class TrefWrapper {
   padding: 4px;
   background: var(--tref-menu-bg);
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: var(--tref-menu-shadow);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s, visibility 0.15s;

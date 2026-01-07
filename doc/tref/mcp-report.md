@@ -8,7 +8,7 @@
 
 ## Overview
 
-The TREF MCP Server exposes the AIBlocks/TREF format as 6 tools accessible to AI assistants via Model Context Protocol (MCP). This enables AI to create, read, derive, and validate traceable knowledge blocks directly within chat sessions.
+The TREF MCP Server exposes the TREF format as 6 tools accessible to AI assistants via Model Context Protocol (MCP). This enables AI to create, read, derive, and validate traceable knowledge blocks directly within chat sessions.
 
 ---
 
@@ -170,7 +170,7 @@ Uses stdio - server reads from stdin, writes to stdout. Logs go to stderr (impor
 
 ## Conclusion
 
-The TREF MCP Server successfully bridges AI assistants with the AIBlocks format. The core functionality is solid:
+The TREF MCP Server successfully bridges AI assistants with the TREF format. The core functionality is solid:
 
 - **Publishing works** - Content becomes traceable blocks
 - **Derivation works** - Lineage and refs are preserved

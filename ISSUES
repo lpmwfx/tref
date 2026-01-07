@@ -4,4 +4,43 @@ Problems found after testing. Add new issues at the top.
 
 ---
 
-(No issues recorded yet)
+## AIBlocks → TREF Naming Refactor (IN PROGRESS)
+
+**Date**: 2026-01-07
+**Priority**: Medium
+**Scope**: Project-wide
+
+Old "AIBlocks" naming found in 26+ files across source code, documentation, and website.
+
+### Completed (Documentation only):
+- [x] doc/style/format.md - TREF Format Specification
+- [x] doc/tref/publisher.md - TREF Publisher
+- [x] doc/tref/mcp-report.md - TREF MCP report
+- [x] doc/license-model.md - TREF License Model
+- [x] docs/index.html - GitHub links
+- [x] docs/guide.html - GitHub links
+- [x] docs/builder.html - GitHub links
+- [x] docs/examples.html - GitHub links
+- [x] docs/about-cli.html - GitHub links
+- [x] .env.example - Comment header
+- [x] RULES - Project description
+- [x] RAG - Project description
+
+### Remaining (Source Code - awaiting approval):
+- [ ] src/index.js
+- [ ] src/tref.manifest.json
+- [ ] src/tref.schema.json
+- [ ] src/publisher/publish.js (AIBlock typedef)
+- [ ] src/publisher/io.js (AIBlock typedef)
+- [ ] src/publisher/publish.test.js
+- [ ] src/publisher/id.test.js
+- [ ] src/mcp/server.js
+- [ ] docs/js/wrapper.js (code)
+- [ ] docs/js/browser.js (code)
+
+### Decisions still needed:
+1. License identifier: `AIBlocks-1.0` → `TREF-1.0`?
+2. Schema URL: New domain or placeholder?
+3. Historical files (DONE, CHANGELOG, PHASES): Update or preserve?
+
+---
