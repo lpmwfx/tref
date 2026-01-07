@@ -17,6 +17,73 @@
   --gray-900: #0f172a;
   --success: #10B981;
   --error: #ef4444;
+
+  /* Site theme vars */
+  --site-bg: var(--light-bg);
+  --site-text: var(--gray-800);
+  --site-card-bg: var(--white);
+  --site-card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  --site-section-alt: var(--white);
+}
+
+/* Dark mode site vars */
+html.dark {
+  --site-bg: #0f172a;
+  --site-text: #e2e8f0;
+  --site-card-bg: #1e293b;
+  --site-card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  --site-section-alt: #1e293b;
+  --gray-100: #1e293b;
+  --gray-200: #334155;
+  --gray-600: #94a3b8;
+  --gray-800: #f1f5f9;
+}
+
+/* Force light TREF component vars */
+html:not(.dark) {
+  --tref-menu-bg: #ffffff;
+  --tref-menu-text: #374151;
+  --tref-menu-hover: #f3f4f6;
+  --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  --tref-receiver-bg: #f9fafb;
+  --tref-receiver-text: #6b7280;
+  --tref-receiver-active-bg: #f3e8ff;
+  --tref-receiver-success-bg: #ecfdf5;
+  --tref-receiver-error-bg: #fef2f2;
+  --tref-receiver-block-bg: #ffffff;
+}
+
+/* Force dark TREF component vars */
+html.dark {
+  --tref-menu-bg: #1f2937;
+  --tref-menu-text: #e5e7eb;
+  --tref-menu-hover: #374151;
+  --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  --tref-receiver-bg: #1f2937;
+  --tref-receiver-text: #9ca3af;
+  --tref-receiver-active-bg: #3b2d5e;
+  --tref-receiver-success-bg: #064e3b;
+  --tref-receiver-error-bg: #450a0a;
+  --tref-receiver-block-bg: #111827;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--gray-300);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.theme-toggle:hover {
+  border-color: var(--mint);
+  color: var(--mint);
 }
 
 * {
@@ -28,8 +95,9 @@
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
-  color: var(--gray-800);
-  background: var(--light-bg);
+  color: var(--site-text);
+  background: var(--site-bg);
+  transition: background 0.3s, color 0.3s;
 }
 
 /* Navigation */
@@ -165,7 +233,7 @@ body {
   font-size: 2rem;
   text-align: center;
   margin-bottom: 3rem;
-  color: var(--gray-800);
+  color: var(--site-text);
 }
 
 /* Cards */
@@ -176,11 +244,11 @@ body {
 }
 
 .card {
-  background: white;
+  background: var(--site-card-bg);
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--site-card-shadow);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
 }
 
 .card:hover {
@@ -204,12 +272,16 @@ body {
 .card h3 {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
-  color: var(--gray-800);
+  color: var(--site-text);
 }
 
 .card p {
   color: var(--gray-600);
   font-size: 0.95rem;
+}
+
+html.dark .card p {
+  color: var(--gray-400);
 }
 
 /* Code Blocks */
@@ -291,12 +363,21 @@ body {
 .step-content h4 {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
-  color: var(--gray-800);
+  color: var(--site-text);
 }
 
 .step-content p {
   color: var(--gray-600);
   margin-bottom: 0.5rem;
+}
+
+html.dark .step-content p {
+  color: var(--gray-400);
+}
+
+/* Section alternating backgrounds */
+.section-alt {
+  background: var(--site-section-alt);
 }
 
 /* Feature Grid */
