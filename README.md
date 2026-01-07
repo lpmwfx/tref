@@ -144,6 +144,7 @@ doc/
 
 - [Project & Architecture](doc/project.md) – vision, principles, single-source architecture
 - [UI/UX Specification](doc/TrefBlockUIUX.md) – complete UI/UX design guide
+- [Auto TREF Block Generation](doc/auto-tref-blocks.md) – build TREF blocks from markdown at commit time
 
 ## Status
 
