@@ -1,11 +1,41 @@
 # CHANGELOG
 
-Finished changes for AIBlocks project.
+Finished changes for TREF project.
+
+## [0.1.0] - 2026-01-07
+
+### Added
+- Single-source architecture: src/ → dist/ → CDN/npm
+- npm run build:browser bundles wrapper.js to dist/tref-block.js (10kb)
+- Package exports for ESM and CJS
+- CDN support via jsdelivr/unpkg
+
+### Changed
+- Renamed package from aiblocks to tref-block
+- Renamed AIBlock typedef to TrefBlock
+- Demo imports from dist/ instead of src/
+
+### UI/UX
+- Hover menu as dropdown overlay (not inline)
+- SVG icons for all action buttons (copy, JSON, download)
+- Proper JSON icon with curly braces
+- Accessibility: ARIA roles, keyboard navigation, focus-visible
+- Touch support: tap-to-toggle, long-press (500ms) for drag
+- Compact receiver mode (32x32)
+- Mobile: larger hit areas via @media (pointer: coarse)
+
+### Documentation
+- doc/project.md: Single-source architecture section
+- doc/TrefBlockUIUX.md: Complete UI/UX specification
+- CLAUDE.md: Build workflow and architecture
+- README.md: Install instructions, architecture diagram
+
+---
 
 ## [Unreleased]
 
 ### Added
-- TrefWrapper dropdown menu (⋯) with Copy Content, Copy JSON, Download actions
+- TrefWrapper dropdown menu with Copy Content, Copy JSON, Download actions
 - Documentation site (tref.lpmwfx.com)
   - index.html: Homepage with promo TREF block
   - builder.html: No-code block builder with embed code copy button

@@ -1,4 +1,4 @@
-# AIBlocks (TREF)
+# TREF
 
 **Traceable Reference Format**
 
@@ -14,6 +14,19 @@ TREF is a **knowledge exchange format** – not a CMS, not an AI model, not a pl
 - **References** – URLs, archived snippets, search prompts, hashes
 - **Lineage** – parent/child relationships, version history
 
+## Install
+
+```bash
+npm install tref-block
+```
+
+Or use CDN:
+```html
+<script type="module">
+  import { TrefWrapper } from 'https://cdn.jsdelivr.net/npm/tref-block';
+</script>
+```
+
 ## Core Principles
 
 1. **The Block is the Atom of Truth** – smallest meaningful unit of knowledge
@@ -22,6 +35,7 @@ TREF is a **knowledge exchange format** – not a CMS, not an AI model, not a pl
 4. **AI-First, Human-Readable** – JSON format readable by both machines and humans
 5. **Verifiability Over Authority** – trust through transparency, not central control
 6. **Copy = Citation** – copying preserves origin, references, and license
+7. **The Icon IS the Block** – no extra containers, just the draggable icon
 
 ## Browser Components
 
@@ -66,8 +80,26 @@ The entire block (content, refs, license, lineage) transfers with the drag.
 
 ```bash
 npm install
-npm run check   # typecheck + lint + format
-npm test        # run tests
+npm run build         # build browser bundle
+npm run dev           # start dev server (http://localhost:8080)
+npm run check         # typecheck + lint + format
+npm test              # run tests
+```
+
+## Architecture
+
+**Single source, many outputs:**
+
+```
+src/wrapper/wrapper.js    ← Write code here
+        │
+    npm run build
+        ▼
+dist/tref-block.js        ← Built output (10kb)
+        │
+        ├──> CDN (jsdelivr/unpkg)
+        ├──> npm install
+        └──> demo/
 ```
 
 ## Development
@@ -81,6 +113,7 @@ This project uses **TypeScript-level safety in pure JavaScript**:
 - Prettier for formatting
 
 ```bash
+npm run build:browser # build browser bundle
 npm run typecheck     # type check
 npm run lint          # lint
 npm run format        # format code
@@ -93,46 +126,37 @@ npm test              # run tests
 ```
 src/
   wrapper/
-    wrapper.js        # TrefWrapper + TrefReceiver (browser components)
-    wrapper.test.js   # Tests
-  schemas/
-    block.js          # Block schema with Zod
-    reference.js      # Reference types (URL, archive, search, hash)
-  publisher/
-    publish.js        # Block publishing (ID generation)
-    io.js             # File I/O operations
-    registry.js       # Block registry
-  browser.js          # Browser bundle entry point (window.TREF)
+    wrapper.js        # TrefWrapper + TrefReceiver (single source)
   cli/
-    index.js          # CLI tool (tref publish, validate, etc.)
+    index.js          # CLI tool
   mcp/
-    server.js         # MCP server for Claude Code integration
+    server.js         # MCP server for Claude Code
+dist/
+  tref-block.js       # Built browser bundle
+demo/
+  index.html          # Visual testing
 doc/
-  format.md           # Format specification v1.0
-  license.md          # License philosophy (format-as-license)
-  project.md          # Project vision and principles
-  publisher.md        # Publisher specification
-  TS-like-JS.md       # TypeScript-in-JS approach
+  project.md          # Vision & architecture
+  TrefBlockUIUX.md    # UI/UX specification
 ```
 
 ## Documentation
 
-- [Format Specification](doc/format.md) – complete AIBlocks v1.0 format spec
-- [License Philosophy](doc/license.md) – format-as-license concept
-- [Project Vision](doc/project.md) – core principles and design philosophy
-- [Publisher Spec](doc/publisher.md) – publishing mechanism specification
-- [TS-like-JS](doc/TS-like-JS.md) – how we achieve TypeScript safety in JavaScript
+- [Project & Architecture](doc/project.md) – vision, principles, single-source architecture
+- [UI/UX Specification](doc/TrefBlockUIUX.md) – complete UI/UX design guide
 
 ## Status
 
-**MVP Complete** – CLI, MCP server, and browser components ready.
+**MVP Complete** – Single-source architecture with browser bundle.
 
-- Format specification v1.0
-- TrefWrapper + TrefReceiver for browser drag-and-drop
+- TrefWrapper + TrefReceiver (drag-and-drop)
+- Accessibility: ARIA, keyboard, focus-visible
+- Mobile/touch support: tap-to-toggle, long-press
+- Dropdown action menu with SVG icons
 - CLI tool (`tref publish`, `tref validate`, `tref derive`)
 - MCP server for Claude Code integration
 - Live demo at [tref.lpmwfx.com](https://tref.lpmwfx.com)
 
 ## License
 
-MIT
+AGPL-3.0-or-later
