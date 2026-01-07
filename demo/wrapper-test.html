@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TREF Wrapper Test</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      color: #2D1B4E;
+      border-bottom: 3px solid #5CCCCC;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      margin-top: 2rem;
+      color: #374151;
+    }
+
+    .test-section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .test-section h3 {
+      margin-top: 0;
+      color: #2D1B4E;
+      font-size: 1rem;
+    }
+
+    .test-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .test-label {
+      min-width: 150px;
+      font-weight: 500;
+      color: #6b7280;
+    }
+
+    .test-result {
+      flex: 1;
+    }
+
+    .status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-pass { background: #ecfdf5; color: #10B981; }
+    .status-fail { background: #fef2f2; color: #ef4444; }
+    .status-pending { background: #fffbeb; color: #f59e0b; }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .comparison-box {
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .comparison-box.correct {
+      background: #ecfdf5;
+      border: 2px solid #10B981;
+    }
+
+    .comparison-box.wrong {
+      background: #fef2f2;
+      border: 2px solid #ef4444;
+    }
+
+    .comparison-box h4 {
+      margin: 0 0 15px 0;
+      font-size: 14px;
+    }
+
+    .receiver-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .add-btn {
+      width: 32px;
+      height: 32px;
+      border: 2px dashed #5CCCCC;
+      border-radius: 4px;
+      background: #f9fafb;
+      color: #5CCCCC;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .add-btn:hover {
+      background: #f3e8ff;
+      border-color: #8B5CF6;
+      color: #8B5CF6;
+    }
+
+    .log {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      margin-bottom: 4px;
+    }
+
+    .log-entry.success { color: #10B981; }
+    .log-entry.error { color: #ef4444; }
+    .log-entry.info { color: #5CCCCC; }
+
+    /* Inject wrapper styles here */
+    #wrapper-styles { display: none; }
+  </style>
+  <style id="wrapper-styles"></style>
+</head>
+<body>
+  <h1>TREF Wrapper Test</h1>
+  <p>Testing <code>src/wrapper/wrapper.js</code> against <code>doc/TrefBlockUIUX.md</code> specification.</p>
+
+  <!-- Test 1: Core Design Principle -->
+  <div class="test-section">
+    <h3>1. Core Design Principle: Icon IS the block</h3>
+    <p>The block should show ONLY the icon. No ID, no content preview, no labels.</p>
+
+    <div class="comparison">
+      <div class="comparison-box correct">
+        <h4>CORRECT</h4>
+        <div id="test-correct"></div>
+      </div>
+      <div class="comparison-box wrong">
+        <h4>WRONG (with ID shown)</h4>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div id="test-wrong-icon"></div>
+          <code style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px;">#a3f8b2c1</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test 2: Hover Actions -->
+  <div class="test-section">
+    <h3>2. Hover Actions</h3>
+    <p>Hover over the icon to see action buttons appear.</p>
+
+    <div class="test-row">
+      <span class="test-label">Interactive block:</span>
+      <div class="test-result" id="test-hover"></div>
+    </div>
+
+    <div class="test-row">
+      <span class="test-label">Expected actions:</span>
+      <div class="test-result">
+        <code>📋</code> Copy content &nbsp;
+        <code>{ }</code> Copy JSON &nbsp;
+        <code>💾</code> Download .tref
+      </div>
+    </div>
+  </div>
+
+  <!-- Test 3: Drag and Drop -->
+  <div class="test-section">
+    <h3>3. Drag and Drop</h3>
+    <p>Drag the icon to the drop zone.</p>
+
+    <div class="test-row">
+      <span class="test-label">Drag source:</span>
+      <div class="test-result" id="test-drag-source"></div>
+    </div>
+
+    <div class="test-row">
+      <span class="test-label">Drop target:</span>
+      <div class="test-result" id="test-drop-target" data-placeholder="Drop TREF here"></div>
+    </div>
+  </div>
+
+  <!-- Test 4: Compact Receiver -->
+  <div class="test-section">
+    <h3>4. Compact Receiver (32x32) with Add Button</h3>
+    <p>Receivers should match icon size. Plus button adds new receivers.</p>
+
+    <div class="receiver-row" id="receiver-row">
+      <button class="add-btn" id="add-receiver-btn">+</button>
+    </div>
+  </div>
+
+  <!-- Test 5: States -->
+  <div class="test-section">
+    <h3>5. Receiver States</h3>
+    <p>Visual feedback for different states.</p>
+
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+      <div>
+        <p style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">Default</p>
+        <div id="state-default" style="width: 100px; height: 50px;" data-placeholder="Default"></div>
+      </div>
+      <div>
+        <p style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">Active (dragover)</p>
+        <div class="tref-receiver tref-receiver-active" style="width: 100px; height: 50px; min-height: auto; padding: 10px;">Active</div>
+      </div>
+      <div>
+        <p style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">Success</p>
+        <div class="tref-receiver tref-receiver-success" style="width: 100px; height: 50px; min-height: auto; padding: 10px;">Success</div>
+      </div>
+      <div>
+        <p style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">Error</p>
+        <div class="tref-receiver tref-receiver-error" style="width: 100px; height: 50px; min-height: auto; padding: 10px;">Error</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test 6: Accessibility (TODO) -->
+  <div class="test-section">
+    <h3>6. Accessibility <span class="status status-pending">TODO</span></h3>
+    <p>Keyboard navigation and ARIA labels.</p>
+
+    <div class="test-row">
+      <span class="test-label">Tab to focus:</span>
+      <div class="test-result" id="test-a11y"></div>
+    </div>
+
+    <div class="test-row">
+      <span class="test-label">Expected:</span>
+      <div class="test-result">
+        <code>role="button"</code> &nbsp;
+        <code>aria-label</code> &nbsp;
+        <code>tabindex="0"</code> &nbsp;
+        <code>:focus-visible</code> outline
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Log -->
+  <div class="test-section">
+    <h3>Event Log</h3>
+    <div class="log" id="event-log">
+      <div class="log-entry info">Ready for testing...</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { TrefWrapper, TrefReceiver, wrap, unwrap, TREF_ICON_SVG } from '../src/wrapper/wrapper.js';
+
+    // Inject wrapper styles
+    document.getElementById('wrapper-styles').textContent =
+      TrefWrapper.getStyles() + TrefReceiver.getStyles();
+
+    // Test block
+    const testBlock = {
+      v: 1,
+      id: 'sha256:a3f8b2c1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1',
+      content: '# Test Block\n\nThis is test content for the wrapper.',
+      meta: {
+        created: '2025-01-07T12:00:00Z',
+        license: 'CC0-1.0'
+      },
+      refs: [
+        { type: 'url', url: 'https://example.com', title: 'Example' }
+      ]
+    };
+
+    const wrapper = wrap(testBlock);
+
+    // Logging helper
+    function log(message, type = 'info') {
+      const logEl = document.getElementById('event-log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logEl.appendChild(entry);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // Test 1: Core Design - correct
+    const correctEl = document.getElementById('test-correct');
+    correctEl.innerHTML = wrapper.toHTML();
+    wrapper.attachEvents(correctEl);
+
+    // Test 1: Core Design - wrong (just show icon for comparison)
+    document.getElementById('test-wrong-icon').innerHTML = TREF_ICON_SVG;
+
+    // Test 2: Hover actions
+    const hoverEl = document.getElementById('test-hover');
+    hoverEl.innerHTML = wrapper.toHTML();
+    wrapper.attachEvents(hoverEl);
+
+    // Test 3: Drag source
+    const dragSourceEl = document.getElementById('test-drag-source');
+    dragSourceEl.innerHTML = wrapper.toHTML();
+    wrapper.attachEvents(dragSourceEl);
+    log('Drag source initialized');
+
+    // Test 3: Drop target
+    const dropTargetEl = document.getElementById('test-drop-target');
+    const receiver = new TrefReceiver(dropTargetEl, {
+      onReceive: (w) => {
+        log(`Received block: ${w.shortId}`, 'success');
+        receiver.showBlock(w);
+      },
+      onError: (err) => {
+        log(`Drop error: ${err.message}`, 'error');
+      }
+    });
+    log('Drop receiver initialized');
+
+    // Test 4: Compact receivers with add button
+    const receiverRow = document.getElementById('receiver-row');
+    const addBtn = document.getElementById('add-receiver-btn');
+
+    function addCompactReceiver() {
+      const zone = document.createElement('div');
+      receiverRow.insertBefore(zone, addBtn);
+
+      new TrefReceiver(zone, {
+        compact: true,
+        onReceive: (w) => {
+          zone.innerHTML = w.toHTML({ interactive: false });
+          zone.classList.add('has-block');
+          log(`Compact receiver got: ${w.shortId}`, 'success');
+        },
+        onError: () => {
+          log('Compact receiver: invalid data', 'error');
+        }
+      });
+
+      log('Added compact receiver');
+    }
+
+    addBtn.addEventListener('click', addCompactReceiver);
+    addCompactReceiver(); // Start with one
+
+    // Test 5: Default state receiver
+    new TrefReceiver(document.getElementById('state-default'), {});
+    document.querySelector('#state-default .tref-receiver').style.cssText =
+      'min-height: auto; padding: 10px;';
+
+    // Test 6: Accessibility test
+    const a11yEl = document.getElementById('test-a11y');
+    a11yEl.innerHTML = wrapper.toHTML();
+    wrapper.attachEvents(a11yEl);
+
+    // Check accessibility attributes
+    const icon = a11yEl.querySelector('.tref-icon');
+    const checks = [
+      { name: 'role="button"', pass: icon?.getAttribute('role') === 'button' },
+      { name: 'aria-label', pass: !!icon?.getAttribute('aria-label') },
+      { name: 'tabindex="0"', pass: icon?.getAttribute('tabindex') === '0' },
+    ];
+
+    checks.forEach(check => {
+      log(`A11y check "${check.name}": ${check.pass ? 'PASS' : 'FAIL'}`, check.pass ? 'success' : 'error');
+    });
+
+    log('All tests initialized');
+  </script>
+</body>
+</html>

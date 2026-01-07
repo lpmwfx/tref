@@ -2,39 +2,77 @@
 
 Current phase tasks.
 
-## Wrapper UX Adaptation (ACTIVE)
+## Repo Refactoring (ACTIVE)
+
+Single source architecture: `src/` → `dist/` → CDN/npm
+
+### Build Setup
+
+- [ ] Add esbuild as dev dependency
+- [ ] Add `npm run build` script (src/ → dist/)
+- [ ] Add `npm run dev` script (watch + serve demo/)
+- [ ] Create dist/ folder structure
+
+### Package Config
+
+- [ ] Update package.json with exports field
+- [ ] Add "main" and "module" fields
+- [ ] Configure for npm publish
+- [ ] Add .npmignore (exclude demo/, doc/)
+
+### Demo Refactor
+
+- [ ] Update demo/index.html to import from dist/ (dev) or CDN (prod)
+- [ ] Add environment detection (localhost vs production)
+- [ ] Remove any hardcoded styles/code
+
+### Docs Site Refactor
+
+- [ ] Update docs/ to import from CDN only
+- [ ] Remove any local copies of wrapper code
+- [ ] Test with tref.lpmwfx.com
+
+### Documentation
+
+- [x] Document architecture in doc/project.md
+- [ ] Update CLAUDE.md with build workflow
+- [ ] Add CONTRIBUTING.md with dev setup
+
+---
+
+## Wrapper UX Adaptation
 
 Align `src/wrapper/wrapper.js` with `doc/TrefBlockUIUX.md` specification.
 Test in `/demo` folder. Goal: wrapper.js as reusable library.
 
 ### Typedef
 
-- [ ] Rename `AIBlock` to `TrefBlock` throughout
+- [x] Rename `AIBlock` to `TrefBlock` throughout
 
 ### Accessibility
 
-- [ ] Add `role="button"` to icon
-- [ ] Add `aria-label` to icon and action buttons
-- [ ] Add `tabindex="0"` to icon for keyboard focus
-- [ ] Fix focus styles (`:focus-visible` instead of removing outline)
-- [ ] Add keyboard handlers (Enter/Space to activate)
+- [x] Add `role="button"` to icon
+- [x] Add `aria-label` to icon and action buttons
+- [x] Add `tabindex="0"` to icon for keyboard focus
+- [x] Fix focus styles (`:focus-visible` instead of removing outline)
+- [x] Add keyboard handlers (Enter/Space to activate)
 
 ### Mobile / Touch
 
-- [ ] Add tap-to-toggle for action menu on touch devices
-- [ ] Add long-press (500ms) to start drag
-- [ ] Add responsive sizing (32px → 48px on mobile)
-- [ ] Add `@media (pointer: coarse)` styles for touch hit areas
+- [x] Add tap-to-toggle for action menu on touch devices
+- [x] Add long-press (500ms) to start drag
+- [x] Add responsive sizing (32px → 48px on mobile)
+- [x] Add `@media (pointer: coarse)` styles for touch hit areas
 
 ### Compact Receiver
 
-- [ ] Add `.tref-receiver-compact` class (32x32)
-- [ ] Make compact mode the default for inline use
-- [ ] Keep large mode for standalone drop zones
+- [x] Add `.tref-receiver-compact` class (32x32)
+- [x] Add `compact: true` option to TrefReceiver
+- [x] Keep large mode for standalone drop zones
 
 ### Demo Page
 
-- [ ] Create `/demo/wrapper-test.html` for visual testing
+- [x] Create `/demo/wrapper-test.html` for visual testing
 - [ ] Test all states: hover, focus, active, drag, drop
 - [ ] Test accessibility with keyboard only
 - [ ] Test on mobile/touch device
@@ -44,6 +82,13 @@ Test in `/demo` folder. Goal: wrapper.js as reusable library.
 - [ ] Add live region for status announcements
 - [ ] Announce copy success/failure
 - [ ] Announce drop success/failure
+
+### Theme Support (Light/Dark/Custom)
+
+- [ ] Convert hardcoded colors to CSS custom properties
+- [ ] Add `@media (prefers-color-scheme: dark)` styles
+- [ ] Document custom theme override pattern
+- [ ] Test in light and dark contexts
 
 ### UI/UX Build Guide
 

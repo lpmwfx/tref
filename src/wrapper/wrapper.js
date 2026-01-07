@@ -9,7 +9,7 @@
 const TREF_EXTENSION = '.tref';
 
 /**
- * @typedef {object} AIBlock
+ * @typedef {object} TrefBlock
  * @property {1} v
  * @property {string} id
  * @property {string} content
@@ -54,7 +54,7 @@ function escapeHtml(str) {
 /**
  * Validate block structure
  * @param {unknown} block
- * @returns {block is AIBlock}
+ * @returns {block is TrefBlock}
  */
 function isValidBlock(block) {
   if (!block || typeof block !== 'object') {
@@ -88,11 +88,11 @@ function isValidBlock(block) {
  * - Status feedback in the ID badge
  */
 export class TrefWrapper {
-  /** @type {AIBlock} */
+  /** @type {TrefBlock} */
   #block;
 
   /**
-   * @param {AIBlock} block
+   * @param {TrefBlock} block
    */
   constructor(block) {
     if (!isValidBlock(block)) {
@@ -173,19 +173,47 @@ export class TrefWrapper {
   toHTML(options = {}) {
     const { interactive = true } = options;
 
+    // SVG icons for actions
+    const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const iconJson = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"></path><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"></path><circle cx="12" cy="12" r="1" fill="currentColor"></circle><circle cx="8" cy="12" r="1" fill="currentColor"></circle><circle cx="16" cy="12" r="1" fill="currentColor"></circle></svg>`;
+    const iconDownload = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
+
     // Hover actions appear on hover
     const actionsHtml = interactive
-      ? `<div class="tref-actions">
-          <button class="tref-action" data-action="copy-content" title="Copy content">📋</button>
-          <button class="tref-action" data-action="copy-json" title="Copy JSON">{ }</button>
-          <button class="tref-action" data-action="download" title="Download .tref">💾</button>
+      ? `<div class="tref-actions" role="group" aria-label="Block actions">
+          <button class="tref-action" data-action="copy-content" title="Copy content" aria-label="Copy content to clipboard">${iconCopy}</button>
+          <button class="tref-action" data-action="copy-json" title="Copy JSON" aria-label="Copy JSON to clipboard">${iconJson}</button>
+          <button class="tref-action" data-action="download" title="Download .tref" aria-label="Download as .tref file">${iconDownload}</button>
         </div>`
       : '';
 
     return `<div class="tref-wrapper" data-tref-id="${this.#block.id}">
-  <span class="tref-icon" draggable="true" title="Drag to share">${TREF_ICON_SVG}</span>
+  <span class="tref-icon"
+        role="button"
+        aria-label="TREF block - drag to share"
+        tabindex="0"
+        draggable="true"
+        title="Drag to share">${TREF_ICON_SVG}</span>
   ${actionsHtml}
 </div>`;
+  }
+
+  /**
+   * Toggle actions visibility (for keyboard/touch)
+   * @param {HTMLElement} element
+   */
+  #toggleActions(element) {
+    const actions = element.querySelector('.tref-actions');
+    if (actions) {
+      const actionsEl = /** @type {HTMLElement} */ (actions);
+      const isVisible = actionsEl.style.opacity === '1';
+      actionsEl.style.opacity = isVisible ? '0' : '1';
+      if (!isVisible) {
+        // Focus first action button
+        const firstBtn = actionsEl.querySelector('button');
+        if (firstBtn) /** @type {HTMLElement} */ (firstBtn).focus();
+      }
+    }
   }
 
   /**
@@ -197,12 +225,51 @@ export class TrefWrapper {
 
     // Icon is drag handle
     if (iconEl) {
-      /** @type {HTMLElement} */ (iconEl).addEventListener('dragstart', e => {
+      const icon = /** @type {HTMLElement} */ (iconEl);
+
+      icon.addEventListener('dragstart', e => {
         const de = /** @type {DragEvent} */ (e);
         if (de.dataTransfer) {
           this.setDragData(de.dataTransfer);
           de.dataTransfer.effectAllowed = 'copy';
         }
+      });
+
+      // Keyboard: Enter/Space shows actions or triggers default action
+      icon.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.#toggleActions(element);
+        }
+      });
+
+      // Touch: tap toggles actions
+      icon.addEventListener('touchend', e => {
+        // Only handle if not dragging
+        if (!icon.dataset.dragging) {
+          e.preventDefault();
+          this.#toggleActions(element);
+        }
+      });
+
+      // Touch: long-press (500ms) to start drag indication
+      /** @type {number | undefined} */
+      let longPressTimer;
+      icon.addEventListener('touchstart', () => {
+        longPressTimer = window.setTimeout(() => {
+          icon.dataset.dragging = 'true';
+          icon.style.transform = 'scale(1.15)';
+        }, 500);
+      });
+      icon.addEventListener('touchend', () => {
+        clearTimeout(longPressTimer);
+        delete icon.dataset.dragging;
+        icon.style.transform = '';
+      });
+      icon.addEventListener('touchcancel', () => {
+        clearTimeout(longPressTimer);
+        delete icon.dataset.dragging;
+        icon.style.transform = '';
       });
     }
 
@@ -211,15 +278,18 @@ export class TrefWrapper {
       e.stopPropagation();
       const btn = /** @type {HTMLElement} */ (e.currentTarget);
       const action = btn.dataset.action;
-      const originalText = btn.textContent || '';
+      const originalHtml = btn.innerHTML;
+
+      const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      const iconError = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
       try {
         if (action === 'copy-content') {
           await this.copyContentToClipboard();
-          btn.textContent = '✓';
+          btn.innerHTML = iconCheck;
         } else if (action === 'copy-json') {
           await this.copyToClipboard();
-          btn.textContent = '✓';
+          btn.innerHTML = iconCheck;
         } else if (action === 'download') {
           const url = this.toObjectURL();
           const a = document.createElement('a');
@@ -227,15 +297,15 @@ export class TrefWrapper {
           a.download = this.getFilename();
           a.click();
           URL.revokeObjectURL(url);
-          btn.textContent = '✓';
+          btn.innerHTML = iconCheck;
         }
         setTimeout(() => {
-          btn.textContent = originalText;
+          btn.innerHTML = originalHtml;
         }, 1000);
       } catch {
-        btn.textContent = '✗';
+        btn.innerHTML = iconError;
         setTimeout(() => {
-          btn.textContent = originalText;
+          btn.innerHTML = originalHtml;
         }, 1000);
       }
     };
@@ -248,9 +318,7 @@ export class TrefWrapper {
   static getStyles() {
     return `
 .tref-wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  display: inline-block;
   position: relative;
 }
 .tref-icon {
@@ -264,26 +332,56 @@ export class TrefWrapper {
 .tref-icon:active { cursor: grabbing; }
 .tref-icon svg { width: 100%; height: 100%; }
 .tref-actions {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 2px;
+  padding: 4px;
+  background: #1f2937;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   opacity: 0;
-  transition: opacity 0.15s;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+  z-index: 100;
+  margin-top: 4px;
 }
-.tref-wrapper:hover .tref-actions { opacity: 1; }
+.tref-wrapper:hover .tref-actions {
+  opacity: 1;
+  visibility: visible;
+}
 .tref-action {
-  background: #f3f4f6;
+  background: transparent;
   border: none;
   outline: none;
-  padding: 4px 6px;
+  padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
-  color: #374151;
+  color: #e5e7eb;
   transition: background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.tref-action:hover { background: #e5e7eb; }
+.tref-action svg {
+  width: 16px;
+  height: 16px;
+}
+.tref-action:hover { background: #374151; }
 .tref-action:focus { outline: none; }
+.tref-action:focus-visible {
+  outline: 2px solid #5CCCCC;
+  outline-offset: 1px;
+}
+.tref-icon:focus { outline: none; }
+.tref-icon:focus-visible {
+  outline: 2px solid #5CCCCC;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 `;
   }
 }
@@ -298,21 +396,30 @@ export class TrefReceiver {
   #onReceive;
   /** @type {(error: Error) => void} */
   #onError;
+  /** @type {boolean} */
+  #compact;
 
   /**
    * @param {HTMLElement} element
-   * @param {{ onReceive?: (wrapper: TrefWrapper) => void, onError?: (error: Error) => void }} [options]
+   * @param {{ onReceive?: (wrapper: TrefWrapper) => void, onError?: (error: Error) => void, compact?: boolean }} [options]
    */
   constructor(element, options = {}) {
     this.#element = element;
     this.#onReceive = options.onReceive || (() => {});
     this.#onError = options.onError || (() => {});
+    this.#compact = options.compact || false;
     this.#setup();
   }
 
   #setup() {
     const el = this.#element;
     el.classList.add('tref-receiver');
+    if (this.#compact) {
+      el.classList.add('tref-receiver-compact');
+    }
+    el.setAttribute('role', 'region');
+    el.setAttribute('aria-label', 'Drop zone for TREF blocks');
+    el.setAttribute('aria-dropeffect', 'copy');
 
     el.addEventListener('dragover', e => {
       e.preventDefault();
@@ -397,6 +504,30 @@ export class TrefReceiver {
   border-style: solid;
   background: white;
 }
+.tref-receiver-compact {
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  border-radius: 4px;
+}
+/* Touch devices - larger hit areas */
+@media (pointer: coarse) {
+  .tref-icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .tref-action {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+  }
+  .tref-receiver-compact {
+    width: 48px;
+    height: 48px;
+    min-height: 48px;
+  }
+}
 `;
   }
 }
@@ -407,7 +538,7 @@ export class TrefReceiver {
  * @returns {TrefWrapper}
  */
 export function wrap(data) {
-  return new TrefWrapper(/** @type {AIBlock} */ (data));
+  return new TrefWrapper(/** @type {TrefBlock} */ (data));
 }
 
 /**

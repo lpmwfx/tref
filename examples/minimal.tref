@@ -1,9 +1,0 @@
-{
-  "v": 1,
-  "id": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "content": "# Hello World\n\nThis is a minimal TREF block.\n",
-  "meta": {
-    "created": "2025-01-06T12:00:00Z",
-    "license": "AIBlocks-1.0"
-  }
-}

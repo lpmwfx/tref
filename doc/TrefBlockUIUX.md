@@ -53,13 +53,18 @@ The wrapper provides two main components:
 
 ### Visual Design
 
+The icon stands ALONE. No space is reserved for the hover menu.
+
 ```
-┌─────────────────────────────────────┐
-│  [ICON]  [📋] [{ }] [💾]            │
-│    ▲           ▲                    │
-│    │           └── Actions (hover)  │
-│    └── Drag handle                  │
-└─────────────────────────────────────┘
+Default state:           On hover:
+┌──────┐                 ┌──────┐
+│ TREF │                 │ TREF │
+└──────┘                 └──────┘
+   ↑                        │
+   Only the icon            ▼
+                      ┌───────────┐
+                      │ 📋 { } 💾 │  ← dropdown overlay
+                      └───────────┘
 ```
 
 ### Elements
@@ -67,7 +72,15 @@ The wrapper provides two main components:
 | Element | Purpose | Behavior |
 |---------|---------|----------|
 | Icon | Chain link SVG (purple-mint theme) | Drag handle - only draggable element |
-| Actions | Button row | Hidden by default, visible on hover |
+| Actions | Dropdown menu | Hidden by default, appears as overlay on hover |
+
+### Hover Menu (Dropdown)
+
+The action menu is a **dropdown overlay** that:
+- Appears BELOW the icon (not beside it)
+- Has its own dark background (#1f2937)
+- Floats above page content (z-index)
+- Does NOT reserve space in the layout
 
 ### Icon (Drag Handle)
 
@@ -229,14 +242,69 @@ const wrapper = unwrap(dataTransfer);  // or unwrap(jsonString)
 
 ## Theme
 
-Purple-mint color scheme:
+### Color Scheme
+
+The icon uses a fixed purple-mint scheme that works in both light and dark contexts:
 
 | Element | Color |
 |---------|-------|
-| Primary background | #2D1B4E (deep purple) |
-| Primary accent | #5CCCCC (mint) |
-| Icon fill | #5CCCCC |
+| Icon background | #2D1B4E (deep purple) |
+| Icon accent | #5CCCCC (mint) |
 | Active state | #8B5CF6 (violet) |
+
+### Light / Dark / Custom Modes
+
+UI elements (action buttons, receivers) adapt to context via CSS custom properties:
+
+```css
+:root {
+  /* Light mode (default) */
+  --tref-action-bg: #f3f4f6;
+  --tref-action-bg-hover: #e5e7eb;
+  --tref-action-text: #374151;
+  --tref-receiver-bg: #f9fafb;
+  --tref-receiver-border: #5CCCCC;
+  --tref-receiver-text: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tref-action-bg: #374151;
+    --tref-action-bg-hover: #4b5563;
+    --tref-action-text: #e5e7eb;
+    --tref-receiver-bg: #1f2937;
+    --tref-receiver-border: #5CCCCC;
+    --tref-receiver-text: #9ca3af;
+  }
+}
+
+/* Custom theme override */
+.theme-custom {
+  --tref-action-bg: /* your color */;
+  --tref-action-bg-hover: /* your color */;
+  /* etc. */
+}
+```
+
+### Theme Variables Reference
+
+| Variable | Purpose | Light | Dark |
+|----------|---------|-------|------|
+| `--tref-action-bg` | Action button background | #f3f4f6 | #374151 |
+| `--tref-action-bg-hover` | Action button hover | #e5e7eb | #4b5563 |
+| `--tref-action-text` | Action button text | #374151 | #e5e7eb |
+| `--tref-receiver-bg` | Receiver background | #f9fafb | #1f2937 |
+| `--tref-receiver-border` | Receiver border | #5CCCCC | #5CCCCC |
+| `--tref-receiver-text` | Receiver placeholder | #6b7280 | #9ca3af |
+| `--tref-success` | Success state | #10B981 | #10B981 |
+| `--tref-error` | Error state | #ef4444 | #ef4444 |
+
+### Icon Consistency
+
+The TREF icon (#2D1B4E + #5CCCCC) is intentionally fixed - not themed. This ensures:
+- Universal recognition across sites
+- Works on both light and dark backgrounds
+- Brand consistency
 
 ---
 
