@@ -228,11 +228,7 @@ tref_cat       - Read block content</code>
 
   <!-- Article TREF Block -->
   <section class="section">
-    <div class="container" style="max-width: 900px;">
-      <h2 class="section-title">This Article as TREF</h2>
-      <p style="text-align: center; color: var(--gray-600); margin-bottom: 2rem;">
-        Drag this block to cite or share this guide.
-      </p>
+    <div class="container" style="max-width: 900px; display: flex; justify-content: center;">
       <div id="article-tref"></div>
     </div>
   </section>
@@ -250,33 +246,7 @@ tref_cat       - Read block content</code>
   <script type="module">
     import { TrefWrapper, publish } from './js/browser.js';
 
-    const content = `TREF Developer Guide
-
-Quick Start (CLI):
-1. Install: curl -sSL https://tref.lpmwfx.com/install.sh | bash
-2. Create a block: tref publish "content"
-3. Add references: tref publish "content" --refs '[{"type":"url","url":"..."}]'
-4. Derive from existing: tref derive sha256:abc... "new content"
-
-CLI Commands:
-- tref publish: Create a new block
-- tref derive: Create child block from parent
-- tref validate: Verify block integrity
-- tref list/info/cat: Browse and read blocks
-
-JavaScript API:
-- publish(content, options): Create block
-- derive(parent, content): Create child block
-- validate(block): Check integrity
-- TrefWrapper: Display blocks
-- TrefReceiver: Drag-and-drop receiver
-
-Claude Code MCP:
-Install: claude mcp add tref -- tref-mcp
-Tools: tref_publish, tref_derive, tref_validate, tref_list, tref_info, tref_cat`;
-
-    const block = await publish(content, {
-      author: 'TREF Documentation',
+    const block = await publish('TREF Developer Guide', {
       refs: [{ type: 'url', url: window.location.href, title: 'TREF Developer Guide' }]
     });
 

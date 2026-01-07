@@ -228,11 +228,7 @@
 
   <!-- Article TREF Block -->
   <section class="section" style="background: white;">
-    <div class="container" style="max-width: 800px;">
-      <h2 class="section-title">This Article as TREF</h2>
-      <p style="text-align: center; color: var(--gray-600); margin-bottom: 2rem;">
-        Drag this block to cite or share this explanation.
-      </p>
+    <div class="container" style="max-width: 800px; display: flex; justify-content: center;">
       <div id="article-tref"></div>
     </div>
   </section>
@@ -249,30 +245,7 @@
   <script type="module">
     import { TrefWrapper, publish } from './js/browser.js';
 
-    const content = `About TREF Tools - Explained Simply
-
-What is TREF?
-TREF is like a digital trading card for facts. Every TREF block has:
-1. The fact itself - what you want to share
-2. Where it came from - links to sources so people can check
-3. A special ID - like a fingerprint that proves nobody changed it
-
-What is "tref" (the command)?
-tref is a tool you type in the Terminal. You can tell it to:
-- Create a fact card: tref publish "The moon is 384,400 km from Earth"
-- Check if a card is real: tref validate mycard.tref
-- See all your cards: tref list
-
-What is "tref-mcp"?
-tref-mcp lets AI assistants (like Claude) use TREF. It's like a special mailbox that lets your AI friend receive and read your fact cards. MCP stands for "Model Context Protocol" - the way AI assistants talk to tools.
-
-Why does this matter?
-On the internet, people copy and paste stuff all the time. But after a while, nobody knows where the information came from. TREF keeps track of everything. When you share a TREF block, the sources come with it. When you change it, it gets a new ID.
-
-TREF = Facts you can trust`;
-
-    const block = await publish(content, {
-      author: 'TREF Documentation',
+    const block = await publish('About the TREF Tools', {
       refs: [{ type: 'url', url: window.location.href, title: 'About the TREF Tools' }]
     });
 
