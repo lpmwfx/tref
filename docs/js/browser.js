@@ -7,8 +7,8 @@
 
 /* global window, TextEncoder, crypto */
 
-// Import from CDN (jsdelivr serves from GitHub)
-// After npm publish, change to: https://cdn.jsdelivr.net/npm/tref-block/dist/tref-block.js
+// Import from local bundle (copy of dist/tref-block.js)
+// After npm publish, can change to: https://cdn.jsdelivr.net/npm/tref-block/dist/tref-block.js
 import {
   TrefWrapper,
   TrefReceiver,
@@ -17,7 +17,7 @@ import {
   TREF_ICON_SVG,
   TREF_ICON_DATA_URL,
   TREF_MIME_TYPE,
-} from 'https://cdn.jsdelivr.net/gh/lpmwfx/tref@main/dist/tref-block.js';
+} from './tref-block.js';
 
 // Re-export wrapper components
 export {

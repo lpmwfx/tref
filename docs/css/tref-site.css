@@ -5,7 +5,7 @@
   --mint: #5CCCCC;
   --dark-purple: #2D1B4E;
   --light-bg: #f8fafc;
-  --white: #ffffff;
+  --white: #fff;
   --gray-100: #f1f5f9;
   --gray-200: #e2e8f0;
   --gray-300: #cbd5e1;
@@ -22,43 +22,25 @@
   --site-bg: var(--light-bg);
   --site-text: var(--gray-800);
   --site-card-bg: var(--white);
-  --site-card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  --site-card-shadow: 0 4px 12px rgb(0 0 0 / 5%);
   --site-section-alt: var(--white);
 }
 
-/* Dark mode site vars */
+/* Dark mode site vars + TREF component vars */
 html.dark {
   --site-bg: #0f172a;
   --site-text: #e2e8f0;
   --site-card-bg: #1e293b;
-  --site-card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  --site-card-shadow: 0 4px 12px rgb(0 0 0 / 30%);
   --site-section-alt: #1e293b;
   --gray-100: #1e293b;
   --gray-200: #334155;
   --gray-600: #94a3b8;
   --gray-800: #f1f5f9;
-}
-
-/* Force light TREF component vars */
-html:not(.dark) {
-  --tref-menu-bg: #ffffff;
-  --tref-menu-text: #374151;
-  --tref-menu-hover: #f3f4f6;
-  --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  --tref-receiver-bg: #f9fafb;
-  --tref-receiver-text: #6b7280;
-  --tref-receiver-active-bg: #f3e8ff;
-  --tref-receiver-success-bg: #ecfdf5;
-  --tref-receiver-error-bg: #fef2f2;
-  --tref-receiver-block-bg: #ffffff;
-}
-
-/* Force dark TREF component vars */
-html.dark {
   --tref-menu-bg: #1f2937;
   --tref-menu-text: #e5e7eb;
   --tref-menu-hover: #374151;
-  --tref-menu-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  --tref-menu-shadow: 0 4px 12px rgb(0 0 0 / 40%);
   --tref-receiver-bg: #1f2937;
   --tref-receiver-text: #9ca3af;
   --tref-receiver-active-bg: #3b2d5e;
@@ -67,10 +49,24 @@ html.dark {
   --tref-receiver-block-bg: #111827;
 }
 
+/* Light mode TREF component vars */
+html:not(.dark) {
+  --tref-menu-bg: #fff;
+  --tref-menu-text: #374151;
+  --tref-menu-hover: #f3f4f6;
+  --tref-menu-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  --tref-receiver-bg: #f9fafb;
+  --tref-receiver-text: #6b7280;
+  --tref-receiver-active-bg: #f3e8ff;
+  --tref-receiver-success-bg: #ecfdf5;
+  --tref-receiver-error-bg: #fef2f2;
+  --tref-receiver-block-bg: #fff;
+}
+
 /* Theme toggle button */
 .theme-toggle {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgb(255 255 255 / 20%);
   border-radius: 8px;
   padding: 6px 12px;
   cursor: pointer;
@@ -81,6 +77,7 @@ html.dark {
   gap: 6px;
   transition: all 0.2s;
 }
+
 .theme-toggle:hover {
   border-color: var(--mint);
   color: var(--mint);
@@ -93,7 +90,7 @@ html.dark {
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   color: var(--site-text);
   background: var(--site-bg);
@@ -107,7 +104,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 20%);
 }
 
 .nav-inner {
@@ -163,6 +160,7 @@ body {
   font-size: 3rem;
   margin-bottom: 1rem;
   background: linear-gradient(135deg, var(--purple) 0%, var(--mint) 100%);
+  /* stylelint-disable-next-line property-no-vendor-prefix -- Safari gradient text */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -204,17 +202,17 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 12px rgb(139 92 246 / 40%);
 }
 
 .btn-secondary {
-  background: rgba(255,255,255,0.1);
+  background: rgb(255 255 255 / 10%);
   color: white;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgb(255 255 255 / 20%);
 }
 
 .btn-secondary:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgb(255 255 255 / 20%);
 }
 
 /* Container */
@@ -253,7 +251,7 @@ body {
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
 }
 
 .card-icon {
@@ -280,17 +278,13 @@ body {
   font-size: 0.95rem;
 }
 
-html.dark .card p {
-  color: var(--gray-400);
-}
-
 /* Code Blocks */
 .code-block {
   background: var(--gray-900);
   color: var(--gray-100);
   border-radius: 8px;
   padding: 1rem 1.5rem;
-  font-family: 'Fira Code', 'Consolas', monospace;
+  font-family: 'Fira Code', Consolas, monospace;
   font-size: 0.9rem;
   overflow-x: auto;
   position: relative;
@@ -371,10 +365,6 @@ html.dark .card p {
   margin-bottom: 0.5rem;
 }
 
-html.dark .step-content p {
-  color: var(--gray-400);
-}
-
 /* Section alternating backgrounds */
 .section-alt {
   background: var(--site-section-alt);
@@ -418,6 +408,7 @@ html.dark .step-content p {
   text-align: center;
 }
 
+/* stylelint-disable-next-line no-descending-specificity -- .footer a and .nav-links a are separate */
 .footer a {
   color: var(--mint);
   text-decoration: none;
@@ -436,7 +427,7 @@ html.dark .step-content p {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .hero h1 {
     font-size: 2rem;
   }
@@ -454,140 +445,7 @@ html.dark .step-content p {
   }
 }
 
-/* TREF Component Styles */
-.tref-wrapper {
-  font-family: system-ui, -apple-system, sans-serif;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 12px;
-  background: #fafafa;
-  max-width: 400px;
-}
-.tref-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.tref-icon {
-  display: inline-flex;
-  width: 24px;
-  height: 24px;
-  cursor: grab;
-  transition: transform 0.15s;
-}
-.tref-icon:hover { transform: scale(1.1); }
-.tref-icon:active { cursor: grabbing; }
-.tref-icon svg { width: 100%; height: 100%; }
-.tref-id {
-  font-family: monospace;
-  font-size: 12px;
-  color: #6b7280;
-  background: #e5e7eb;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-.tref-meta { font-size: 12px; color: #9ca3af; }
-.tref-menu {
-  margin-left: auto;
-  position: relative;
-}
-.tref-menu-btn {
-  background: transparent;
-  border: none;
-  padding: 4px 8px;
-  cursor: pointer;
-  color: #6b7280;
-  border-radius: 4px;
-  font-size: 16px;
-  line-height: 1;
-  transition: all 0.15s;
-}
-.tref-menu-btn:hover {
-  background: #e5e7eb;
-  color: #374151;
-}
-.tref-menu-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  min-width: 140px;
-  z-index: 100;
-  overflow: hidden;
-}
-.tref-menu-dropdown.show { display: block; }
-.tref-action {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  outline: none;
-  background: white;
-  text-align: left;
-  cursor: pointer;
-  font-size: 13px;
-  color: #374151;
-  transition: background 0.15s;
-  font-family: inherit;
-}
-.tref-action:hover {
-  background: #f3f4f6;
-}
-.tref-action:focus {
-  outline: none;
-}
-.tref-content {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #374151;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.tref-refs {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #e5e7eb;
-  font-size: 12px;
-  color: #6b7280;
-}
-.tref-refs a { color: #5CCCCC; text-decoration: none; }
-.tref-refs a:hover { text-decoration: underline; }
-
-.tref-receiver {
-  border: 2px dashed #5CCCCC;
-  border-radius: 8px;
-  padding: 20px;
-  min-height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #6b7280;
-  background: #f9fafb;
-  transition: all 0.2s;
-}
-.tref-receiver-active {
-  border-color: #8B5CF6;
-  background: #f3e8ff;
-  color: #8B5CF6;
-}
-.tref-receiver-success {
-  border-color: #10B981;
-  background: #ecfdf5;
-}
-.tref-receiver-error {
-  border-color: #ef4444;
-  background: #fef2f2;
-}
-.tref-receiver-has-block {
-  border-style: solid;
-  background: white;
-}
+/* TREF Component Styles - injected from bundle via getStyles() */
 
 /* Utility classes */
 .text-center { text-align: center; }

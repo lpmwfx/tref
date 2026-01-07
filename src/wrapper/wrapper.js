@@ -43,13 +43,15 @@ export const TREF_ICON_DATA_URL = 'data:image/svg+xml,' + encodeURIComponent(TRE
  * @param {string} str
  * @returns {string}
  */
-function escapeHtml(str) {
+function _escapeHtml(str) {
   return str
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+// Reserved for future use (content escaping)
+void _escapeHtml;
 
 /**
  * Validate block structure
@@ -211,7 +213,9 @@ export class TrefWrapper {
       if (!isVisible) {
         // Focus first action button
         const firstBtn = actionsEl.querySelector('button');
-        if (firstBtn) /** @type {HTMLElement} */ (firstBtn).focus();
+        if (firstBtn) {
+          /** @type {HTMLElement} */ (firstBtn).focus();
+        }
       }
     }
   }
@@ -253,10 +257,10 @@ export class TrefWrapper {
       });
 
       // Touch: long-press (500ms) to start drag indication
-      /** @type {number | undefined} */
+      /** @type {ReturnType<typeof setTimeout> | undefined} */
       let longPressTimer;
       icon.addEventListener('touchstart', () => {
-        longPressTimer = window.setTimeout(() => {
+        longPressTimer = setTimeout(() => {
           icon.dataset.dragging = 'true';
           icon.style.transform = 'scale(1.15)';
         }, 500);
