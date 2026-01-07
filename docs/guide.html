@@ -3,116 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TREF Guide - Format & CLI Documentation</title>
-  <meta name="description" content="Complete guide to the TREF format and command-line interface.">
+  <title>Guide - TREF</title>
+  <meta name="description" content="Developer guide for TREF - CLI, API, and integration.">
   <link rel="stylesheet" href="css/tref-site.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
-  <style>
-    .guide-nav {
-      position: sticky;
-      top: 60px;
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .guide-nav a {
-      display: block;
-      padding: 0.5rem 0;
-      color: var(--gray-600);
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    .guide-nav a:hover {
-      color: var(--purple);
-    }
-    .guide-content {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-    .guide-content h2 {
-      color: var(--dark-purple);
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--gray-200);
-    }
-    .guide-content h3 {
-      color: var(--gray-700);
-      margin-top: 2rem;
-      margin-bottom: 0.75rem;
-    }
-    .field-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-    .field-table th, .field-table td {
-      text-align: left;
-      padding: 0.75rem;
-      border-bottom: 1px solid var(--gray-200);
-    }
-    .field-table th {
-      background: var(--gray-100);
-      font-weight: 600;
-    }
-    .field-table code {
-      background: var(--gray-100);
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-    }
-    .json-example {
-      background: var(--gray-900);
-      color: var(--gray-100);
-      padding: 1rem;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.85rem;
-      line-height: 1.6;
-    }
-    .json-key { color: #f472b6; }
-    .json-string { color: #34d399; }
-    .json-number { color: #60a5fa; }
-    .anatomy-diagram {
-      background: var(--gray-100);
-      border-radius: 12px;
-      padding: 2rem;
-      margin: 1.5rem 0;
-    }
-    .cli-command {
-      background: var(--gray-900);
-      color: var(--mint);
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      font-family: monospace;
-      margin: 0.5rem 0;
-    }
-    .cli-output {
-      background: var(--gray-800);
-      color: var(--gray-300);
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      font-family: monospace;
-      font-size: 0.85rem;
-      margin: 0.5rem 0;
-    }
-    .two-col {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 2rem;
-    }
-    @media (max-width: 768px) {
-      .two-col {
-        grid-template-columns: 1fr;
-      }
-      .guide-nav {
-        position: static;
-      }
-    }
-  </style>
 </head>
 <body>
   <!-- Navigation -->
@@ -133,262 +27,263 @@
       </a>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
-        <li><a href="guide.html" class="active">Guide</a></li>
-        <li><a href="embed.html">Embed</a></li>
         <li><a href="builder.html">Builder</a></li>
-        <li><a href="demo.html">Demo</a></li>
-        <li><a href="release.html">Download</a></li>
+        <li><a href="examples.html">Examples</a></li>
+        <li><a href="guide.html" class="active">Guide</a></li>
+        <li><a href="about-cli.html">About</a></li>
       </ul>
     </div>
   </nav>
 
+  <!-- Hero -->
+  <section class="hero" style="padding: 2rem;">
+    <h1>Developer Guide</h1>
+    <p class="hero-subtitle" style="font-size: 1.2rem;">
+      CLI commands, API reference, and integration patterns.
+    </p>
+  </section>
+
+  <!-- Quick Start CLI -->
   <section class="section">
-    <div class="container">
-      <div class="two-col">
-        <!-- Side Navigation -->
-        <aside>
-          <nav class="guide-nav">
-            <strong style="color: var(--dark-purple);">Guide</strong>
-            <a href="#format">Block Format</a>
-            <a href="#fields">Field Reference</a>
-            <a href="#refs">Reference Types</a>
-            <a href="#derivation">Derivation</a>
-            <a href="#cli">CLI Commands</a>
-            <a href="#mcp">MCP Server</a>
-          </nav>
-        </aside>
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">Quick Start (CLI)</h2>
 
-        <!-- Content -->
-        <main>
-          <!-- Format Section -->
-          <div class="guide-content" id="format">
-            <h2>The TREF Block Format</h2>
-            <p>A TREF block is a JSON file with the <code>.tref</code> extension. Each block is self-contained, content-addressed, and verifiable.</p>
-
-            <div class="anatomy-diagram">
-              <div class="json-example">
-{
-  <span class="json-key">"v"</span>: <span class="json-number">1</span>,
-  <span class="json-key">"id"</span>: <span class="json-string">"sha256:7a4f2c..."</span>,
-  <span class="json-key">"content"</span>: <span class="json-string">"Your knowledge here"</span>,
-  <span class="json-key">"meta"</span>: {
-    <span class="json-key">"author"</span>: <span class="json-string">"Your Name"</span>,
-    <span class="json-key">"created"</span>: <span class="json-string">"2026-01-06T12:00:00Z"</span>,
-    <span class="json-key">"license"</span>: <span class="json-string">"CC-BY-4.0"</span>
-  },
-  <span class="json-key">"refs"</span>: [...],
-  <span class="json-key">"parent"</span>: <span class="json-string">"sha256:abc123..."</span>
-}
-              </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-content">
+            <h4>Install</h4>
+            <p>Download and install the TREF CLI tool.</p>
+            <div class="code-block">
+              <code>curl -sSL https://tref.lpmwfx.com/install.sh | bash</code>
             </div>
           </div>
+        </div>
 
-          <!-- Fields Section -->
-          <div class="guide-content" id="fields">
-            <h2>Field Reference</h2>
-
-            <table class="field-table">
-              <tr>
-                <th>Field</th>
-                <th>Type</th>
-                <th>Required</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <td><code>v</code></td>
-                <td>number</td>
-                <td>Yes</td>
-                <td>Format version (always <code>1</code>)</td>
-              </tr>
-              <tr>
-                <td><code>id</code></td>
-                <td>string</td>
-                <td>Yes</td>
-                <td>SHA-256 hash of content. Format: <code>sha256:hex...</code></td>
-              </tr>
-              <tr>
-                <td><code>content</code></td>
-                <td>string</td>
-                <td>Yes</td>
-                <td>The actual knowledge content</td>
-              </tr>
-              <tr>
-                <td><code>meta.author</code></td>
-                <td>string</td>
-                <td>No</td>
-                <td>Creator name</td>
-              </tr>
-              <tr>
-                <td><code>meta.created</code></td>
-                <td>string</td>
-                <td>Yes</td>
-                <td>ISO 8601 timestamp</td>
-              </tr>
-              <tr>
-                <td><code>meta.license</code></td>
-                <td>string</td>
-                <td>Yes</td>
-                <td>License identifier (default: CC-BY-4.0)</td>
-              </tr>
-              <tr>
-                <td><code>refs</code></td>
-                <td>array</td>
-                <td>No</td>
-                <td>Array of reference objects</td>
-              </tr>
-              <tr>
-                <td><code>parent</code></td>
-                <td>string</td>
-                <td>No</td>
-                <td>ID of parent block (for derived blocks)</td>
-              </tr>
-            </table>
-          </div>
-
-          <!-- Reference Types -->
-          <div class="guide-content" id="refs">
-            <h2>Reference Types</h2>
-
-            <h3>URL Reference</h3>
-            <p>Link to a web resource.</p>
-            <div class="json-example">
-{ <span class="json-key">"type"</span>: <span class="json-string">"url"</span>, <span class="json-key">"url"</span>: <span class="json-string">"https://example.com/source"</span>, <span class="json-key">"label"</span>: <span class="json-string">"Source"</span> }
-            </div>
-
-            <h3>Archive Reference</h3>
-            <p>Preserved content snippet (survives dead links).</p>
-            <div class="json-example">
-{ <span class="json-key">"type"</span>: <span class="json-string">"archive"</span>, <span class="json-key">"content"</span>: <span class="json-string">"Archived text..."</span>, <span class="json-key">"url"</span>: <span class="json-string">"https://original.url"</span> }
-            </div>
-
-            <h3>Search Reference</h3>
-            <p>Query to refind the information.</p>
-            <div class="json-example">
-{ <span class="json-key">"type"</span>: <span class="json-string">"search"</span>, <span class="json-key">"query"</span>: <span class="json-string">"mitochondria powerhouse cell"</span> }
-            </div>
-
-            <h3>Hash Reference</h3>
-            <p>Integrity checksum for external data.</p>
-            <div class="json-example">
-{ <span class="json-key">"type"</span>: <span class="json-string">"hash"</span>, <span class="json-key">"algorithm"</span>: <span class="json-string">"sha256"</span>, <span class="json-key">"value"</span>: <span class="json-string">"abc123..."</span> }
+        <div class="step">
+          <div class="step-content">
+            <h4>Create a block</h4>
+            <p>Publish your first TREF block from the command line.</p>
+            <div class="code-block">
+              <code>tref publish "The speed of light is 299,792,458 m/s"</code>
             </div>
           </div>
+        </div>
 
-          <!-- Derivation -->
-          <div class="guide-content" id="derivation">
-            <h2>Derivation & Lineage</h2>
-            <p>When you derive a new block from an existing one, the parent's ID is recorded. This creates an immutable chain of provenance.</p>
-
-            <div class="json-example">
-<span style="color: var(--gray-500);">// Original block</span>
-{ "id": "sha256:parent123...", "content": "Original fact" }
-
-<span style="color: var(--gray-500);">// Derived block</span>
-{
-  "id": "sha256:child456...",
-  "content": "Updated fact with more detail",
-  "parent": "sha256:parent123...",  <span style="color: var(--gray-500);">// ← Links to original</span>
-  "refs": [...]  <span style="color: var(--gray-500);">// Parent's refs are inherited</span>
-}
+        <div class="step">
+          <div class="step-content">
+            <h4>Add references</h4>
+            <p>Include source URLs for verifiability.</p>
+            <div class="code-block">
+              <code>tref publish "Fact here" --refs '[{"type":"url","url":"https://source.com"}]'</code>
             </div>
           </div>
+        </div>
 
-          <!-- CLI Commands -->
-          <div class="guide-content" id="cli">
-            <h2>CLI Commands</h2>
-
-            <h3>tref publish</h3>
-            <p>Create and publish a new block.</p>
-            <div class="cli-command">tref publish "Your content here"</div>
-            <div class="cli-command">tref publish -f article.txt</div>
-            <div class="cli-command">echo "Content" | tref publish --stdin</div>
-            <p><strong>Options:</strong></p>
-            <ul>
-              <li><code>--refs '[{"type":"url","url":"..."}]'</code> - Add references</li>
-              <li><code>--license CC-BY-4.0</code> - Set license</li>
-              <li><code>--dir ./published</code> - Output directory</li>
-              <li><code>--pretty</code> - Pretty-print JSON</li>
-            </ul>
-
-            <h3>tref derive</h3>
-            <p>Derive a new block from a parent.</p>
-            <div class="cli-command">tref derive sha256:parent... "New content"</div>
-            <div class="cli-command">tref derive -f parent.tref "Updated content"</div>
-
-            <h3>tref validate</h3>
-            <p>Verify block integrity.</p>
-            <div class="cli-command">tref validate block.tref</div>
-            <div class="cli-output">✓ Valid: sha256:7a4f2c...</div>
-
-            <h3>tref list</h3>
-            <p>List published blocks.</p>
-            <div class="cli-command">tref list</div>
-            <div class="cli-output">sha256:7a4f2c... - 2026-01-06
-sha256:abc123... - 2026-01-05</div>
-
-            <h3>tref info</h3>
-            <p>Show block details.</p>
-            <div class="cli-command">tref info sha256:7a4f2c...</div>
-
-            <h3>tref cat</h3>
-            <p>Output block content.</p>
-            <div class="cli-command">tref cat sha256:7a4f2c...</div>
+        <div class="step">
+          <div class="step-content">
+            <h4>Derive from existing</h4>
+            <p>Create a new block based on an existing one, preserving lineage.</p>
+            <div class="code-block">
+              <code>tref derive sha256:abc123... "Updated content with corrections"</code>
+            </div>
           </div>
-
-          <!-- MCP Server -->
-          <div class="guide-content" id="mcp">
-            <h2>MCP Server (Claude Code)</h2>
-            <p>The TREF MCP server integrates with Claude Code, giving AI assistants direct access to TREF tools.</p>
-
-            <h3>Installation</h3>
-            <div class="cli-command">claude mcp add --scope user --transport stdio tref -- tref-mcp</div>
-
-            <h3>Available Tools</h3>
-            <table class="field-table">
-              <tr>
-                <th>Tool</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <td><code>tref_publish</code></td>
-                <td>Create and publish a block</td>
-              </tr>
-              <tr>
-                <td><code>tref_derive</code></td>
-                <td>Derive from a parent block</td>
-              </tr>
-              <tr>
-                <td><code>tref_validate</code></td>
-                <td>Validate block integrity</td>
-              </tr>
-              <tr>
-                <td><code>tref_list</code></td>
-                <td>List published blocks</td>
-              </tr>
-              <tr>
-                <td><code>tref_info</code></td>
-                <td>Get block details</td>
-              </tr>
-              <tr>
-                <td><code>tref_cat</code></td>
-                <td>Read block content</td>
-              </tr>
-            </table>
-          </div>
-        </main>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- CLI Reference -->
+  <section class="section" style="background: white;">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">CLI Commands</h2>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref publish</h3>
+        <p>Create a new TREF block.</p>
+        <div class="code-block mt-2">
+          <code>tref publish "content"
+tref publish -f file.md
+echo "content" | tref publish --stdin
+tref publish "content" --refs '[...]' --license CC-BY-4.0</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref derive</h3>
+        <p>Create a child block from a parent, preserving lineage.</p>
+        <div class="code-block mt-2">
+          <code>tref derive &lt;parent-id&gt; "new content"
+tref derive sha256:abc... "Updated" --refs '[{"type":"url","url":"..."}]'</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref validate</h3>
+        <p>Verify a block's integrity (ID matches content hash).</p>
+        <div class="code-block mt-2">
+          <code>tref validate block.tref
+tref validate published/ab/abc123...def.tref</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref list / info / cat</h3>
+        <p>Browse and read published blocks.</p>
+        <div class="code-block mt-2">
+          <code>tref list                    # List all blocks
+tref info sha256:abc...      # Show metadata
+tref cat sha256:abc...       # Output content
+tref cat sha256:abc... --format json</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JavaScript API -->
+  <section class="section">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">JavaScript API (Browser)</h2>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Include the script</h3>
+        <div class="code-block mt-2">
+          <code>&lt;script src="https://tref.lpmwfx.com/js/tref.min.js"&gt;&lt;/script&gt;</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Create and display a block</h3>
+        <div class="code-block mt-2">
+          <code>// Publish content
+const block = await TREF.publish("My knowledge", {
+  author: "Jane",
+  refs: [{ type: "url", url: "https://source.com", title: "Source" }]
+});
+
+// Display with wrapper
+const wrapper = new TREF.TrefWrapper(block);
+document.body.innerHTML = wrapper.toHTML();
+wrapper.attachEvents(document.querySelector('.tref-wrapper'));</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Derive from existing</h3>
+        <div class="code-block mt-2">
+          <code>const child = await TREF.derive(parentBlock, "New content based on parent");</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Validate integrity</h3>
+        <div class="code-block mt-2">
+          <code>const isValid = await TREF.validate(block);
+console.log(isValid ? "Block is authentic" : "Block has been tampered with");</code>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Drag and drop</h3>
+        <p>TREF blocks are draggable by default. Create a receiver:</p>
+        <div class="code-block mt-2">
+          <code>const receiver = new TREF.TrefReceiver(dropZoneElement, {
+  onReceive: (wrapper) => {
+    console.log("Received block:", wrapper.block);
+  }
+});</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MCP -->
+  <section class="section" style="background: white;">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">Claude Code MCP</h2>
+
+      <p style="text-align: center; color: var(--gray-600); margin-bottom: 2rem;">
+        Use TREF directly from Claude Code with the MCP server.
+      </p>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Install</h3>
+        <div class="code-block mt-2">
+          <code>claude mcp add tref -- tref-mcp</code>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Available tools</h3>
+        <div class="code-block mt-2">
+          <code>tref_publish   - Create a new block
+tref_derive    - Derive from parent
+tref_validate  - Check block integrity
+tref_list      - List all blocks
+tref_info      - Get block metadata
+tref_cat       - Read block content</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article TREF Block -->
+  <section class="section">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">This Article as TREF</h2>
+      <p style="text-align: center; color: var(--gray-600); margin-bottom: 2rem;">
+        Drag this block to cite or share this guide.
+      </p>
+      <div id="article-tref"></div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-links">
-      <a href="https://github.com/lpmwfx/tref">GitHub</a>
-      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
-      <a href="guide.html">Documentation</a>
-      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
+      <a href="https://github.com/lpmwfx/AIBlocks">GitHub</a>
+      <a href="https://github.com/lpmwfx/AIBlocks/releases">Releases</a>
+      <a href="https://github.com/lpmwfx/AIBlocks/issues">Issues</a>
     </div>
-    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+    <p>TREF v0.1.0 | MIT License | <a href="https://github.com/lpmwfx">lpmwfx</a></p>
   </footer>
+
+  <script type="module">
+    import { TrefWrapper, publish } from './js/browser.js';
+
+    const content = `TREF Developer Guide
+
+Quick Start (CLI):
+1. Install: curl -sSL https://tref.lpmwfx.com/install.sh | bash
+2. Create a block: tref publish "content"
+3. Add references: tref publish "content" --refs '[{"type":"url","url":"..."}]'
+4. Derive from existing: tref derive sha256:abc... "new content"
+
+CLI Commands:
+- tref publish: Create a new block
+- tref derive: Create child block from parent
+- tref validate: Verify block integrity
+- tref list/info/cat: Browse and read blocks
+
+JavaScript API:
+- publish(content, options): Create block
+- derive(parent, content): Create child block
+- validate(block): Check integrity
+- TrefWrapper: Display blocks
+- TrefReceiver: Drag-and-drop receiver
+
+Claude Code MCP:
+Install: claude mcp add tref -- tref-mcp
+Tools: tref_publish, tref_derive, tref_validate, tref_list, tref_info, tref_cat`;
+
+    const block = await publish(content, {
+      author: 'TREF Documentation',
+      refs: [{ type: 'url', url: window.location.href, title: 'TREF Developer Guide' }]
+    });
+
+    const container = document.getElementById('article-tref');
+    const wrapper = new TrefWrapper(block);
+    container.innerHTML = wrapper.toHTML();
+    wrapper.attachEvents(container.querySelector('.tref-wrapper'));
+  </script>
 </body>
 </html>

@@ -3,361 +3,137 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TREF Playground - Build Your First Block</title>
-  <meta name="description" content="Create your first TREF knowledge block in 30 seconds. No coding required.">
+  <title>Builder - TREF</title>
+  <meta name="description" content="Create your own TREF block - no coding required.">
   <link rel="stylesheet" href="css/tref-site.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
   <style>
-    .playground {
-      max-width: 900px;
+    .builder-container {
+      max-width: 800px;
       margin: 0 auto;
-      padding: 0 1rem;
     }
-
-    .step-card {
+    .builder-form {
       background: white;
-      border-radius: 16px;
+      border-radius: 12px;
       padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-
-    .step-number {
-      position: absolute;
-      top: -15px;
-      left: 24px;
-      width: 50px;
-      height: 50px;
-      background: linear-gradient(135deg, var(--purple), var(--mint));
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-    }
-
-    .step-card h2 {
-      margin-left: 50px;
-      margin-bottom: 1rem;
-      color: var(--dark-purple);
-    }
-
-    .step-card p {
-      color: var(--gray-600);
+    .form-group {
       margin-bottom: 1.5rem;
     }
-
-    .big-textarea {
-      width: 100%;
-      min-height: 120px;
-      padding: 1rem;
-      border: 2px solid var(--gray-200);
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-family: inherit;
-      resize: vertical;
-      transition: border-color 0.2s;
-    }
-
-    .big-textarea:focus {
-      outline: none;
-      border-color: var(--purple);
-    }
-
-    .big-textarea::placeholder {
-      color: var(--gray-400);
-    }
-
-    .build-btn {
-      width: 100%;
-      padding: 1.25rem 2rem;
-      font-size: 1.25rem;
-      margin-top: 1rem;
-      background: linear-gradient(135deg, var(--purple), var(--mint));
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .build-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
-    }
-
-    .build-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Play Area */
-    .play-area {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 1rem;
-    }
-
-    @media (max-width: 700px) {
-      .play-area { grid-template-columns: 1fr; }
-    }
-
-    .play-zone {
-      min-height: 200px;
-      border-radius: 12px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .play-zone h3 {
-      font-size: 1rem;
-      color: var(--gray-600);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .drag-zone {
-      background: linear-gradient(135deg, #faf5ff, #f0fdfa);
-      border: 2px solid var(--purple);
-    }
-
-    .drop-zone {
-      background: var(--gray-100);
-      border: 3px dashed var(--gray-300);
-    }
-
-    .drop-zone-inner {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gray-500);
-      font-size: 1.1rem;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-
-    .drop-zone-inner.drag-over {
-      background: #e0f2fe;
-      border-color: var(--mint);
-      color: var(--dark-purple);
-    }
-
-    .drop-zone-inner.has-block {
+    .form-group label {
       display: block;
-      background: white;
-      padding: 0;
-    }
-
-    .block-container {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    .empty-state {
-      color: var(--gray-400);
-      text-align: center;
-      padding: 2rem;
-    }
-
-    /* Code Output */
-    .code-output {
-      background: var(--gray-900);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-top: 1rem;
-    }
-
-    .code-tabs {
-      display: flex;
-      background: var(--gray-800);
-    }
-
-    .code-tab {
-      padding: 0.75rem 1.5rem;
-      background: transparent;
-      border: none;
-      color: var(--gray-400);
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
-
-    .code-tab:hover {
-      color: var(--gray-200);
-    }
-
-    .code-tab.active {
-      background: var(--gray-900);
-      color: var(--mint);
-    }
-
-    .code-content {
-      padding: 1rem;
-      max-height: 350px;
-      overflow: auto;
-    }
-
-    .code-content pre {
-      margin: 0;
-      font-family: 'Fira Code', 'Consolas', monospace;
-      font-size: 0.85rem;
-      color: var(--gray-100);
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-
-    .code-actions {
-      display: flex;
-      gap: 0.5rem;
-      padding: 0.75rem 1rem;
-      background: var(--gray-800);
-    }
-
-    .code-btn {
-      padding: 0.5rem 1rem;
-      background: var(--gray-700);
-      border: none;
-      border-radius: 6px;
-      color: var(--gray-200);
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: background 0.2s;
-    }
-
-    .code-btn:hover {
-      background: var(--gray-600);
-    }
-
-    .code-btn.primary {
-      background: var(--purple);
-      color: white;
-    }
-
-    .code-btn.primary:hover {
-      background: #7c3aed;
-    }
-
-    /* Tips */
-    .tip-box {
-      background: #fef3c7;
-      border: 1px solid #fcd34d;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #92400e;
-    }
-
-    .tip-box strong {
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-
-    /* Intro */
-    .intro-box {
-      background: linear-gradient(135deg, #ede9fe, #ccfbf1);
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    .intro-box h2 {
-      color: var(--dark-purple);
+      font-weight: 600;
       margin-bottom: 0.5rem;
-    }
-
-    .intro-box p {
       color: var(--gray-700);
-      max-width: 600px;
-      margin: 0 auto;
     }
-
-    /* Success animation */
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .block-appear {
-      animation: pop 0.3s ease-out;
-    }
-
-    /* Optional fields */
-    .optional-section {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .optional-toggle {
-      background: none;
-      border: none;
-      color: var(--purple);
-      cursor: pointer;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .optional-toggle:hover {
-      text-decoration: underline;
-    }
-
-    .optional-fields {
-      display: none;
-      margin-top: 1rem;
-    }
-
-    .optional-fields.show {
+    .form-group small {
       display: block;
+      color: var(--gray-500);
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
     }
-
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    @media (max-width: 500px) {
-      .field-row { grid-template-columns: 1fr; }
-    }
-
-    .field-row input,
-    .field-row select {
-      padding: 0.75rem;
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
       border: 1px solid var(--gray-300);
       border-radius: 8px;
       font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-
-    .field-row input:focus,
-    .field-row select:focus {
+    .form-input:focus {
       outline: none;
       border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
     }
-
-    .field-label {
+    textarea.form-input {
+      min-height: 150px;
+      resize: vertical;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+    .btn-build {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+    }
+    .result-section {
+      margin-top: 2rem;
+      display: none;
+    }
+    .result-section.visible {
       display: block;
-      font-size: 0.8rem;
-      color: var(--gray-500);
-      margin-bottom: 0.25rem;
+    }
+    .result-preview {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    .result-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .embed-code {
+      background: var(--gray-900);
+      color: var(--mint);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .step-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      transition: background 0.3s;
+    }
+    .step-dot.active {
+      background: var(--purple);
+    }
+    .step-dot.done {
+      background: var(--mint);
+    }
+    .btn-copy-code {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: var(--gray-700);
+      color: var(--gray-300);
+      border: 1px solid var(--gray-600);
+      border-radius: 4px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-copy-code:hover {
+      background: var(--gray-600);
+      color: white;
+    }
+    .btn-copy-code.copied {
+      background: var(--mint);
+      color: var(--dark-purple);
+      border-color: var(--mint);
     }
   </style>
 </head>
@@ -380,472 +156,207 @@
       </a>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
-        <li><a href="guide.html">Guide</a></li>
-        <li><a href="embed.html">Embed</a></li>
         <li><a href="builder.html" class="active">Builder</a></li>
-        <li><a href="demo.html">Demo</a></li>
-        <li><a href="release.html">Download</a></li>
+        <li><a href="examples.html">Examples</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="about-cli.html">About</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- Header -->
+  <!-- Hero -->
   <section class="hero" style="padding: 2rem;">
-    <h1 style="font-size: 2rem;">TREF Playground</h1>
-    <p class="hero-subtitle" style="font-size: 1.1rem;">Build your first knowledge block in 30 seconds</p>
+    <h1>Build a Block</h1>
+    <p class="hero-subtitle" style="font-size: 1.2rem;">
+      Create a verifiable knowledge block in 3 easy steps. No coding required.
+    </p>
   </section>
 
-  <section class="section" style="padding-top: 1rem;">
-    <div class="playground">
+  <!-- Builder -->
+  <section class="section">
+    <div class="container builder-container">
 
-      <!-- Intro -->
-      <div class="intro-box">
-        <h2>What's a TREF Block?</h2>
-        <p>A small package of knowledge that anyone can verify. Write something true, click Build, and you get a block you can share, embed, or drag into other apps. It's like a sticky note that can't be forged.</p>
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
       </div>
 
-      <!-- Step 1: Write -->
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h2>Write something you know</h2>
-        <p>A fact, a quote, a definition - anything worth remembering.</p>
+      <div class="builder-form">
+        <form id="block-form">
+          <!-- Step 1: Content -->
+          <div class="form-group">
+            <label for="content">Your Content</label>
+            <textarea
+              class="form-input"
+              id="content"
+              placeholder="Write your knowledge here...&#10;&#10;Example: The speed of light in a vacuum is exactly 299,792,458 meters per second."
+              required
+            ></textarea>
+            <small>What do you want to share? Facts, quotes, instructions, notes...</small>
+          </div>
 
-        <textarea
-          id="content"
-          class="big-textarea"
-          placeholder="Example: The speed of light in vacuum is exactly 299,792,458 meters per second."></textarea>
+          <!-- Live Preview Block -->
+          <div class="form-group" id="live-preview-group" style="display: none;">
+            <label>Your Block (Live Preview)</label>
+            <div id="live-preview" style="background: var(--gray-100); border-radius: 8px; padding: 1rem;"></div>
+          </div>
 
-        <!-- Optional fields -->
-        <div class="optional-section">
-          <button class="optional-toggle" onclick="toggleOptional()">
-            <span id="toggle-icon">+</span> Add your name, source link, or license
+          <!-- Step 2: Optional metadata -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="author">Your Name (optional)</label>
+              <input type="text" class="form-input" id="author" placeholder="Jane Doe">
+            </div>
+            <div class="form-group">
+              <label for="source-url">Source URL (optional)</label>
+              <input type="url" class="form-input" id="source-url" placeholder="https://example.com/source">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="source-title">Source Title (optional)</label>
+            <input type="text" class="form-input" id="source-title" placeholder="Wikipedia: Speed of Light">
+            <small>Where did this information come from?</small>
+          </div>
+
+          <!-- Step 3: Build -->
+          <button type="submit" class="btn btn-primary btn-build">
+            Create My Block
           </button>
-
-          <div id="optional-fields" class="optional-fields">
-            <div class="field-row">
-              <div>
-                <span class="field-label">Your name (optional)</span>
-                <input type="text" id="author" placeholder="Jane Doe">
-              </div>
-              <div>
-                <span class="field-label">License</span>
-                <select id="license">
-                  <option value="CC-BY-4.0">CC-BY-4.0 (Anyone can use with credit)</option>
-                  <option value="CC0-1.0">CC0 (Public domain)</option>
-                  <option value="All Rights Reserved">All Rights Reserved</option>
-                </select>
-              </div>
-            </div>
-            <div class="field-row">
-              <div>
-                <span class="field-label">Source URL (optional)</span>
-                <input type="text" id="source-url" placeholder="https://...">
-              </div>
-              <div>
-                <span class="field-label">Source label (optional)</span>
-                <input type="text" id="source-label" placeholder="Wikipedia, NASA, etc.">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <button id="build-btn" class="build-btn" onclick="buildBlock()">
-          Build My Block
-        </button>
+        </form>
       </div>
 
-      <!-- Step 2: Play -->
-      <div class="step-card" id="step-2" style="display: none;">
-        <div class="step-number">2</div>
-        <h2>Your block is ready! Try it out.</h2>
-        <p>Drag your block to the drop zone, or copy the code to use it on your website.</p>
+      <!-- Result -->
+      <div class="result-section" id="result-section">
+        <h2 class="section-title" style="margin-bottom: 1.5rem;">Your Block</h2>
 
-        <div class="play-area">
-          <!-- Your block -->
-          <div class="play-zone drag-zone">
-            <h3>Your Block (drag me!)</h3>
-            <div id="my-block" class="block-container">
-              <div class="empty-state">Building...</div>
-            </div>
-          </div>
-
-          <!-- Drop zone -->
-          <div class="play-zone drop-zone">
-            <h3>Drop Zone (test it here)</h3>
-            <div id="drop-area" class="drop-zone-inner">
-              Drag your block here to test it works!
-            </div>
-          </div>
+        <div class="result-preview">
+          <div id="block-preview"></div>
         </div>
 
-        <div class="tip-box">
-          <strong>It works!</strong>
-          Your block can be dragged into any app that accepts TREF blocks - chat windows, note apps, wikis, and more.
+        <div class="result-actions">
+          <button class="btn btn-primary" id="btn-download">
+            Download .tref File
+          </button>
+          <button class="btn btn-secondary" id="btn-copy">
+            Copy JSON
+          </button>
+        </div>
+
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Embed on Your Site</h3>
+        <p style="color: var(--gray-600); margin-bottom: 1rem;">
+          Copy this code and paste it into your HTML:
+        </p>
+        <div style="position: relative;">
+          <div class="embed-code" id="embed-code"></div>
+          <button class="btn-copy-code" id="btn-copy-embed" title="Copy code">Copy</button>
         </div>
       </div>
 
-      <!-- Step 3: Get the code -->
-      <div class="step-card" id="step-3" style="display: none;">
-        <div class="step-number">3</div>
-        <h2>Copy the code for your website</h2>
-        <p>Paste this into any HTML page and your block will appear, ready to drag.</p>
+    </div>
+  </section>
 
-        <div class="code-output">
-          <div class="code-tabs">
-            <button class="code-tab active" onclick="showTab('complete')">Complete Code</button>
-            <button class="code-tab" onclick="showTab('block-only')">Block Only</button>
-            <button class="code-tab" onclick="showTab('receiver')">Drop Zone</button>
-          </div>
-          <div class="code-content">
-            <pre id="code-display"></pre>
-          </div>
-          <div class="code-actions">
-            <button class="code-btn primary" onclick="copyCode()">Copy Code</button>
-            <button class="code-btn" onclick="downloadFile()">Download .tref File</button>
-          </div>
+  <!-- How it works -->
+  <section class="section" style="background: white;">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+
+      <div class="card-grid" style="max-width: 900px; margin: 0 auto;">
+        <div class="card">
+          <div class="card-icon">1</div>
+          <h3>Write Your Content</h3>
+          <p>Enter any knowledge you want to preserve - facts, quotes, instructions, or notes.</p>
         </div>
-
-        <div class="tip-box" style="background: #dbeafe; border-color: #60a5fa; color: #1e40af;">
-          <strong>Want a drop zone on your site?</strong>
-          Click "Drop Zone" tab above to get code for receiving TREF blocks that others drag to you.
+        <div class="card">
+          <div class="card-icon">2</div>
+          <h3>Add Sources</h3>
+          <p>Optionally link to where the information came from. This makes your block trustworthy.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">3</div>
+          <h3>Share Anywhere</h3>
+          <p>Download the file, copy the code, or embed directly on your website.</p>
         </div>
       </div>
-
-      <!-- Make another -->
-      <div id="make-another" style="display: none; text-align: center; margin: 2rem 0;">
-        <button class="btn btn-secondary" onclick="reset()">
-          Make Another Block
-        </button>
-      </div>
-
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-links">
-      <a href="https://github.com/lpmwfx/tref">GitHub</a>
-      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
+      <a href="https://github.com/lpmwfx/AIBlocks">GitHub</a>
+      <a href="https://github.com/lpmwfx/AIBlocks/releases">Releases</a>
       <a href="guide.html">Documentation</a>
-      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
     </div>
-    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+    <p>TREF v0.1.0 | MIT License | <a href="https://github.com/lpmwfx">lpmwfx</a></p>
   </footer>
 
-  <script src="js/tref.min.js"></script>
-  <script>
-    // Inject TREF styles
-    const style = document.createElement('style');
-    style.textContent = TREF.getStyles();
-    document.head.appendChild(style);
+  <script type="module">
+    import { TrefWrapper, publish, getStyles } from './js/browser.js';
+    const form = document.getElementById('block-form');
+    const resultSection = document.getElementById('result-section');
+    const preview = document.getElementById('block-preview');
+    const embedCode = document.getElementById('embed-code');
 
-    let currentBlock = null;
     let currentWrapper = null;
-    let currentTab = 'complete';
 
-    // Toggle optional fields
-    function toggleOptional() {
-      const fields = document.getElementById('optional-fields');
-      const icon = document.getElementById('toggle-icon');
-      if (fields.classList.contains('show')) {
-        fields.classList.remove('show');
-        icon.textContent = '+';
-      } else {
-        fields.classList.add('show');
-        icon.textContent = '−';
-      }
-    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    // Build the block
-    async function buildBlock() {
       const content = document.getElementById('content').value.trim();
-      if (!content) {
-        document.getElementById('content').focus();
-        document.getElementById('content').style.borderColor = '#ef4444';
-        setTimeout(() => {
-          document.getElementById('content').style.borderColor = '';
-        }, 2000);
-        return;
+      const author = document.getElementById('author').value.trim();
+      const sourceUrl = document.getElementById('source-url').value.trim();
+      const sourceTitle = document.getElementById('source-title').value.trim();
+
+      // Build refs array
+      const refs = [];
+      if (sourceUrl) {
+        refs.push({
+          type: 'url',
+          url: sourceUrl,
+          title: sourceTitle || sourceUrl
+        });
       }
 
-      const btn = document.getElementById('build-btn');
-      btn.disabled = true;
-      btn.textContent = 'Building...';
-
-      try {
-        const author = document.getElementById('author').value.trim();
-        const license = document.getElementById('license').value;
-        const sourceUrl = document.getElementById('source-url').value.trim();
-        const sourceLabel = document.getElementById('source-label').value.trim();
-
-        const options = {
-          license,
-          author: author || undefined,
-          refs: sourceUrl ? [{ type: 'url', url: sourceUrl, label: sourceLabel || undefined }] : undefined
-        };
-
-        currentBlock = await TREF.publish(content, options);
-        currentWrapper = new TREF.TrefWrapper(currentBlock);
-
-        // Show step 2
-        document.getElementById('step-2').style.display = 'block';
-        document.getElementById('step-3').style.display = 'block';
-        document.getElementById('make-another').style.display = 'block';
-
-        // Render block with interactive dropdown
-        const blockContainer = document.getElementById('my-block');
-        blockContainer.innerHTML = currentWrapper.toHTML();
-        const wrapperEl = blockContainer.querySelector('.tref-wrapper');
-        wrapperEl.classList.add('block-appear');
-
-        // Attach wrapper events (drag, copy, download)
-        currentWrapper.attachEvents(wrapperEl);
-
-        // Setup drop zone
-        setupDropZone();
-
-        // Update code display
-        updateCodeDisplay();
-
-        // Scroll to step 2
-        document.getElementById('step-2').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        btn.textContent = 'Block Built!';
-        btn.style.background = 'var(--success)';
-
-      } catch (err) {
-        btn.textContent = 'Error - Try Again';
-        btn.disabled = false;
-        console.error(err);
-      }
-    }
-
-    // Setup the drop zone
-    function setupDropZone() {
-      const dropArea = document.getElementById('drop-area');
-
-      dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('drag-over');
+      // Create block
+      const block = await publish(content, {
+        author: author || undefined,
+        refs: refs.length > 0 ? refs : undefined
       });
 
-      dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('drag-over');
-      });
+      // Create wrapper and display
+      currentWrapper = new TrefWrapper(block);
+      preview.innerHTML = currentWrapper.toHTML();
+      currentWrapper.attachEvents(preview.querySelector('.tref-wrapper'));
 
-      dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('drag-over');
+      // Generate embed code
+      const embedHtml = `<!-- TREF Block -->
+<div id="tref-block"></div>
+<script type="module">
+  import { TrefWrapper } from './js/wrapper.js';
 
-        try {
-          // Try to get TREF data
-          const json = e.dataTransfer.getData('application/vnd.aiblocks.tref+json') ||
-                       e.dataTransfer.getData('application/json') ||
-                       e.dataTransfer.getData('text/plain');
+  const block = ${JSON.stringify(block, null, 2)};
+  const wrapper = new TrefWrapper(block);
+  document.getElementById('tref-block').innerHTML = wrapper.toHTML();
+  wrapper.attachEvents(document.querySelector('.tref-wrapper'));
+<\/script>
+<style>${getStyles()}</style>`;
 
-          if (json) {
-            const block = JSON.parse(json);
-            const wrapper = new TREF.TrefWrapper(block);
+      embedCode.textContent = embedHtml;
 
-            dropArea.classList.add('has-block');
-            dropArea.innerHTML = wrapper.toHTML();
-            wrapper.attachEvents(dropArea.querySelector('.tref-wrapper'));
-          }
-        } catch (err) {
-          console.error('Drop error:', err);
-          dropArea.textContent = 'Could not read block - try again';
-          setTimeout(() => {
-            dropArea.textContent = 'Drag your block here to test it works!';
-            dropArea.classList.remove('has-block');
-          }, 2000);
-        }
-      });
-    }
+      // Show result
+      resultSection.classList.add('visible');
+      resultSection.scrollIntoView({ behavior: 'smooth' });
 
-    // Self-contained TREF icon SVG
-    const TREF_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24"><rect x="6" y="6" width="88" height="88" rx="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/><g transform="translate(50 50) scale(0.022) translate(-1125 -1125)"><g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC"><path d="M1515 2244c-66-10-144-38-220-77-67-35-106-67-237-195-155-152-188-195-188-247 0-41 30-95 64-116 39-24 113-25 146-3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103-4 155-28 78-36 146-104 182-181 24-53 28-73 28-151 0-137-21-175-199-355-79-80-151-156-160-170-39-59-8-162 58-194 81-38 113-22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106-3 130-28 200-91 261-310 428-579 439-50 3-105 2-122 0z"/><path d="M1395 1585c-17-9-189-174-382-368-377-378-383-385-362-461 21-76 87-116 166-101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146-39 59-118 81-181 50z"/><path d="M463 1364c-47-24-323-310-365-379-20-33-49-96-64-140-24-69-28-96-28-195 0-127 14-190 66-294 63-126 157-220 284-284 104-52 167-66 294-66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78-10 184-96 203-61 13-98-11-256-166-186-183-222-204-359-204-77 0-98 4-147 27-79 37-142 98-181 177-29 59-32 74-32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107-2 146-35 57-115 79-178 48z"/></g></g></svg>';
+      // Update step indicators
+      document.getElementById('dot-1').classList.add('done');
+      document.getElementById('dot-2').classList.add('done');
+      document.getElementById('dot-3').classList.add('done', 'active');
+    });
 
-    // Code templates - FULLY SELF-CONTAINED
-    function getCompleteCode() {
-      const blockJson = JSON.stringify(currentBlock, null, 2);
-      const shortId = currentBlock.id.replace('sha256:', '').slice(0, 8);
-      const date = currentBlock.meta.created.split('T')[0];
-      const content = currentBlock.content.length > 200
-        ? currentBlock.content.slice(0, 200).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '...'
-        : currentBlock.content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-      return `<!-- TREF Block - 100% Self-Contained - Just paste and it works! -->
-<style>
-.tref-wrapper{font-family:system-ui,-apple-system,sans-serif;border:1px solid #e5e7eb;border-radius:8px;padding:12px;background:#fafafa;max-width:400px;position:relative}
-.tref-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.tref-icon{display:inline-flex;width:24px;height:24px}
-.tref-icon svg{width:100%;height:100%}
-.tref-id{font-family:monospace;font-size:12px;color:#6b7280;background:#e5e7eb;padding:2px 6px;border-radius:4px;transition:all .2s}
-.tref-meta{font-size:12px;color:#9ca3af}
-.tref-menu{margin-left:auto;position:relative}
-.tref-menu-btn{background:transparent;border:none;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:4px;color:#6b7280;line-height:1}
-.tref-menu-btn:hover{background:#e5e7eb}
-.tref-menu-dropdown{display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);min-width:160px;z-index:100;overflow:hidden}
-.tref-menu-dropdown.show{display:block}
-.tref-action{display:block;width:100%;padding:10px 14px;border:none;background:#fff;text-align:left;cursor:pointer;font-size:13px;color:#374151}
-.tref-action:hover{background:#f3f4f6}
-.tref-content{font-size:14px;line-height:1.5;color:#374151;white-space:pre-wrap;word-break:break-word}
-.tref-wrapper[draggable="true"]{cursor:grab}
-.tref-wrapper[draggable="true"]:active{cursor:grabbing}
-</style>
-
-<div class="tref-wrapper" id="tref-${shortId}" draggable="true" data-tref='${JSON.stringify(currentBlock).replace(/'/g, "\\'")}'>
-  <div class="tref-header">
-    <span class="tref-icon">${TREF_ICON}</span>
-    <span class="tref-id">${shortId}</span>
-    <span class="tref-meta">${date}</span>
-    <div class="tref-menu">
-      <button class="tref-menu-btn" title="Actions">⋮</button>
-      <div class="tref-menu-dropdown">
-        <button class="tref-action" data-action="copy-content">📋 Copy Content</button>
-        <button class="tref-action" data-action="copy-json">📄 Copy JSON</button>
-        <button class="tref-action" data-action="download">⬇️ Download .tref</button>
-      </div>
-    </div>
-  </div>
-  <div class="tref-content">${content}</div>
-</div>
-
-<script>
-(function(){
-  const wrapper = document.getElementById('tref-${shortId}');
-  const block = JSON.parse(wrapper.dataset.tref);
-  const menuBtn = wrapper.querySelector('.tref-menu-btn');
-  const dropdown = wrapper.querySelector('.tref-menu-dropdown');
-  const statusEl = wrapper.querySelector('.tref-id');
-  const origStatus = statusEl.textContent;
-
-  // Dropdown toggle
-  menuBtn.onclick = e => { e.stopPropagation(); dropdown.classList.toggle('show'); };
-  document.addEventListener('click', () => dropdown.classList.remove('show'));
-
-  // Drag support
-  wrapper.ondragstart = e => {
-    const json = JSON.stringify(block);
-    e.dataTransfer.setData('application/vnd.aiblocks.tref+json', json);
-    e.dataTransfer.setData('application/json', json);
-    e.dataTransfer.setData('text/plain', json);
-  };
-
-  // Actions
-  wrapper.querySelectorAll('.tref-action').forEach(btn => {
-    btn.onclick = async e => {
-      e.stopPropagation();
-      const action = e.currentTarget.dataset.action;
-      try {
-        if (action === 'copy-content') {
-          await navigator.clipboard.writeText(block.content);
-          statusEl.textContent = 'Copied!';
-        } else if (action === 'copy-json') {
-          await navigator.clipboard.writeText(JSON.stringify(block, null, 2));
-          statusEl.textContent = 'Copied!';
-        } else if (action === 'download') {
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(new Blob([JSON.stringify(block)], {type:'application/json'}));
-          a.download = block.id.replace('sha256:','') + '.tref';
-          a.click();
-          statusEl.textContent = 'Downloaded!';
-        }
-        setTimeout(() => statusEl.textContent = origStatus, 1500);
-      } catch(err) { statusEl.textContent = 'Error'; setTimeout(() => statusEl.textContent = origStatus, 1500); }
-      dropdown.classList.remove('show');
-    };
-  });
-})();
-<\/script>`;
-    }
-
-    function getBlockOnlyCode() {
-      return JSON.stringify(currentBlock, null, 2);
-    }
-
-    function getReceiverCode() {
-      return `<!-- TREF Drop Zone - 100% Self-Contained -->
-<style>
-.tref-receiver{border:3px dashed #5CCCCC;border-radius:12px;padding:2rem;min-height:150px;display:flex;align-items:center;justify-content:center;color:#666;background:#f9fafb;transition:all .2s}
-.tref-receiver.active{border-color:#8B5CF6;background:#f3e8ff}
-.tref-receiver.has-block{border-style:solid;background:#fff;display:block;padding:0}
-.tref-wrapper{font-family:system-ui,-apple-system,sans-serif;border:1px solid #e5e7eb;border-radius:8px;padding:12px;background:#fafafa;max-width:400px;position:relative}
-.tref-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.tref-icon{display:inline-flex;width:24px;height:24px}
-.tref-icon svg{width:100%;height:100%}
-.tref-id{font-family:monospace;font-size:12px;color:#6b7280;background:#e5e7eb;padding:2px 6px;border-radius:4px}
-.tref-meta{font-size:12px;color:#9ca3af}
-.tref-content{font-size:14px;line-height:1.5;color:#374151;white-space:pre-wrap;word-break:break-word}
-</style>
-
-<div id="tref-drop-zone" class="tref-receiver">
-  Drop a TREF block here
-</div>
-
-<script>
-(function(){
-  const ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24"><rect x="6" y="6" width="88" height="88" rx="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/><g transform="translate(50 50) scale(0.022) translate(-1125 -1125)"><g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC"><path d="M1515 2244c-66-10-144-38-220-77-67-35-106-67-237-195-155-152-188-195-188-247 0-41 30-95 64-116 39-24 113-25 146-3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103-4 155-28 78-36 146-104 182-181 24-53 28-73 28-151 0-137-21-175-199-355-79-80-151-156-160-170-39-59-8-162 58-194 81-38 113-22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106-3 130-28 200-91 261-310 428-579 439-50 3-105 2-122 0z"/></g></g></svg>';
-  const zone = document.getElementById('tref-drop-zone');
-
-  zone.ondragover = e => { e.preventDefault(); zone.classList.add('active'); };
-  zone.ondragleave = () => zone.classList.remove('active');
-  zone.ondrop = e => {
-    e.preventDefault();
-    zone.classList.remove('active');
-    const json = e.dataTransfer.getData('application/vnd.aiblocks.tref+json') ||
-                 e.dataTransfer.getData('application/json') ||
-                 e.dataTransfer.getData('text/plain');
-    if (json) {
-      try {
-        const block = JSON.parse(json);
-        const shortId = block.id.replace('sha256:', '').slice(0, 8);
-        const date = block.meta.created.split('T')[0];
-        const content = block.content.length > 200
-          ? block.content.slice(0, 200).replace(/</g,'&lt;').replace(/>/g,'&gt;') + '...'
-          : block.content.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        zone.classList.add('has-block');
-        zone.innerHTML = '<div class="tref-wrapper"><div class="tref-header"><span class="tref-icon">' + ICON + '</span><span class="tref-id">' + shortId + '</span><span class="tref-meta">' + date + '</span></div><div class="tref-content">' + content + '</div></div>';
-        console.log('Received TREF block:', block);
-      } catch(err) { zone.textContent = 'Invalid block'; setTimeout(() => { zone.textContent = 'Drop a TREF block here'; zone.classList.remove('has-block'); }, 2000); }
-    }
-  };
-})();
-<\/script>`;
-    }
-
-    function showTab(tab) {
-      currentTab = tab;
-      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-      updateCodeDisplay();
-    }
-
-    function updateCodeDisplay() {
-      const display = document.getElementById('code-display');
-      switch (currentTab) {
-        case 'complete':
-          display.textContent = getCompleteCode();
-          break;
-        case 'block-only':
-          display.textContent = getBlockOnlyCode();
-          break;
-        case 'receiver':
-          display.textContent = getReceiverCode();
-          break;
-      }
-    }
-
-    function copyCode() {
-      const code = document.getElementById('code-display').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        const btn = event.target;
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = 'Copy Code'; }, 2000);
-      });
-    }
-
-    function downloadFile() {
+    // Download button
+    document.getElementById('btn-download').addEventListener('click', () => {
       if (!currentWrapper) return;
       const url = currentWrapper.toObjectURL();
       const a = document.createElement('a');
@@ -853,26 +364,36 @@
       a.download = currentWrapper.getFilename();
       a.click();
       URL.revokeObjectURL(url);
-    }
+    });
 
-    function reset() {
-      document.getElementById('content').value = '';
-      document.getElementById('author').value = '';
-      document.getElementById('source-url').value = '';
-      document.getElementById('source-label').value = '';
-      document.getElementById('step-2').style.display = 'none';
-      document.getElementById('step-3').style.display = 'none';
-      document.getElementById('make-another').style.display = 'none';
-      document.getElementById('build-btn').disabled = false;
-      document.getElementById('build-btn').textContent = 'Build My Block';
-      document.getElementById('build-btn').style.background = '';
-      document.getElementById('drop-area').innerHTML = 'Drag your block here to test it works!';
-      document.getElementById('drop-area').classList.remove('has-block');
-      document.getElementById('content').focus();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      currentBlock = null;
-      currentWrapper = null;
-    }
+    // Copy JSON button
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      if (!currentWrapper) return;
+      await currentWrapper.copyToClipboard();
+      const btn = document.getElementById('btn-copy');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy JSON', 2000);
+    });
+
+    // Copy embed code button
+    document.getElementById('btn-copy-embed').addEventListener('click', async () => {
+      await navigator.clipboard.writeText(embedCode.textContent);
+      const btn = document.getElementById('btn-copy-embed');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+
+    // Update step indicators on input
+    document.getElementById('content').addEventListener('input', (e) => {
+      if (e.target.value.trim()) {
+        document.getElementById('dot-1').classList.add('done');
+        document.getElementById('dot-2').classList.add('active');
+      }
+    });
   </script>
 </body>
 </html>

@@ -25,43 +25,28 @@ TREF is a **knowledge exchange format** – not a CMS, not an AI model, not a pl
 
 ## Browser Components
 
-Two components enable TREF exchange between websites and AI chats:
+Two components enable TREF exchange between websites and AI chats.
+See [src/wrapper/README.md](src/wrapper/README.md) for full design guide.
 
 ### TrefWrapper – Display and Share
 
-Display a TREF block on your site. The icon is draggable for sharing.
-
-```html
-<script src="https://tref.lpmwfx.com/js/tref.min.js"></script>
-<script>
-  // Create and display a block
-  const block = await TREF.publish('Your content here', {
-    author: 'Your Name',
-    refs: [{ type: 'url', url: 'https://source.com' }]
-  });
-
-  const wrapper = new TREF.TrefWrapper(block);
-  container.innerHTML = wrapper.toHTML();
-  wrapper.attachEvents(container.querySelector('.tref-wrapper'));
-</script>
+```javascript
+const wrapper = new TrefWrapper(block);
+container.innerHTML = wrapper.toHTML();
+wrapper.attachEvents(container.querySelector('.tref-wrapper'));
 ```
+
+- ICON is the drag handle (only the icon, not the entire block)
+- Actions appear on hover: "drag me" hint, copy, download
+- Status feedback in the shortId badge
 
 ### TrefReceiver – Accept TREF Blocks
 
-Create a drop zone to receive TREF blocks from other sites or AI chats.
-
-```html
-<div id="drop-zone">Drop a TREF block here</div>
-<script>
-  new TREF.TrefReceiver(document.getElementById('drop-zone'), {
-    onReceive: (wrapper) => {
-      console.log('Received block:', wrapper.block);
-      console.log('Content:', wrapper.content);
-      console.log('References:', wrapper.block.refs);
-    },
-    onError: (err) => console.error('Invalid block:', err)
-  });
-</script>
+```javascript
+const receiver = new TrefReceiver(element, {
+  onReceive: wrapper => console.log('Got block:', wrapper.block),
+  onError: err => console.error(err),
+});
 ```
 
 ### Drag-and-Drop Flow

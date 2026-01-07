@@ -27,33 +27,33 @@
       </a>
       <ul class="nav-links">
         <li><a href="/" class="active">Home</a></li>
-        <li><a href="guide.html">Guide</a></li>
-        <li><a href="embed.html">Embed</a></li>
         <li><a href="builder.html">Builder</a></li>
-        <li><a href="demo.html">Demo</a></li>
-        <li><a href="release.html">Download</a></li>
+        <li><a href="examples.html">Examples</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="about-cli.html">About</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- Hero with live TREF block -->
-  <section class="hero" style="padding-bottom: 2rem;">
+  <!-- Hero -->
+  <section class="hero">
     <h1>Traceable Reference Format</h1>
     <p class="hero-subtitle">
       Knowledge blocks you can verify, share, and trust. Content-addressed, self-contained, and always traceable to source.
     </p>
-
-    <!-- THIS IS A REAL TREF BLOCK - Try the menu! -->
-    <div id="hero-block" style="display: flex; justify-content: center; margin: 2rem 0;"></div>
-
     <div class="hero-cta">
       <a href="builder.html" class="btn btn-primary">
-        <span>🔨</span> Build a Block
+        Build a Block
       </a>
-      <a href="#install" class="btn btn-secondary">
-        <span>⬇️</span> Install CLI
+      <a href="guide.html" class="btn btn-secondary">
+        Developer Guide
       </a>
     </div>
+  </section>
+
+  <!-- Promo TREF Block -->
+  <section style="padding: 2rem 1rem; display: flex; justify-content: center;">
+    <div id="promo-tref" style="max-width: 500px;"></div>
   </section>
 
   <!-- What is TREF -->
@@ -63,25 +63,25 @@
 
       <div class="card-grid">
         <div class="card">
-          <div class="card-icon">🔗</div>
+          <div class="card-icon">1</div>
           <h3>Content-Addressed</h3>
           <p>Every block has a unique ID derived from its content using SHA-256. Change the content, change the ID. Verify integrity instantly.</p>
         </div>
 
         <div class="card">
-          <div class="card-icon">📦</div>
+          <div class="card-icon">2</div>
           <h3>Self-Contained</h3>
           <p>A .tref file contains everything: content, metadata, license, references, and lineage. No external dependencies.</p>
         </div>
 
         <div class="card">
-          <div class="card-icon">🌳</div>
+          <div class="card-icon">3</div>
           <h3>Traceable Lineage</h3>
           <p>Derive new blocks from existing ones. The parent chain is preserved, so you always know where knowledge came from.</p>
         </div>
 
         <div class="card">
-          <div class="card-icon">⚖️</div>
+          <div class="card-icon">4</div>
           <h3>License Preserved</h3>
           <p>Attribution travels with the content. CC-BY-4.0 by default. Original creators always get credit.</p>
         </div>
@@ -89,111 +89,37 @@
     </div>
   </section>
 
-  <!-- Quick Start -->
+  <!-- Get Started -->
   <section class="section" style="background: white;">
     <div class="container">
-      <h2 class="section-title">Quick Start</h2>
+      <h2 class="section-title">Get Started</h2>
 
-      <div class="steps" style="max-width: 700px; margin: 0 auto;">
-        <div class="step">
-          <div class="step-content">
-            <h4>Create a block</h4>
-            <p>Write your knowledge and publish it as a TREF block.</p>
-            <div class="code-block">
-              <code>tref publish "The speed of light is 299,792,458 m/s"</code>
-            </div>
-          </div>
+      <div class="card-grid" style="max-width: 800px; margin: 0 auto;">
+        <div class="card" style="text-align: center;">
+          <div class="card-icon" style="margin: 0 auto 1rem;">A</div>
+          <h3>No-Code Builder</h3>
+          <p>Create blocks visually in your browser. Perfect for writers, researchers, and anyone who wants to share verified knowledge.</p>
+          <a href="builder.html" class="btn btn-primary mt-2" style="margin-top: 1rem;">Open Builder</a>
         </div>
 
-        <div class="step">
-          <div class="step-content">
-            <h4>Share it</h4>
-            <p>The block gets a unique ID. Share the .tref file or embed it in your page.</p>
-            <div class="code-block">
-              <code>sha256:7a4f2c...</code> → <code>7a4f2c...tref</code>
-            </div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-content">
-            <h4>Verify & Derive</h4>
-            <p>Anyone can verify the block's integrity. Derive new blocks while preserving lineage.</p>
-            <div class="code-block">
-              <code>tref validate block.tref</code><br>
-              <code>tref derive sha256:7a4f2c... "Updated with source"</code>
-            </div>
-          </div>
+        <div class="card" style="text-align: center;">
+          <div class="card-icon" style="margin: 0 auto 1rem;">B</div>
+          <h3>Developer Tools</h3>
+          <p>CLI, JavaScript API, and MCP server for Claude Code. Integrate TREF into your apps and workflows.</p>
+          <a href="guide.html" class="btn btn-primary mt-2" style="margin-top: 1rem;">Read Guide</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Install -->
-  <section class="section" id="install">
-    <div class="container">
-      <h2 class="section-title">Install</h2>
-
-      <div class="card-grid" style="max-width: 900px; margin: 0 auto;">
-        <div class="card">
-          <h3>🐧 Linux / 🍎 macOS</h3>
-          <div class="code-block mt-2">
-            <div class="code-block-header">
-              <span class="code-block-label">Terminal</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <code>curl -sSL https://tref.lpmwfx.com/install.sh | bash</code>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>🪟 Windows</h3>
-          <div class="code-block mt-2">
-            <div class="code-block-header">
-              <span class="code-block-label">PowerShell</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <code>iwr https://tref.lpmwfx.com/install.ps1 | iex</code>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>🤖 Claude Code MCP</h3>
-          <div class="code-block mt-2">
-            <div class="code-block-header">
-              <span class="code-block-label">Terminal</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <code>claude mcp add tref -- tref-mcp</code>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>🌐 Browser (CDN)</h3>
-          <div class="code-block mt-2">
-            <div class="code-block-header">
-              <span class="code-block-label">HTML</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <code>&lt;script src="https://tref.lpmwfx.com/js/tref.min.js"&gt;&lt;/script&gt;</code>
-          </div>
-        </div>
-      </div>
-
-      <p class="text-center mt-4">
-        <a href="release.html" class="btn btn-primary">View All Downloads</a>
-      </p>
     </div>
   </section>
 
   <!-- Use Cases -->
-  <section class="section" style="background: white;">
+  <section class="section">
     <div class="container">
       <h2 class="section-title">Use Cases</h2>
 
       <div class="feature-grid" style="max-width: 900px; margin: 0 auto;">
         <div class="feature">
-          <div class="feature-icon">📚</div>
+          <div class="feature-icon">*</div>
           <div>
             <h4>Knowledge Bases</h4>
             <p>Build verifiable knowledge graphs with traceable sources.</p>
@@ -201,7 +127,7 @@
         </div>
 
         <div class="feature">
-          <div class="feature-icon">🤖</div>
+          <div class="feature-icon">*</div>
           <div>
             <h4>AI Context</h4>
             <p>Give AI assistants verified facts they can cite.</p>
@@ -209,7 +135,7 @@
         </div>
 
         <div class="feature">
-          <div class="feature-icon">📝</div>
+          <div class="feature-icon">*</div>
           <div>
             <h4>Documentation</h4>
             <p>Track changes and preserve attribution in docs.</p>
@@ -217,7 +143,7 @@
         </div>
 
         <div class="feature">
-          <div class="feature-icon">🔬</div>
+          <div class="feature-icon">*</div>
           <div>
             <h4>Research</h4>
             <p>Reproducible findings with immutable references.</p>
@@ -225,7 +151,7 @@
         </div>
 
         <div class="feature">
-          <div class="feature-icon">💬</div>
+          <div class="feature-icon">*</div>
           <div>
             <h4>Chat Citations</h4>
             <p>Drag TREF blocks into conversations as citations.</p>
@@ -233,7 +159,7 @@
         </div>
 
         <div class="feature">
-          <div class="feature-icon">🌐</div>
+          <div class="feature-icon">*</div>
           <div>
             <h4>Dead Link Recovery</h4>
             <p>Archive snippets survive when URLs die.</p>
@@ -246,73 +172,31 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-links">
-      <a href="https://github.com/lpmwfx/tref">GitHub</a>
-      <a href="https://github.com/lpmwfx/tref/releases">Releases</a>
-      <a href="guide.html">Documentation</a>
-      <a href="https://github.com/lpmwfx/tref/issues">Issues</a>
+      <a href="https://github.com/lpmwfx/AIBlocks">GitHub</a>
+      <a href="https://github.com/lpmwfx/AIBlocks/releases">Releases</a>
+      <a href="https://github.com/lpmwfx/AIBlocks">Issues</a>
     </div>
-    <p>TREF v0.1.0 • MIT License • Made with 💜 by <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+    <p>TREF v0.1.0 | MIT License | <a href="https://github.com/lpmwfx">lpmwfx</a></p>
   </footer>
 
-  <script src="js/tref.min.js"></script>
-  <script>
-    function copyCode(btn) {
-      const code = btn.closest('.code-block').querySelector('code').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'Copy';
-          btn.classList.remove('copied');
-        }, 2000);
-      });
-    }
+  <script type="module">
+    import { TrefWrapper, publish } from './js/browser.js';
 
-    // Create the hero TREF block
-    (async function() {
-      // Inject styles
-      const style = document.createElement('style');
-      style.textContent = TREF.getStyles();
-      document.head.appendChild(style);
+    const content = `Hey! This block right here? It's a TREF block.
 
-      // The content of this page as a TREF block
-      const pageContent = `TREF - Traceable Reference Format
+Drag it, drop it, share it - the sources come along for the ride. No more "where did this come from?" moments.
 
-What is TREF?
-A small package of knowledge that anyone can verify. Each block has:
-• Content-addressed ID (SHA-256 hash)
-• Self-contained data (no external dependencies)
-• Traceable lineage (know where it came from)
-• Preserved license (attribution travels with content)
+Try building your own - it takes 30 seconds!`;
 
-Quick Start:
-1. tref publish "Your knowledge here"
-2. Share the .tref file or embed it
-3. Anyone can verify and derive from it
+    const block = await publish(content, {
+      author: 'TREF',
+      refs: [{ type: 'url', url: window.location.origin + '/', title: 'TREF - Traceable Reference Format' }]
+    });
 
-This block is draggable. Try the ⋮ menu for copy/download options.`;
-
-      const block = await TREF.publish(pageContent, {
-        author: 'TREF Website',
-        license: 'CC-BY-4.0',
-        refs: [{ type: 'url', url: 'https://tref.lpmwfx.com', label: 'TREF Homepage' }]
-      });
-
-      const wrapper = new TREF.TrefWrapper(block);
-      const container = document.getElementById('hero-block');
-      container.innerHTML = wrapper.toHTML();
-
-      const el = container.querySelector('.tref-wrapper');
-      el.style.background = 'white';
-      el.style.maxWidth = '450px';
-
-      // Attach interactive events
-      wrapper.attachEvents(el);
-
-      // Make draggable
-      el.setAttribute('draggable', 'true');
-      el.addEventListener('dragstart', e => wrapper.setDragData(e.dataTransfer));
-    })();
+    const container = document.getElementById('promo-tref');
+    const wrapper = new TrefWrapper(block);
+    container.innerHTML = wrapper.toHTML();
+    wrapper.attachEvents(container.querySelector('.tref-wrapper'));
   </script>
 </body>
 </html>

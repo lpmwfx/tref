@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat - TREF Examples</title>
+  <link rel="stylesheet" href="../css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+  <style>
+    .mini-receiver {
+      width: 40px;
+      height: 40px;
+      min-height: 40px;
+      padding: 8px;
+      border-radius: 8px;
+    }
+    .mini-receiver.tref-receiver-has-block { padding: 0; }
+    .mini-receiver .tref-wrapper { max-width: 40px; padding: 0; background: transparent; border: none; }
+    .mini-receiver .tref-header { margin: 0; }
+    .mini-receiver .tref-icon { width: 40px; height: 40px; }
+    .mini-receiver .tref-icon svg { width: 100%; height: 100%; }
+    .mini-receiver .tref-id,
+    .mini-receiver .tref-meta,
+    .mini-receiver .tref-actions,
+    .mini-receiver .tref-content,
+    .mini-receiver .tref-refs { display: none; }
+
+    .chat-box {
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--gray-100);
+    }
+    .chat-messages {
+      height: 250px;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .chat-msg {
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      max-width: 85%;
+      font-size: 0.9rem;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .chat-msg.ai { background: white; align-self: flex-start; }
+    .chat-msg.user { background: var(--purple); color: white; align-self: flex-end; }
+    .chat-msg.tref-context {
+      background: rgba(92, 204, 204, 0.15);
+      border: 1px solid var(--mint);
+      align-self: flex-end;
+      font-size: 0.8rem;
+      color: var(--gray-600);
+    }
+    .chat-tref-row {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(92, 204, 204, 0.1);
+      border-top: 1px solid var(--gray-200);
+      align-items: center;
+    }
+    .chat-input-row {
+      display: flex;
+      border-top: 1px solid var(--gray-200);
+    }
+    .chat-input {
+      flex: 1;
+      border: none;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .chat-send {
+      background: var(--purple);
+      color: white;
+      border: none;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .chat-send:hover { background: #7c3aed; }
+    .add-slot-btn {
+      width: 40px;
+      height: 40px;
+      border: 2px dashed var(--gray-300);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--gray-400);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .add-slot-btn:hover { border-color: var(--mint); color: var(--mint); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="../builder.html">Builder</a></li>
+        <li><a href="../examples.html" class="active">Examples</a></li>
+        <li><a href="../guide.html">Guide</a></li>
+        <li><a href="../about-cli.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero" style="padding: 2rem;">
+    <h1>AI Chat Comparison</h1>
+    <p class="hero-subtitle" style="font-size: 1.2rem;">
+      Compare chat without TREF vs chat with TREF context.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 900px;">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+
+        <!-- Chat WITH TREF -->
+        <div class="card">
+          <h3 style="margin-bottom: 1rem; color: var(--mint);">With TREF</h3>
+          <div class="chat-box">
+            <div class="chat-messages" id="messages-with-tref">
+              <div class="chat-msg ai">How can I help you? Drop TREF blocks for verified context.</div>
+            </div>
+            <div class="chat-tref-row" id="tref-slots-row">
+              <button class="add-slot-btn" id="add-slot-btn" title="Add slot">+</button>
+            </div>
+            <div class="chat-input-row">
+              <input type="text" class="chat-input" id="input-with-tref" placeholder="Type a message...">
+              <button class="chat-send" id="send-with-tref">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat WITHOUT TREF -->
+        <div class="card">
+          <h3 style="margin-bottom: 1rem; color: var(--gray-500);">Without TREF</h3>
+          <div class="chat-box">
+            <div class="chat-messages" id="messages-no-tref">
+              <div class="chat-msg ai">How can I help you today?</div>
+            </div>
+            <div class="chat-input-row">
+              <input type="text" class="chat-input" id="input-no-tref" placeholder="Type a message...">
+              <button class="chat-send" id="send-no-tref">Send</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Source blocks -->
+      <div style="margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Source Blocks (drag into chat)</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;" id="source-blocks"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><a href="../examples.html">Back to Examples</a></p>
+  </footer>
+
+  <script type="module">
+    import { TrefWrapper, TrefReceiver, publish } from '../js/browser.js';
+
+    // Create source blocks
+    const blocks = await Promise.all([
+      publish('The Earth is approximately 4.5 billion years old.', {
+        author: 'Science Facts',
+        refs: [{ type: 'url', url: 'https://en.wikipedia.org/wiki/Age_of_Earth', title: 'Wikipedia' }]
+      }),
+      publish('Water boils at 100°C (212°F) at sea level.', {
+        author: 'Physics',
+        refs: [{ type: 'url', url: 'https://en.wikipedia.org/wiki/Boiling_point', title: 'Wikipedia' }]
+      }),
+      publish('The human brain contains approximately 86 billion neurons.', {
+        author: 'Neuroscience',
+        refs: [{ type: 'url', url: 'https://en.wikipedia.org/wiki/Neuron', title: 'Wikipedia' }]
+      }),
+      publish('Pi is approximately 3.14159265359.', {
+        author: 'Mathematics',
+        refs: [{ type: 'url', url: 'https://en.wikipedia.org/wiki/Pi', title: 'Wikipedia' }]
+      })
+    ]);
+
+    const sourceContainer = document.getElementById('source-blocks');
+    blocks.forEach((b) => {
+      const div = document.createElement('div');
+      const w = new TrefWrapper(b);
+      div.innerHTML = w.toHTML();
+      w.attachEvents(div.querySelector('.tref-wrapper'));
+      sourceContainer.appendChild(div);
+    });
+
+    // Chat WITHOUT TREF
+    const messagesNoTref = document.getElementById('messages-no-tref');
+    const inputNoTref = document.getElementById('input-no-tref');
+
+    function sendNoTref() {
+      const text = inputNoTref.value.trim();
+      if (!text) return;
+      const msg = document.createElement('div');
+      msg.className = 'chat-msg user';
+      msg.textContent = text;
+      messagesNoTref.appendChild(msg);
+      inputNoTref.value = '';
+      setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = 'chat-msg ai';
+        reply.textContent = "Works on most ai-chats";
+        messagesNoTref.appendChild(reply);
+        messagesNoTref.scrollTop = messagesNoTref.scrollHeight;
+      }, 500);
+    }
+
+    document.getElementById('send-no-tref').addEventListener('click', sendNoTref);
+    inputNoTref.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendNoTref(); });
+
+    // Chat WITH TREF
+    const messagesWithTref = document.getElementById('messages-with-tref');
+    const inputWithTref = document.getElementById('input-with-tref');
+    const trefSlotsRow = document.getElementById('tref-slots-row');
+    const addSlotBtn = document.getElementById('add-slot-btn');
+
+    const chatTrefSlots = new Map();
+    let slotCount = 0;
+
+    function createSlot() {
+      const slot = document.createElement('div');
+      slot.id = `slot-${slotCount}`;
+      slot.className = 'mini-receiver tref-receiver';
+      trefSlotsRow.insertBefore(slot, addSlotBtn);
+
+      new TrefReceiver(slot, {
+        onReceive: (w) => {
+          slot.innerHTML = w.toHTML({ includeContent: false });
+          w.attachEvents(slot.querySelector('.tref-wrapper'));
+          chatTrefSlots.set(slot.id, w);
+        },
+        onError: (err) => console.error(err)
+      });
+      slotCount++;
+    }
+
+    createSlot(); // Start with one slot
+    addSlotBtn.addEventListener('click', createSlot);
+
+    function sendWithTref() {
+      const text = inputWithTref.value.trim();
+      if (!text && chatTrefSlots.size === 0) return;
+
+      if (chatTrefSlots.size > 0) {
+        const ctx = document.createElement('div');
+        ctx.className = 'chat-msg tref-context';
+        const refCount = Array.from(chatTrefSlots.values()).reduce((s, w) => s + (w.block.refs?.length || 0), 0);
+        ctx.textContent = `[${chatTrefSlots.size} block(s), ${refCount} ref(s)]`;
+        messagesWithTref.appendChild(ctx);
+      }
+
+      if (text) {
+        const msg = document.createElement('div');
+        msg.className = 'chat-msg user';
+        msg.textContent = text;
+        messagesWithTref.appendChild(msg);
+      }
+      inputWithTref.value = '';
+
+      setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = 'chat-msg ai';
+        if (chatTrefSlots.size > 0) {
+          const content = Array.from(chatTrefSlots.values()).map(w => w.block.content).join(' ');
+          reply.textContent = `I have verified context: "${content.slice(0, 60)}..." I can give a sourced answer.`;
+        } else {
+          reply.textContent = "Try dropping TREF blocks for verified context!";
+        }
+        messagesWithTref.appendChild(reply);
+        messagesWithTref.scrollTop = messagesWithTref.scrollHeight;
+      }, 500);
+
+      chatTrefSlots.clear();
+      document.querySelectorAll('#tref-slots-row .mini-receiver').forEach(s => {
+        s.innerHTML = '';
+        s.classList.remove('tref-receiver-has-block');
+      });
+    }
+
+    document.getElementById('send-with-tref').addEventListener('click', sendWithTref);
+    inputWithTref.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendWithTref(); });
+  </script>
+</body>
+</html>

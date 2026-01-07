@@ -388,7 +388,15 @@ body {
   gap: 8px;
   margin-bottom: 8px;
 }
-.tref-icon { display: inline-flex; width: 24px; height: 24px; }
+.tref-icon {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  cursor: grab;
+  transition: transform 0.15s;
+}
+.tref-icon:hover { transform: scale(1.1); }
+.tref-icon:active { cursor: grabbing; }
 .tref-icon svg { width: 100%; height: 100%; }
 .tref-id {
   font-family: monospace;
@@ -397,8 +405,39 @@ body {
   background: #e5e7eb;
   padding: 2px 6px;
   border-radius: 4px;
+  transition: all 0.2s;
 }
-.tref-meta { font-size: 12px; color: #9ca3af; margin-left: auto; }
+.tref-meta { font-size: 12px; color: #9ca3af; }
+.tref-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.tref-wrapper:hover .tref-actions { opacity: 1; }
+.tref-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-right: 4px;
+}
+.tref-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.tref-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
 .tref-content {
   font-size: 14px;
   line-height: 1.5;
@@ -415,8 +454,6 @@ body {
 }
 .tref-refs a { color: #5CCCCC; text-decoration: none; }
 .tref-refs a:hover { text-decoration: underline; }
-.tref-wrapper[draggable="true"] { cursor: grab; }
-.tref-wrapper[draggable="true"]:active { cursor: grabbing; }
 
 .tref-receiver {
   border: 2px dashed #5CCCCC;

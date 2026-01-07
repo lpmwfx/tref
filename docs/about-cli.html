@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About the Tools - TREF</title>
+  <link rel="stylesheet" href="css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+  <style>
+    .explainer {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .explainer h2 {
+      color: var(--purple);
+      margin-bottom: 1rem;
+    }
+    .analogy {
+      background: rgba(92, 204, 204, 0.1);
+      border-left: 4px solid var(--mint);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .analogy-title {
+      font-weight: 600;
+      color: var(--dark-purple);
+      margin-bottom: 0.5rem;
+    }
+    .simple-list {
+      list-style: none;
+      padding: 0;
+    }
+    .simple-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .simple-list li:last-child {
+      border-bottom: none;
+    }
+    .list-icon {
+      background: var(--purple);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.8rem;
+    }
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    @media (max-width: 600px) {
+      .comparison { grid-template-columns: 1fr; }
+    }
+    .comparison-box {
+      background: var(--gray-100);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    .comparison-box h4 {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="builder.html">Builder</a></li>
+        <li><a href="examples.html">Examples</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="about-cli.html" class="active">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero" style="padding: 2rem;">
+    <h1>About the Tools</h1>
+    <p class="hero-subtitle" style="font-size: 1.2rem;">
+      What is tref and tref-mcp? Explained simply.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
+
+      <!-- What is TREF -->
+      <div class="explainer">
+        <h2>What is TREF?</h2>
+        <p>TREF is like a <strong>digital trading card for facts</strong>.</p>
+
+        <div class="analogy">
+          <div class="analogy-title">Think of it like this:</div>
+          <p>Imagine you write a fact on a card. On the back, you write where you learned it (like "Wikipedia" or "my science book"). Then you put a special sticker on the card that proves nobody changed what you wrote.</p>
+          <p style="margin-top: 0.5rem;">That's what TREF does - but for computers!</p>
+        </div>
+
+        <p>Every TREF block has:</p>
+        <ul class="simple-list">
+          <li>
+            <span class="list-icon">1</span>
+            <div><strong>The fact itself</strong> - What you want to share</div>
+          </li>
+          <li>
+            <span class="list-icon">2</span>
+            <div><strong>Where it came from</strong> - Links to sources, so people can check</div>
+          </li>
+          <li>
+            <span class="list-icon">3</span>
+            <div><strong>A special ID</strong> - Like a fingerprint that proves nobody changed it</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- What is tref (CLI) -->
+      <div class="explainer">
+        <h2>What is "tref" (the command)?</h2>
+        <p><code>tref</code> is a tool you type in the Terminal (that black window where hackers type stuff in movies).</p>
+
+        <div class="analogy">
+          <div class="analogy-title">Think of it like this:</div>
+          <p>You know how you can ask Siri or Alexa to do things by talking? The Terminal is like that, but you type instead of talk. And <code>tref</code> is a helper that lives in the Terminal.</p>
+        </div>
+
+        <p>You can tell it to:</p>
+        <ul class="simple-list">
+          <li>
+            <span class="list-icon">+</span>
+            <div><strong>Create a fact card</strong><br><code>tref publish "The moon is 384,400 km from Earth"</code></div>
+          </li>
+          <li>
+            <span class="list-icon">?</span>
+            <div><strong>Check if a card is real</strong><br><code>tref validate mycard.tref</code></div>
+          </li>
+          <li>
+            <span class="list-icon">*</span>
+            <div><strong>See all your cards</strong><br><code>tref list</code></div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- What is tref-mcp -->
+      <div class="explainer">
+        <h2>What is "tref-mcp"?</h2>
+        <p><code>tref-mcp</code> lets AI assistants (like Claude) use TREF.</p>
+
+        <div class="analogy">
+          <div class="analogy-title">Think of it like this:</div>
+          <p>Imagine you have a super smart friend (the AI) who knows lots of stuff. But sometimes you want to give them a fact card to make sure they use the <em>exact</em> right information.</p>
+          <p style="margin-top: 0.5rem;"><code>tref-mcp</code> is like a special mailbox that lets your AI friend receive and read your fact cards.</p>
+        </div>
+
+        <p><strong>MCP</strong> stands for "Model Context Protocol" - but you can just think of it as "the way AI assistants talk to tools".</p>
+      </div>
+
+      <!-- Comparison -->
+      <div class="explainer">
+        <h2>Which one should I use?</h2>
+
+        <div class="comparison">
+          <div class="comparison-box">
+            <h4 style="color: var(--purple);">Use <code>tref</code> if...</h4>
+            <ul style="margin: 0; padding-left: 1.25rem;">
+              <li>You like typing commands</li>
+              <li>You want to make lots of cards quickly</li>
+              <li>You're building something with code</li>
+            </ul>
+          </div>
+          <div class="comparison-box">
+            <h4 style="color: var(--mint);">Use <code>tref-mcp</code> if...</h4>
+            <ul style="margin: 0; padding-left: 1.25rem;">
+              <li>You use Claude Code</li>
+              <li>You want AI to create/read cards</li>
+              <li>You want AI to have verified facts</li>
+            </ul>
+          </div>
+        </div>
+
+        <p style="text-align: center; color: var(--gray-600);">Or just use the <a href="builder.html">Builder</a> in your browser - no installation needed!</p>
+      </div>
+
+      <!-- Why does this matter -->
+      <div class="explainer">
+        <h2>Why does this matter?</h2>
+
+        <div class="analogy">
+          <div class="analogy-title">The problem:</div>
+          <p>On the internet, people copy and paste stuff all the time. But after a while, nobody knows where the information came from. Was it true? Who wrote it? Did someone change it?</p>
+        </div>
+
+        <div class="analogy">
+          <div class="analogy-title">The solution:</div>
+          <p>TREF keeps track of everything. When you share a TREF block, the sources come with it. When you copy it, it stays the same. When you change it, it gets a new ID (so you can't pretend it's the original).</p>
+        </div>
+
+        <p style="font-size: 1.1rem; text-align: center; margin-top: 1.5rem;"><strong>TREF = Facts you can trust</strong></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Article TREF Block -->
+  <section class="section" style="background: white;">
+    <div class="container" style="max-width: 800px;">
+      <h2 class="section-title">This Article as TREF</h2>
+      <p style="text-align: center; color: var(--gray-600); margin-bottom: 2rem;">
+        Drag this block to cite or share this explanation.
+      </p>
+      <div id="article-tref"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/lpmwfx/AIBlocks">GitHub</a>
+      <a href="guide.html">Developer Guide</a>
+      <a href="builder.html">Try the Builder</a>
+    </div>
+    <p>TREF v0.1.0 | MIT License | <a href="https://github.com/lpmwfx">lpmwfx</a></p>
+  </footer>
+
+  <script type="module">
+    import { TrefWrapper, publish } from './js/browser.js';
+
+    const content = `About TREF Tools - Explained Simply
+
+What is TREF?
+TREF is like a digital trading card for facts. Every TREF block has:
+1. The fact itself - what you want to share
+2. Where it came from - links to sources so people can check
+3. A special ID - like a fingerprint that proves nobody changed it
+
+What is "tref" (the command)?
+tref is a tool you type in the Terminal. You can tell it to:
+- Create a fact card: tref publish "The moon is 384,400 km from Earth"
+- Check if a card is real: tref validate mycard.tref
+- See all your cards: tref list
+
+What is "tref-mcp"?
+tref-mcp lets AI assistants (like Claude) use TREF. It's like a special mailbox that lets your AI friend receive and read your fact cards. MCP stands for "Model Context Protocol" - the way AI assistants talk to tools.
+
+Why does this matter?
+On the internet, people copy and paste stuff all the time. But after a while, nobody knows where the information came from. TREF keeps track of everything. When you share a TREF block, the sources come with it. When you change it, it gets a new ID.
+
+TREF = Facts you can trust`;
+
+    const block = await publish(content, {
+      author: 'TREF Documentation',
+      refs: [{ type: 'url', url: window.location.href, title: 'About the TREF Tools' }]
+    });
+
+    const container = document.getElementById('article-tref');
+    const wrapper = new TrefWrapper(block);
+    container.innerHTML = wrapper.toHTML();
+    wrapper.attachEvents(container.querySelector('.tref-wrapper'));
+  </script>
+</body>
+</html>
