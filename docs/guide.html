@@ -9,6 +9,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
 </head>
 <body>
+  <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
       <a href="/" class="nav-brand">
@@ -37,6 +38,7 @@
     </div>
   </nav>
 
+  <!-- Hero -->
   <section class="hero" style="padding: 2rem;">
     <h1>Developer Guide</h1>
     <p class="hero-subtitle" style="font-size: 1.2rem;">
@@ -44,34 +46,197 @@
     </p>
   </section>
 
+  <!-- Quick Start CLI -->
   <section class="section">
-    <div class="container" style="max-width: 800px;">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">Quick Start (CLI)</h2>
 
-      <div class="card-grid">
+      <div class="steps">
+        <div class="step">
+          <div class="step-content">
+            <h4>Install</h4>
+            <p>Download and install the TREF CLI tool.</p>
+            <div class="code-block">
+              <code>curl -sSL https://tref.lpmwfx.com/install.sh | bash</code>
+            </div>
+          </div>
+        </div>
 
-        <a href="guide/cli.html" class="card" style="text-decoration: none;">
-          <div class="card-icon">$</div>
-          <h3>CLI Reference</h3>
-          <p>Command-line tools: publish, derive, validate. Install and use TREF from your terminal.</p>
-        </a>
+        <div class="step">
+          <div class="step-content">
+            <h4>Create a block</h4>
+            <p>Publish your first TREF block from the command line.</p>
+            <div class="code-block">
+              <code>tref publish "The speed of light is 299,792,458 m/s"</code>
+            </div>
+          </div>
+        </div>
 
-        <a href="guide/js-api.html" class="card" style="text-decoration: none;">
-          <div class="card-icon">{}</div>
-          <h3>JavaScript API</h3>
-          <p>Browser library for creating, displaying, and interacting with TREF blocks in web apps.</p>
-        </a>
+        <div class="step">
+          <div class="step-content">
+            <h4>Add references</h4>
+            <p>Include source URLs for verifiability.</p>
+            <div class="code-block">
+              <code>tref publish "Fact here" --refs '[{"type":"url","url":"https://source.com"}]'</code>
+            </div>
+          </div>
+        </div>
 
-        <a href="guide/mcp.html" class="card" style="text-decoration: none;">
-          <div class="card-icon">AI</div>
-          <h3>Claude MCP</h3>
-          <p>Model Context Protocol server for using TREF directly from Claude Code.</p>
-        </a>
-
+        <div class="step">
+          <div class="step-content">
+            <h4>Derive from existing</h4>
+            <p>Create a new block based on an existing one, preserving lineage.</p>
+            <div class="code-block">
+              <code>tref derive sha256:abc123... "Updated content with corrections"</code>
+            </div>
+          </div>
+        </div>
       </div>
-
     </div>
   </section>
 
+  <!-- CLI Reference -->
+  <section class="section" style="background: var(--site-section-alt);">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">CLI Commands</h2>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref publish</h3>
+        <p>Create a new TREF block.</p>
+        <div class="code-block mt-2">
+          <code>tref publish "content"
+tref publish -f file.md
+echo "content" | tref publish --stdin
+tref publish "content" --refs '[...]' --license CC-BY-4.0</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref derive</h3>
+        <p>Create a child block from a parent, preserving lineage.</p>
+        <div class="code-block mt-2">
+          <code>tref derive &lt;parent-id&gt; "new content"
+tref derive sha256:abc... "Updated" --refs '[{"type":"url","url":"..."}]'</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref validate</h3>
+        <p>Verify a block's integrity (ID matches content hash).</p>
+        <div class="code-block mt-2">
+          <code>tref validate block.tref
+tref validate published/ab/abc123...def.tref</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>tref list / info / cat</h3>
+        <p>Browse and read published blocks.</p>
+        <div class="code-block mt-2">
+          <code>tref list                    # List all blocks
+tref info sha256:abc...      # Show metadata
+tref cat sha256:abc...       # Output content
+tref cat sha256:abc... --format json</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JavaScript API -->
+  <section class="section">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">JavaScript API (Browser)</h2>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Include the script</h3>
+        <div class="code-block mt-2">
+          <code>&lt;script src="https://tref.lpmwfx.com/js/tref.min.js"&gt;&lt;/script&gt;</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Create and display a block</h3>
+        <div class="code-block mt-2">
+          <code>// Publish content
+const block = await TREF.publish("My knowledge", {
+  author: "Jane",
+  refs: [{ type: "url", url: "https://source.com", title: "Source" }]
+});
+
+// Display with wrapper
+const wrapper = new TREF.TrefWrapper(block);
+document.body.innerHTML = wrapper.toHTML();
+wrapper.attachEvents(document.querySelector('.tref-wrapper'));</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Derive from existing</h3>
+        <div class="code-block mt-2">
+          <code>const child = await TREF.derive(parentBlock, "New content based on parent");</code>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Validate integrity</h3>
+        <div class="code-block mt-2">
+          <code>const isValid = await TREF.validate(block);
+console.log(isValid ? "Block is authentic" : "Block has been tampered with");</code>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Drag and drop</h3>
+        <p>TREF blocks are draggable by default. Create a receiver:</p>
+        <div class="code-block mt-2">
+          <code>const receiver = new TREF.TrefReceiver(dropZoneElement, {
+  onReceive: (wrapper) => {
+    console.log("Received block:", wrapper.block);
+  }
+});</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MCP -->
+  <section class="section" style="background: var(--site-section-alt);">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title">Claude Code MCP</h2>
+
+      <p style="text-align: center; color: var(--gray-600); margin-bottom: 2rem;">
+        Use TREF directly from Claude Code with the MCP server.
+      </p>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Install</h3>
+        <div class="code-block mt-2">
+          <code>claude mcp add tref -- tref-mcp</code>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Available tools</h3>
+        <div class="code-block mt-2">
+          <code>tref_publish   - Create a new block
+tref_derive    - Derive from parent
+tref_validate  - Check block integrity
+tref_list      - List all blocks
+tref_info      - Get block metadata
+tref_cat       - Read block content</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article TREF Block -->
+  <section class="section">
+    <div class="container" style="max-width: 900px;">
+      <div id="article-tref" class="article-tref-card"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-links">
       <a href="https://github.com/lpmwfx/TRefBlocks">GitHub</a>
@@ -81,7 +246,14 @@
     <p>TREF v0.1.0 | MIT License | <a href="https://github.com/lpmwfx">lpmwfx</a></p>
   </footer>
 
-  <script>
+  <script type="module">
+    import { TrefWrapper, getStyles } from './js/browser.js';
+
+    // Inject TREF styles
+    const style = document.createElement('style');
+    style.textContent = getStyles();
+    document.head.appendChild(style);
+
     // Theme toggle
     window.toggleTheme = function() {
       const html = document.documentElement;
@@ -93,6 +265,22 @@
       document.documentElement.classList.add('dark');
       document.getElementById('theme-icon').innerHTML = '&#9728;';
     }
+
+    // Load pre-built TREF block (generated from markdown at build time)
+    const response = await fetch('./blocks/guide.json');
+    const block = await response.json();
+
+    const container = document.getElementById('article-tref');
+    const wrapper = new TrefWrapper(block);
+    container.innerHTML = `
+      ${wrapper.toHTML()}
+      <div class="article-tref-content">
+        <h4>This Guide as TREF</h4>
+        <p>Drag the icon to share this reference with verified origin.</p>
+        <div class="article-tref-hint">Hover icon for actions: copy, download, view JSON</div>
+      </div>
+    `;
+    wrapper.attachEvents(container.querySelector('.tref-wrapper'));
   </script>
 </body>
 </html>
