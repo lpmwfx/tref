@@ -231,10 +231,44 @@
 
   <!-- Article TREF Block -->
   <section class="section" style="background: white;">
-    <div class="container" style="max-width: 800px; display: flex; justify-content: center;">
-      <div id="article-tref"></div>
+    <div class="container" style="max-width: 800px;">
+      <div id="article-tref" class="article-tref-card"></div>
     </div>
   </section>
+
+  <style>
+    .article-tref-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      background: var(--site-card-bg);
+      border-radius: 12px;
+      box-shadow: var(--site-card-shadow);
+      border-left: 4px solid var(--mint);
+    }
+    .article-tref-card .tref-wrapper {
+      flex-shrink: 0;
+    }
+    .article-tref-content {
+      flex: 1;
+    }
+    .article-tref-content h4 {
+      margin: 0 0 4px 0;
+      color: var(--site-text);
+      font-size: 1rem;
+    }
+    .article-tref-content p {
+      margin: 0;
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
+    .article-tref-hint {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      margin-top: 8px;
+    }
+  </style>
 
   <footer class="footer">
     <div class="footer-links">
@@ -265,13 +299,31 @@
       document.getElementById('theme-icon').innerHTML = '&#9728;';
     }
 
-    const block = await publish('About the TREF Tools', {
+    // Create article TREF block with meaningful content
+    const articleContent = `About the TREF Tools
+
+TREF is like a digital trading card for facts. Every block has:
+- The fact itself (what you want to share)
+- Where it came from (links to sources)
+- A special ID (fingerprint that proves authenticity)
+
+Tools: tref (CLI) and tref-mcp (for AI assistants like Claude)`;
+
+    const block = await publish(articleContent, {
+      author: 'TREF Documentation',
       refs: [{ type: 'url', url: window.location.href, title: 'About the TREF Tools' }]
     });
 
     const container = document.getElementById('article-tref');
     const wrapper = new TrefWrapper(block);
-    container.innerHTML = wrapper.toHTML();
+    container.innerHTML = `
+      ${wrapper.toHTML()}
+      <div class="article-tref-content">
+        <h4>This Article as TREF</h4>
+        <p>Drag the icon to share this knowledge with verified origin.</p>
+        <div class="article-tref-hint">Hover icon for actions: copy, download, view JSON</div>
+      </div>
+    `;
     wrapper.attachEvents(container.querySelector('.tref-wrapper'));
   </script>
 </body>
