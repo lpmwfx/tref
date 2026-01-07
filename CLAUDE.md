@@ -181,6 +181,15 @@ docs/css/tref-site.css    ← ALL site styles (single file)
    16. Utilities
 ```
 
+## Identity Rule
+
+**lpmwfx is the public identity.** Use "lpmwfx" for all public-facing content:
+- Author fields (package.json, LICENSE)
+- Copyright notices
+- URLs and links
+
+**Never use "lpm" alone** in any tracked file - it's the private identity.
+
 ## Language Rule
 
 **All content in English before push.** Translate any Danish text in code, docs, and project files to English before committing/pushing.
