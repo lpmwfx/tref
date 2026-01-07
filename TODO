@@ -27,8 +27,33 @@ Single source architecture: `src/` → `dist/` → CDN/npm
 
 ### Docs Site Refactor
 
-- [ ] Update docs/ to import from CDN only
-- [ ] Test with tref.lpmwfx.com
+Konverter /docs til single-source arkitektur som /demo.
+Målgruppe: lægfolk 12-13 år og derover.
+
+#### Teknisk migration
+
+- [ ] Fjern docs/js/wrapper.js (duplikat)
+- [ ] Fjern docs/js/tref.min.js (duplikat)
+- [ ] Opret docs/js/browser.js som importerer fra CDN
+- [ ] Opdater index.html til at importere fra CDN
+- [ ] Opdater builder.html til at importere fra CDN
+- [ ] Opdater guide.html til at importere fra CDN
+- [ ] Opdater about-cli.html til at importere fra CDN
+- [ ] Opdater examples.html til at importere fra CDN
+- [ ] Opdater examples/drag-drop.html til at importere fra CDN
+- [ ] Opdater examples/ai-chat.html til at importere fra CDN
+- [ ] Tilføj theme toggle til alle sider (som demo/)
+- [ ] Test alle sider lokalt
+- [ ] Test med tref.lpmwfx.com
+
+#### Indhold til målgruppe (12-13 år)
+
+- [ ] Omskriv index.html med enkle analogier (som about-cli.html)
+- [ ] Fjern teknisk jargon fra forsiden (SHA-256, content-addressed)
+- [ ] Tilføj "faktakort" og "fingeraftryk" analogier
+- [ ] Forenkl use cases til konkrete eksempler
+- [ ] Mærk guide.html tydeligt som "For udviklere"
+- [ ] Gennemgå builder.html for klarhed
 
 ### Documentation
 
