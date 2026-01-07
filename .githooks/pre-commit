@@ -1,0 +1,8 @@
+#!/bin/bash
+# Auto-build docs before commit
+
+if [ -f "bin/build-docs.js" ]; then
+  echo "Building docs..."
+  node bin/build-docs.js
+  git add docs/*.html
+fi

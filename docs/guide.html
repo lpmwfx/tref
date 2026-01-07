@@ -281,7 +281,7 @@ tref_cat       - Read block content</code>
   </footer>
 
   <script type="module">
-    import { TrefWrapper, publish, getStyles } from './js/browser.js';
+    import { TrefWrapper, getStyles } from './js/browser.js';
 
     // Inject TREF styles
     const style = document.createElement('style');
@@ -300,21 +300,9 @@ tref_cat       - Read block content</code>
       document.getElementById('theme-icon').innerHTML = '&#9728;';
     }
 
-    // Create article TREF block with meaningful content
-    const articleContent = `TREF Developer Guide
-
-Quick reference for TREF CLI and JavaScript API:
-
-CLI: tref publish, tref derive, tref validate, tref list
-JS: TREF.publish(), TREF.derive(), TREF.validate()
-MCP: tref_publish, tref_derive, tref_validate, tref_list
-
-CDN: https://cdn.jsdelivr.net/npm/tref-block/dist/tref-block.js`;
-
-    const block = await publish(articleContent, {
-      author: 'TREF Documentation',
-      refs: [{ type: 'url', url: window.location.href, title: 'TREF Developer Guide' }]
-    });
+    // Load pre-built TREF block (generated from markdown at build time)
+    const response = await fetch('./blocks/guide.tref');
+    const block = await response.json();
 
     const container = document.getElementById('article-tref');
     const wrapper = new TrefWrapper(block);
