@@ -4,4 +4,26 @@ Problems found after testing. Add new issues at the top.
 
 ---
 
-(No current issues)
+## Wrapper Tests Failing (6 tests)
+
+**Date**: 2026-01-07
+**Priority**: Medium
+**File**: `src/wrapper/wrapper.test.js`
+
+Tests expect HTML/CSS output that doesn't match current implementation.
+
+### Failing tests:
+- [ ] `includes content preview by default` - expects `.tref-content` class
+- [ ] `truncates long content` - expects `...` in output
+- [ ] `escapes HTML in content` - expects `&lt;script&gt;`
+- [ ] `includes date from meta` - expects date in HTML
+- [ ] `returns CSS string` - expects `.tref-content` in styles
+- [ ] `styles use brand colors` - expects `#5CCCCC` in styles
+
+**Root cause**: Tests written for a different HTML structure than current `TrefWrapper.render()` produces.
+
+**Fix options**:
+1. Update tests to match current implementation
+2. Update implementation to match test expectations
+
+---
