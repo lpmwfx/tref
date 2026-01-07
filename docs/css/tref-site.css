@@ -408,35 +408,53 @@ body {
   transition: all 0.2s;
 }
 .tref-meta { font-size: 12px; color: #9ca3af; }
-.tref-actions {
+.tref-menu {
   margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  opacity: 0;
-  transition: opacity 0.15s;
+  position: relative;
 }
-.tref-wrapper:hover .tref-actions { opacity: 1; }
-.tref-hint {
-  font-size: 11px;
-  color: #9ca3af;
-  margin-right: 4px;
-}
-.tref-btn {
+.tref-menu-btn {
   background: transparent;
   border: none;
-  padding: 4px;
+  padding: 4px 8px;
   cursor: pointer;
   color: #6b7280;
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
   transition: all 0.15s;
 }
-.tref-btn:hover {
+.tref-menu-btn:hover {
   background: #e5e7eb;
   color: #374151;
+}
+.tref-menu-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  min-width: 140px;
+  z-index: 100;
+  overflow: hidden;
+}
+.tref-menu-dropdown.show { display: block; }
+.tref-action {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  color: #374151;
+  transition: background 0.15s;
+}
+.tref-action:hover {
+  background: #f3f4f6;
 }
 .tref-content {
   font-size: 14px;
