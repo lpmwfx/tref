@@ -1,0 +1,8 @@
+{
+  "current": "sha256:demo123abc",
+  "versions": [
+    { "v": 3, "id": "sha256:demo123abc", "date": "2026-01-08" },
+    { "v": 2, "id": "sha256:demo456def", "date": "2026-01-06" },
+    { "v": 1, "id": "sha256:demo789ghi", "date": "2026-01-04" }
+  ]
+}

@@ -14,7 +14,9 @@ import {
   TrefReceiver,
   wrap,
   unwrap,
+  validateBlock,
   TREF_ICON_SVG,
+  TREF_ICON_INVALID_SVG,
   TREF_ICON_DATA_URL,
   TREF_MIME_TYPE,
 } from './tref-block.js';
@@ -25,7 +27,9 @@ export {
   TrefReceiver,
   wrap,
   unwrap,
+  validateBlock,
   TREF_ICON_SVG,
+  TREF_ICON_INVALID_SVG,
   TREF_ICON_DATA_URL,
   TREF_MIME_TYPE,
 };
@@ -73,12 +77,13 @@ async function sha256(data) {
 }
 
 /**
- * Generate block ID from draft
+ * Generate block ID from content (content-addressable)
  * @param {Omit<TrefBlock, 'id'>} draft
  * @returns {Promise<string>}
  */
 async function generateId(draft) {
-  return `sha256:${await sha256(JSON.stringify(sortKeys(draft)))}`;
+  // ID is SHA-256 of content only for content-addressability
+  return `sha256:${await sha256(draft.content)}`;
 }
 
 // ========== Publishing Functions ==========
@@ -141,13 +146,13 @@ export async function derive(parent, content, options = {}) {
 }
 
 /**
- * Validate a block's integrity
+ * Validate a block's integrity (checks content hash)
  * @param {TrefBlock} block
  * @returns {Promise<boolean>}
  */
 export async function validate(block) {
-  const { id, ...rest } = block;
-  return id === await generateId(rest);
+  const expectedId = `sha256:${await sha256(block.content)}`;
+  return block.id === expectedId;
 }
 
 /**
@@ -167,11 +172,13 @@ if (typeof window !== 'undefined') {
     publish,
     derive,
     validate,
+    validateBlock,
     createDraft,
     wrap,
     unwrap,
     getStyles,
     TREF_ICON_SVG,
+    TREF_ICON_INVALID_SVG,
     TREF_ICON_DATA_URL,
     TREF_MIME_TYPE,
   };

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHA-256 Validation - TREF Examples</title>
+  <link rel="stylesheet" href="../css/tref-site.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
+          <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+            <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
+              <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+              <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+              <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+            </g>
+          </g>
+        </svg>
+        TREF
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="../builder.html">Builder</a></li>
+        <li><a href="../examples.html" class="active">Examples</a></li>
+        <li><a href="../guide.html">Guide</a></li>
+        <li><a href="../about-cli.html">About</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">&#127769;</span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="hero" style="padding: 2rem;">
+    <h1>SHA-256 Validation</h1>
+    <p class="hero-subtitle" style="font-size: 1.2rem;">
+      TREF automatically detects if content has been tampered with.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 900px;">
+
+      <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+
+        <div class="card">
+          <h3 style="color: var(--tref-success, #10B981); margin-bottom: 1rem;">Original (Valid)</h3>
+          <div style="padding: 1rem; background: var(--tref-receiver-bg, #f9fafb); border-radius: 8px; margin-bottom: 1rem;">
+            <p>The sky is <strong>blue</strong> due to Rayleigh scattering.</p>
+          </div>
+          <div id="valid-tref" style="display: flex; justify-content: flex-end;"></div>
+          <p style="font-size: 13px; color: var(--demo-muted, #6b7280); margin-top: 1rem;">
+            Content matches SHA-256 ID. Icon is normal.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--tref-error, #ef4444); margin-bottom: 1rem;">Tampered (Invalid)</h3>
+          <div style="padding: 1rem; background: var(--tref-receiver-error-bg, #fef2f2); border-radius: 8px; margin-bottom: 1rem;">
+            <p>The sky is <strong>green</strong> due to Rayleigh scattering.</p>
+          </div>
+          <div id="invalid-tref" style="display: flex; justify-content: flex-end;"></div>
+          <p style="font-size: 13px; color: var(--demo-muted, #6b7280); margin-top: 1rem;">
+            Content was changed but ID kept. Red X appears!
+          </p>
+        </div>
+
+      </div>
+
+      <div class="card" style="margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem;">How It Works</h3>
+        <ol style="line-height: 1.8; padding-left: 1.5rem;">
+          <li>When a TREF block is created, the content is hashed with SHA-256</li>
+          <li>This hash becomes the block's unique ID</li>
+          <li>When displayed, TrefWrapper validates the hash automatically</li>
+          <li>If the content was changed, the hash won't match</li>
+          <li>Invalid blocks show a <strong style="color: var(--tref-error);">red X</strong> and warning message</li>
+        </ol>
+
+        <h4 style="margin-top: 1.5rem;">API Usage:</h4>
+        <pre style="background: var(--tref-menu-bg, #1f2937); color: var(--tref-menu-text, #e5e7eb); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 13px;">// Automatic validation on display
+wrapper.attachEvents(element);
+
+// Manual validation
+const result = await wrapper.validate();
+if (!result.valid) {
+  console.log('Tampered!', result.expected, result.actual);
+}
+
+// Standalone function
+import { validateBlock } from 'tref-block';
+const result = await validateBlock(block);</pre>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><a href="../examples.html">Back to Examples</a></p>
+  </footer>
+
+  <script type="module">
+    import { TrefWrapper, publish, getStyles } from '../js/browser.js';
+
+    // Inject TREF styles
+    const style = document.createElement('style');
+    style.textContent = getStyles();
+    document.head.appendChild(style);
+
+    // Theme toggle
+    window.toggleTheme = function() {
+      const html = document.documentElement;
+      const isDark = html.classList.toggle('dark');
+      document.getElementById('theme-icon').innerHTML = isDark ? '&#9728;' : '&#127769;';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    };
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.getElementById('theme-icon').innerHTML = '&#9728;';
+    }
+
+    // SHA-256 helper
+    async function sha256(text) {
+      const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Create valid block (content matches ID)
+    const originalContent = 'The sky is blue due to Rayleigh scattering.';
+    const validBlock = await publish(originalContent, {
+      author: 'TREF Example',
+      refs: [{ type: 'url', url: 'https://en.wikipedia.org/wiki/Rayleigh_scattering' }]
+    });
+
+    // Render valid block
+    const validContainer = document.getElementById('valid-tref');
+    const validWrapper = new TrefWrapper(validBlock);
+    validContainer.innerHTML = validWrapper.toHTML();
+    validWrapper.attachEvents(validContainer.querySelector('.tref-wrapper'));
+
+    // Create invalid block (content changed but ID kept from original)
+    const tamperedContent = 'The sky is green due to Rayleigh scattering.';
+    const invalidBlock = {
+      ...validBlock,
+      content: tamperedContent  // Changed content but keeping original ID!
+    };
+
+    // Render invalid block
+    const invalidContainer = document.getElementById('invalid-tref');
+    const invalidWrapper = new TrefWrapper(invalidBlock);
+    invalidContainer.innerHTML = invalidWrapper.toHTML();
+    invalidWrapper.attachEvents(invalidContainer.querySelector('.tref-wrapper'));
+  </script>
+</body>
+</html>

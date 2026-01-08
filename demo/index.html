@@ -270,6 +270,26 @@
 
   <div id="sr-announcements" class="sr-only" aria-live="polite"></div>
 
+  <!-- SHA Validation Demo -->
+  <section class="editor" style="margin-bottom: 24px;">
+    <h2>SHA-256 Validation Demo</h2>
+    <p style="color: var(--demo-muted); margin-bottom: 16px;">Two blocks with the same original ID - one authentic, one modified:</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div class="article" style="margin: 0;">
+        <h3 style="color: var(--demo-heading); margin-top: 0;">Original (Valid)</h3>
+        <p style="line-height: 1.6;">The sky is blue due to Rayleigh scattering.</p>
+        <div class="article-tref" id="valid-tref"></div>
+      </div>
+
+      <div class="article" style="margin: 0;">
+        <h3 style="color: var(--demo-heading); margin-top: 0;">Tampered (Invalid)</h3>
+        <p style="line-height: 1.6;">The sky is <strong>green</strong> due to Rayleigh scattering.</p>
+        <div class="article-tref" id="invalid-tref"></div>
+      </div>
+    </div>
+  </section>
+
   <article class="article" id="article-block" style="display: none;">
     <div class="article-content" id="article-content"></div>
     <div class="article-refs" id="article-refs"></div>
@@ -357,10 +377,9 @@ https://en.wikipedia.org/wiki/Content-addressable_storage</textarea>
       return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
+    // ID is SHA-256 of content only (for content-addressability)
     async function generateId(block) {
-      const copy = { ...block };
-      delete copy.id;
-      return `sha256:${await sha256(JSON.stringify(sortKeys(copy)))}`;
+      return `sha256:${await sha256(block.content)}`;
     }
 
     // Toast
@@ -411,7 +430,9 @@ https://en.wikipedia.org/wiki/Content-addressable_storage</textarea>
 
       const trefEl = document.getElementById('article-tref');
       trefEl.innerHTML = wrapper.toHTML();
-      wrapper.attachEvents(trefEl);
+      // Add history attribute for demo
+      trefEl.querySelector('.tref-wrapper').dataset.history = 'history-demo.json';
+      wrapper.attachEvents(trefEl.querySelector('.tref-wrapper'));
 
       showToast('Published: ' + wrapper.shortId);
     };
@@ -438,13 +459,53 @@ https://en.wikipedia.org/wiki/Content-addressable_storage</textarea>
 
         const trefEl = document.getElementById('article-tref');
         trefEl.innerHTML = wrapper.toHTML();
-        wrapper.attachEvents(trefEl);
+        // Add history attribute for demo
+        trefEl.querySelector('.tref-wrapper').dataset.history = 'history-demo.json';
+        wrapper.attachEvents(trefEl.querySelector('.tref-wrapper'));
       },
       onError: () => showToast('Invalid TREF data')
     });
 
     // Auto-create on load
     createArticle();
+
+    // SHA Validation Demo - create valid and invalid blocks
+    async function setupValidationDemo() {
+      const originalContent = 'The sky is blue due to Rayleigh scattering.';
+      const tamperedContent = 'The sky is green due to Rayleigh scattering.';
+
+      // Create a valid block (content matches ID)
+      const validBlock = {
+        v: 1,
+        content: originalContent,
+        meta: { created: '2026-01-08T10:00:00Z', license: 'CC0-1.0' },
+        refs: [{ type: 'url', url: 'https://en.wikipedia.org/wiki/Rayleigh_scattering' }]
+      };
+      validBlock.id = await generateId(validBlock);
+
+      // Create an invalid block (content was tampered but ID is from original)
+      const invalidBlock = {
+        v: 1,
+        id: validBlock.id, // Using the ORIGINAL id
+        content: tamperedContent, // But content was changed!
+        meta: { created: '2026-01-08T10:00:00Z', license: 'CC0-1.0' },
+        refs: [{ type: 'url', url: 'https://en.wikipedia.org/wiki/Rayleigh_scattering' }]
+      };
+
+      // Render valid block
+      const validWrapper = wrap(validBlock);
+      const validEl = document.getElementById('valid-tref');
+      validEl.innerHTML = validWrapper.toHTML();
+      validWrapper.attachEvents(validEl.querySelector('.tref-wrapper'));
+
+      // Render invalid block
+      const invalidWrapper = wrap(invalidBlock);
+      const invalidEl = document.getElementById('invalid-tref');
+      invalidEl.innerHTML = invalidWrapper.toHTML();
+      invalidWrapper.attachEvents(invalidEl.querySelector('.tref-wrapper'));
+    }
+
+    setupValidationDemo();
   </script>
 </body>
 </html>

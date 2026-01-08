@@ -1,4 +1,4 @@
-var u=".tref",g=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+var m=".tref",x=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
   <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#5CCCCC" stroke-width="5"/>
   <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
     <g transform="translate(0,2250) scale(1,-1)" fill="#5CCCCC">
@@ -7,19 +7,42 @@ var u=".tref",g=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" w
       <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
     </g>
   </g>
-</svg>`,c="application/vnd.tref+json",y="data:image/svg+xml,"+encodeURIComponent(g);function b(i){if(!i||typeof i!="object")return!1;let e=i;return!(e.v!==1||typeof e.id!="string"||!e.id.startsWith("sha256:")||typeof e.content!="string"||!e.meta||typeof e.meta!="object")}var d=class{#e;constructor(e){if(!b(e))throw new Error("Invalid TREF block");this.#e=e}get block(){return this.#e}get id(){return this.#e.id}get shortId(){return this.#e.id.replace("sha256:","").slice(0,8)}get content(){return this.#e.content}toJSON(e={}){return e.pretty?JSON.stringify(this.#e,null,2):JSON.stringify(this.#e)}getFilename(){return this.#e.id.replace("sha256:","")+u}toBlob(){return new Blob([this.toJSON()],{type:c})}toDataURL(){let e=this.toJSON(),t=btoa(unescape(encodeURIComponent(e)));return`data:${c};base64,${t}`}toObjectURL(){return URL.createObjectURL(this.toBlob())}async copyToClipboard(){await navigator.clipboard.writeText(this.toJSON())}async copyContentToClipboard(){await navigator.clipboard.writeText(this.#e.content)}getDragData(){let e=this.toJSON();return[{type:c,data:e},{type:"application/json",data:e},{type:"text/plain",data:e}]}setDragData(e){for(let{type:t,data:a}of this.getDragData())e.setData(t,a)}toHTML(e={}){let{interactive:t=!0}=e,n=t?`<div class="tref-actions" role="group" aria-label="Block actions">
+</svg>`,u="application/vnd.tref+json",T="data:image/svg+xml,"+encodeURIComponent(x),k=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+  <rect x="6" y="6" width="88" height="88" rx="12" ry="12" fill="#2D1B4E" stroke="#ef4444" stroke-width="5"/>
+  <g transform="translate(50 50) scale(0.022) translate(-1125 -1125)">
+    <g transform="translate(0,2250) scale(1,-1)" fill="#6b7280">
+      <path d="M1515 2244 c-66 -10 -144 -38 -220 -77 -67 -35 -106 -67 -237 -195 -155 -152 -188 -195 -188 -247 0 -41 30 -95 64 -116 39 -24 113 -25 146 -3 14 9 90 81 170 160 183 181 216 199 350 199 83 0 103 -4 155 -28 78 -36 146 -104 182 -181 24 -53 28 -73 28 -151 0 -137 -21 -175 -199 -355 -79 -80 -151 -156 -160 -170 -39 -59 -8 -162 58 -194 81 -38 113 -22 284 147 165 163 230 252 268 370 24 71 28 99 28 202 0 106 -3 130 -28 200 -91 261 -310 428 -579 439 -50 3 -105 2 -122 0z"/>
+      <path d="M1395 1585 c-17 -9 -189 -174 -382 -368 -377 -378 -383 -385 -362 -461 21 -76 87 -116 166 -101 33 6 80 49 386 353 191 191 358 362 369 381 26 42 28 109 4 146 -39 59 -118 81 -181 50z"/>
+      <path d="M463 1364 c-47 -24 -323 -310 -365 -379 -20 -33 -49 -96 -64 -140 -24 -69 -28 -96 -28 -195 0 -127 14 -190 66 -294 63 -126 157 -220 284 -284 104 -52 167 -66 294 -66 99 0 126 4 195 28 44 15 107 44 140 64 65 39 348 309 371 354 41 78 -10 184 -96 203 -61 13 -98 -11 -256 -166 -186 -183 -222 -204 -359 -204 -77 0 -98 4 -147 27 -79 37 -142 98 -181 177 -29 59 -32 74 -32 156 0 136 21 174 199 355 79 80 150 156 159 170 23 33 22 107 -2 146 -35 57 -115 79 -178 48z"/>
+    </g>
+  </g>
+  <line x1="25" y1="25" x2="75" y2="75" stroke="#ef4444" stroke-width="8" stroke-linecap="round"/>
+  <line x1="75" y1="25" x2="25" y2="75" stroke="#ef4444" stroke-width="8" stroke-linecap="round"/>
+</svg>`;function b(n){if(!n||typeof n!="object")return!1;let e=n;return!(e.v!==1||typeof e.id!="string"||!e.id.startsWith("sha256:")||typeof e.content!="string"||!e.meta||typeof e.meta!="object")}var v=class{#e;constructor(e){if(!b(e))throw new Error("Invalid TREF block");this.#e=e}get block(){return this.#e}get id(){return this.#e.id}get shortId(){return this.#e.id.replace("sha256:","").slice(0,8)}get content(){return this.#e.content}toJSON(e={}){return e.pretty?JSON.stringify(this.#e,null,2):JSON.stringify(this.#e)}getFilename(){return this.#e.id.replace("sha256:","")+m}toBlob(){return new Blob([this.toJSON()],{type:u})}toDataURL(){let e=this.toJSON(),t=btoa(unescape(encodeURIComponent(e)));return`data:${u};base64,${t}`}toObjectURL(){return URL.createObjectURL(this.toBlob())}async copyToClipboard(){await navigator.clipboard.writeText(this.toJSON())}async copyContentToClipboard(){await navigator.clipboard.writeText(this.#e.content)}async validate(){let e=this.#e.content,i=new TextEncoder().encode(e),s=await crypto.subtle.digest("SHA-256",i),o=`sha256:${Array.from(new Uint8Array(s)).map(a=>a.toString(16).padStart(2,"0")).join("")}`,c=this.#e.id;return o===c?{valid:!0}:{valid:!1,expected:o,actual:c}}getDragData(){let e=this.toJSON();return[{type:u,data:e},{type:"application/json",data:e},{type:"text/plain",data:e}]}setDragData(e){for(let{type:t,data:i}of this.getDragData())e.setData(t,i)}toHTML(e={}){let{interactive:t=!0}=e,o=t?`<div class="tref-actions" role="group" aria-label="Block actions">
           <button class="tref-action" data-action="copy-content" title="Copy content" aria-label="Copy content to clipboard"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
           <button class="tref-action" data-action="copy-json" title="Copy JSON" aria-label="Copy JSON to clipboard"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"></path><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"></path><circle cx="12" cy="12" r="1" fill="currentColor"></circle><circle cx="8" cy="12" r="1" fill="currentColor"></circle><circle cx="16" cy="12" r="1" fill="currentColor"></circle></svg></button>
           <button class="tref-action" data-action="download" title="Download .tref" aria-label="Download as .tref file"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></button>
+          <button class="tref-action" data-action="history" title="Version history" aria-label="Show version history"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg></button>
         </div>`:"";return`<div class="tref-wrapper" data-tref-id="${this.#e.id}">
   <span class="tref-icon"
         role="button"
         aria-label="TREF block - drag to share"
         tabindex="0"
         draggable="true"
-        title="Drag to share">${g}</span>
-  ${n}
-</div>`}#t(e){let t=e.querySelector(".tref-actions");if(t){let a=t,r=a.style.opacity==="1";if(a.style.opacity=r?"0":"1",!r){let o=a.querySelector("button");o&&o.focus()}}}attachEvents(e){let t=e.querySelector(".tref-icon");if(t){let r=t;r.addEventListener("dragstart",n=>{let s=n;s.dataTransfer&&(this.setDragData(s.dataTransfer),s.dataTransfer.effectAllowed="copy")}),r.addEventListener("keydown",n=>{(n.key==="Enter"||n.key===" ")&&(n.preventDefault(),this.#t(e))}),r.addEventListener("touchend",n=>{r.dataset.dragging||(n.preventDefault(),this.#t(e))});let o;r.addEventListener("touchstart",()=>{o=setTimeout(()=>{r.dataset.dragging="true",r.style.transform="scale(1.15)"},500)}),r.addEventListener("touchend",()=>{clearTimeout(o),delete r.dataset.dragging,r.style.transform=""}),r.addEventListener("touchcancel",()=>{clearTimeout(o),delete r.dataset.dragging,r.style.transform=""})}let a=async r=>{r.stopPropagation();let o=r.currentTarget,n=o.dataset.action,s=o.innerHTML,l='<svg class="tref-icon-success" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',v='<svg class="tref-icon-error" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';try{if(n==="copy-content")await this.copyContentToClipboard(),o.innerHTML=l;else if(n==="copy-json")await this.copyToClipboard(),o.innerHTML=l;else if(n==="download"){let p=this.toObjectURL(),f=document.createElement("a");f.href=p,f.download=this.getFilename(),f.click(),URL.revokeObjectURL(p),o.innerHTML=l}setTimeout(()=>{o.innerHTML=s},1e3)}catch{o.innerHTML=v,setTimeout(()=>{o.innerHTML=s},1e3)}};e.querySelectorAll(".tref-action").forEach(r=>{r.addEventListener("click",o=>{a(o)})})}static getStyles(){return`
+        title="Drag to share">${x}</span>
+  ${o}
+</div>`}#r(e){let t=e.querySelector(".tref-icon");t&&(t.innerHTML=k,t.setAttribute("title","Invalid - content has been modified"),t.setAttribute("aria-label","Invalid TREF block - content has been modified"));let i=e.querySelector(".tref-actions");if(i){let s=document.createElement("span");s.className="tref-warning",s.textContent="Modified content",s.setAttribute("title","SHA-256 hash does not match - content was changed"),i.insertBefore(s,i.firstChild)}e.classList.add("tref-invalid")}#t(e){let t=e.querySelector(".tref-actions");if(t){let i=t,s=i.style.opacity==="1";if(i.style.opacity=s?"0":"1",!s){let d=i.querySelector("button");d&&d.focus()}}}async#o(e,t){let i=document.querySelector(".tref-history-popup");i&&i.remove();let s=await fetch(e);if(!s.ok)throw new Error("Failed to load history");let r=(await s.json()).versions||[],o=this.#e.id,c=r.map(l=>{let g=l.id===o,w=l.id.replace("sha256:","").slice(0,8);return`<li class="tref-history-item${g?" tref-history-current":""}">
+          <span class="tref-history-version">v${l.v}</span>
+          <span class="tref-history-date">${l.date}</span>
+          <code class="tref-history-id">${w}</code>
+          ${g?'<span class="tref-history-badge">current</span>':""}
+        </li>`}).join(""),a=document.createElement("div");a.className="tref-history-popup",a.innerHTML=`
+      <div class="tref-history-header">
+        <span>Version History</span>
+        <button class="tref-history-close" aria-label="Close">&times;</button>
+      </div>
+      <ul class="tref-history-list">${c}</ul>
+    `;let p=t.getBoundingClientRect();a.style.position="fixed",a.style.top=`${p.bottom+8}px`,a.style.left=`${p.left}px`,document.body.appendChild(a),a.querySelector(".tref-history-close")?.addEventListener("click",()=>{a.remove()});let h=l=>{a.contains(l.target)||(a.remove(),document.removeEventListener("click",h))};setTimeout(()=>document.addEventListener("click",h),0);let f=l=>{l.key==="Escape"&&(a.remove(),document.removeEventListener("keydown",f))};document.addEventListener("keydown",f)}attachEvents(e,t={}){let{validateOnAttach:i=!0}=t,s=e.querySelector(".tref-icon");if(i&&this.validate().then(r=>{r.valid||this.#r(e)}),s){let r=s;r.addEventListener("dragstart",c=>{let a=c;a.dataTransfer&&(this.setDragData(a.dataTransfer),a.dataTransfer.effectAllowed="copy")}),r.addEventListener("keydown",c=>{(c.key==="Enter"||c.key===" ")&&(c.preventDefault(),this.#t(e))}),r.addEventListener("touchend",c=>{r.dataset.dragging||(c.preventDefault(),this.#t(e))});let o;r.addEventListener("touchstart",()=>{o=setTimeout(()=>{r.dataset.dragging="true",r.style.transform="scale(1.15)"},500)}),r.addEventListener("touchend",()=>{clearTimeout(o),delete r.dataset.dragging,r.style.transform=""}),r.addEventListener("touchcancel",()=>{clearTimeout(o),delete r.dataset.dragging,r.style.transform=""})}let d=async r=>{r.stopPropagation();let o=r.currentTarget,c=o.dataset.action,a=o.innerHTML,p='<svg class="tref-icon-success" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',h='<svg class="tref-icon-error" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';try{if(c==="copy-content")await this.copyContentToClipboard(),o.innerHTML=p;else if(c==="copy-json")await this.copyToClipboard(),o.innerHTML=p;else if(c==="download"){let f=this.toObjectURL(),l=document.createElement("a");l.href=f,l.download=this.getFilename(),l.click(),URL.revokeObjectURL(f),o.innerHTML=p}else if(c==="history"){let f=e.dataset.history;if(f)await this.#o(f,e);else throw new Error("No history URL");return}setTimeout(()=>{o.innerHTML=a},1e3)}catch{o.innerHTML=h,setTimeout(()=>{o.innerHTML=a},1e3)}};e.querySelectorAll(".tref-action").forEach(r=>{r.addEventListener("click",o=>{d(o)})})}static getStyles(){return`
 :root {
   --tref-accent: #5CCCCC;
   --tref-accent-hover: #8B5CF6;
@@ -115,7 +138,87 @@ var u=".tref",g=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" w
 }
 .tref-icon-success { color: var(--tref-success); }
 .tref-icon-error { color: var(--tref-error); }
-`}},h=class{#e;#t;#r;#o;constructor(e,t={}){this.#e=e,this.#t=t.onReceive||(()=>{}),this.#r=t.onError||(()=>{}),this.#o=t.compact||!1,this.#i()}#i(){let e=this.#e;e.classList.add("tref-receiver"),this.#o&&e.classList.add("tref-receiver-compact"),e.setAttribute("role","region"),e.setAttribute("aria-label","Drop zone for TREF blocks"),e.setAttribute("aria-dropeffect","copy"),e.addEventListener("dragover",t=>{t.preventDefault(),t.dataTransfer&&(t.dataTransfer.dropEffect="copy"),e.classList.add("tref-receiver-active")}),e.addEventListener("dragleave",()=>{e.classList.remove("tref-receiver-active")}),e.addEventListener("drop",t=>{if(t.preventDefault(),e.classList.remove("tref-receiver-active"),!t.dataTransfer){this.#r(new Error("No data"));return}let a=w(t.dataTransfer);a?(e.classList.add("tref-receiver-success"),setTimeout(()=>e.classList.remove("tref-receiver-success"),1e3),this.#t(a)):(e.classList.add("tref-receiver-error"),setTimeout(()=>e.classList.remove("tref-receiver-error"),1e3),this.#r(new Error("Invalid TREF data")))})}get element(){return this.#e}showBlock(e){this.#e.innerHTML=e.toHTML(),this.#e.classList.add("tref-receiver-has-block")}clear(){this.#e.innerHTML=this.#e.dataset.placeholder||"Drop TREF here",this.#e.classList.remove("tref-receiver-has-block")}static getStyles(){return`
+/* Invalid block warning */
+.tref-invalid .tref-icon { opacity: 0.8; }
+.tref-warning {
+  font-size: 11px;
+  color: var(--tref-error);
+  padding: 4px 8px;
+  background: var(--tref-receiver-error-bg);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+/* History popup */
+.tref-history-popup {
+  background: var(--tref-menu-bg);
+  border-radius: 8px;
+  box-shadow: var(--tref-menu-shadow);
+  min-width: 220px;
+  max-width: 300px;
+  z-index: 1000;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+}
+.tref-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--tref-menu-hover);
+  font-weight: 600;
+  color: var(--tref-menu-text);
+}
+.tref-history-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--tref-menu-text);
+  padding: 0 4px;
+  line-height: 1;
+}
+.tref-history-close:hover { color: var(--tref-error); }
+.tref-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+.tref-history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--tref-menu-text);
+}
+.tref-history-item:hover {
+  background: var(--tref-menu-hover);
+}
+.tref-history-current {
+  background: var(--tref-receiver-active-bg);
+}
+.tref-history-version {
+  font-weight: 600;
+  color: var(--tref-accent);
+}
+.tref-history-date {
+  color: var(--tref-receiver-text);
+}
+.tref-history-id {
+  font-family: monospace;
+  font-size: 11px;
+  background: var(--tref-menu-hover);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.tref-history-badge {
+  font-size: 10px;
+  background: var(--tref-accent);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+`}},y=class{#e;#r;#t;#o;constructor(e,t={}){this.#e=e,this.#r=t.onReceive||(()=>{}),this.#t=t.onError||(()=>{}),this.#o=t.compact||!1,this.#i()}#i(){let e=this.#e;e.classList.add("tref-receiver"),this.#o&&e.classList.add("tref-receiver-compact"),e.setAttribute("role","region"),e.setAttribute("aria-label","Drop zone for TREF blocks"),e.setAttribute("aria-dropeffect","copy"),e.addEventListener("dragover",t=>{t.preventDefault(),t.dataTransfer&&(t.dataTransfer.dropEffect="copy"),e.classList.add("tref-receiver-active")}),e.addEventListener("dragleave",()=>{e.classList.remove("tref-receiver-active")}),e.addEventListener("drop",t=>{if(t.preventDefault(),e.classList.remove("tref-receiver-active"),!t.dataTransfer){this.#t(new Error("No data"));return}let i=L(t.dataTransfer);i?(e.classList.add("tref-receiver-success"),setTimeout(()=>e.classList.remove("tref-receiver-success"),1e3),this.#r(i)):(e.classList.add("tref-receiver-error"),setTimeout(()=>e.classList.remove("tref-receiver-error"),1e3),this.#t(new Error("Invalid TREF data")))})}get element(){return this.#e}showBlock(e){this.#e.innerHTML=e.toHTML(),this.#e.classList.add("tref-receiver-has-block")}clear(){this.#e.innerHTML=this.#e.dataset.placeholder||"Drop TREF here",this.#e.classList.remove("tref-receiver-has-block")}static getStyles(){return`
 .tref-receiver {
   border: 2px dashed var(--tref-accent);
   border-radius: 8px;
@@ -169,5 +272,5 @@ var u=".tref",g=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" w
     min-height: 48px;
   }
 }
-`}};function x(i){return new d(i)}function w(i){try{let e;if(typeof i=="string")e=i;else if(i&&typeof i.getData=="function")e=i.getData(c)||i.getData("application/json")||i.getData("text/plain");else return null;return e?x(JSON.parse(e)):null}catch{return null}}export{y as TREF_ICON_DATA_URL,g as TREF_ICON_SVG,c as TREF_MIME_TYPE,h as TrefReceiver,d as TrefWrapper,w as unwrap,x as wrap};
+`}};function E(n){return new v(n)}function L(n){try{let e;if(typeof n=="string")e=n;else if(n&&typeof n.getData=="function")e=n.getData(u)||n.getData("application/json")||n.getData("text/plain");else return null;return e?E(JSON.parse(e)):null}catch{return null}}async function C(n){if(!b(n))return{valid:!1,actual:"invalid block structure"};let t=new TextEncoder().encode(n.content),i=await crypto.subtle.digest("SHA-256",t),r=`sha256:${Array.from(new Uint8Array(i)).map(o=>o.toString(16).padStart(2,"0")).join("")}`;return r===n.id?{valid:!0}:{valid:!1,expected:r,actual:n.id}}export{T as TREF_ICON_DATA_URL,k as TREF_ICON_INVALID_SVG,x as TREF_ICON_SVG,u as TREF_MIME_TYPE,y as TrefReceiver,v as TrefWrapper,L as unwrap,C as validateBlock,E as wrap};
 //# sourceMappingURL=tref-block.js.map

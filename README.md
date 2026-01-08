@@ -51,8 +51,48 @@ wrapper.attachEvents(container.querySelector('.tref-wrapper'));
 ```
 
 - ICON is the drag handle (only the icon, not the entire block)
-- Actions appear on hover: "drag me" hint, copy, download
+- Actions appear on hover: copy content, copy JSON, download, history
+- **Auto-validates** SHA-256 on display – tampered blocks show red X icon
 - Status feedback in the shortId badge
+
+### SHA-256 Validation
+
+Every block's ID is a SHA-256 hash of its content. If content is modified, the hash won't match:
+
+```javascript
+// Automatic (runs on attachEvents)
+wrapper.attachEvents(element);  // Shows red X if invalid
+
+// Manual validation
+const result = await wrapper.validate();
+if (!result.valid) {
+  console.log('Tampered!', result.expected, result.actual);
+}
+
+// Standalone function
+import { validateBlock } from 'tref-block';
+const result = await validateBlock(block);
+```
+
+### Version History
+
+Track article versions with a simple JSON file:
+
+```javascript
+// Add history URL to wrapper element
+wrapperEl.dataset.history = 'history.json';
+
+// history.json format
+{
+  "current": "sha256:abc123...",
+  "versions": [
+    { "v": 2, "id": "sha256:abc...", "date": "2026-01-08" },
+    { "v": 1, "id": "sha256:def...", "date": "2026-01-01" }
+  ]
+}
+```
+
+Click the history icon in hover menu to see all versions.
 
 ### TrefReceiver – Accept TREF Blocks
 
@@ -148,12 +188,14 @@ doc/
 
 ## Status
 
-**MVP Complete** – Single-source architecture with browser bundle.
+**v0.3.0** – SHA-256 validation and version history.
 
 - TrefWrapper + TrefReceiver (drag-and-drop)
+- **SHA-256 validation** – auto-detects tampered content with red X icon
+- **Version history** – popup showing all versions with dates
 - Accessibility: ARIA, keyboard, focus-visible
 - Mobile/touch support: tap-to-toggle, long-press
-- Dropdown action menu with SVG icons
+- Dropdown action menu with SVG icons (Feather style)
 - CLI tool (`tref publish`, `tref validate`, `tref derive`)
 - MCP server for Claude Code integration
 - Live demo at [tref.lpmwfx.com](https://tref.lpmwfx.com)

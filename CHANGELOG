@@ -2,6 +2,30 @@
 
 Finished changes for TREF project.
 
+## [0.3.0] - 2026-01-08
+
+### Added
+- **SHA-256 Validation**: Automatic content integrity verification
+  - `wrapper.validate()` method returns `{ valid, expected, actual }`
+  - `validateBlock(block)` standalone function
+  - Auto-validation on `attachEvents()` (can disable with `validateOnAttach: false`)
+  - Visual indicator for invalid blocks: red X icon + "Modified content" warning
+  - `TREF_ICON_INVALID_SVG` export for custom use
+- **Version History**: Track article versions with history popup
+  - History button in hover menu (rotate-ccw icon)
+  - Fetches from `data-history` attribute URL
+  - Shows version list with dates and IDs
+  - `history.json` format: `{ current, versions: [{ v, id, date }] }`
+- New example pages: `examples/validation.html`, `examples/history.html`
+- Blog publishing guide: `doc/blog-publishing.md`
+
+### Changed
+- ID generation now based on content only (not entire block) for simpler validation
+- CSS: Added `.tref-invalid`, `.tref-warning` styles
+- browser.js: Updated to match content-based ID generation
+
+---
+
 ## [0.2.0] - 2026-01-07
 
 ### Added
