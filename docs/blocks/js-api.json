@@ -1,8 +1,9 @@
 {
   "v": 1,
+  "id": "sha256:b4307c40e44199921c54ba3a2ed9cc2a66c24fa3d7d335e3eff876f469513a0e",
   "content": "# JavaScript API\n\nBrowser library for creating and interacting with TREF blocks.\n\n## Include the script\n\n```html\n<script src=\"https://cdn.jsdelivr.net/npm/tref-block/dist/tref-block.js\"></script>\n```\n\nOr install from npm:\n\n```\nnpm install tref-block\n```\n\n## Create and display a block\n\n```javascript\nconst block = await TREF.publish(\"My knowledge\", {\n  author: \"Jane\",\n  refs: [{ type: \"url\", url: \"https://source.com\", title: \"Source\" }]\n});\n\nconst wrapper = new TREF.TrefWrapper(block);\ndocument.body.innerHTML = wrapper.toHTML();\nwrapper.attachEvents(document.querySelector('.tref-wrapper'));\n```\n\n## Derive from existing\n\nCreate a child block that links back to its parent, preserving lineage.\n\n```javascript\nconst child = await TREF.derive(parentBlock, \"New content based on parent\");\n```\n\n## Validate integrity\n\nVerify that a block's ID matches its content hash (tamper detection).\n\n```javascript\nconst isValid = await TREF.validate(block);\nconsole.log(isValid ? \"Block is authentic\" : \"Block has been tampered with\");\n```\n\n## Drag and drop\n\nTREF blocks are draggable by default. Create a receiver:\n\n```javascript\nconst receiver = new TREF.TrefReceiver(dropZoneElement, {\n  onReceive: (wrapper) => {\n    console.log(\"Received block:\", wrapper.block);\n  }\n});\n```",
   "meta": {
-    "created": "2026-01-08T19:26:01.234Z",
+    "created": "2026-01-08T19:33:29.589Z",
     "license": "CC-BY-4.0",
     "author": "TREF Documentation"
   },
@@ -12,6 +13,5 @@
       "url": "https://tref.lpmwfx.com/js-api.html",
       "title": "JavaScript API"
     }
-  ],
-  "id": "sha256:fa34d7013ae01db055cf228be66b505df1a5bd7c2b3b0e5e4b5fd2beb869e0e2"
+  ]
 }
