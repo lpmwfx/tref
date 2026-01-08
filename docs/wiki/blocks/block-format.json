@@ -1,0 +1,17 @@
+{
+  "v": 1,
+  "id": "sha256:e1985d630618679adf27588763615cdb38560fe9c910040367b9118f929c80dc",
+  "content": "# Block Format\n\nUnderstanding the TREF block structure.\n\n## Block Anatomy\n\nA TREF block is a JSON object with these fields:\n\n```json\n{\n  \"v\": 1,\n  \"id\": \"sha256:abc123...\",\n  \"content\": \"The actual text content\",\n  \"meta\": {\n    \"created\": \"2026-01-08T12:00:00Z\",\n    \"license\": \"CC-BY-4.0\",\n    \"author\": \"Author Name\"\n  },\n  \"refs\": [...],\n  \"parent\": \"sha256:parent...\"\n}\n```\n\n## Required Fields\n\n### v (version)\n\nAlways `1` for the current format version.\n\n### id\n\nSHA-256 hash of the content, prefixed with `sha256:`.\n\n```\nsha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n```\n\n### content\n\nThe actual text content. Can be plain text, Markdown, or any text format.\n\n### meta\n\nMetadata object containing:\n\n* `created` - ISO 8601 timestamp\n* `license` - License identifier (e.g., CC-BY-4.0)\n* `author` - Optional author name\n* `modified` - Optional modification timestamp\n* `lang` - Optional language code\n\n## Optional Fields\n\n### refs\n\nArray of reference objects. Each reference has a `type`:\n\n**URL Reference**\n\n```json\n{\n  \"type\": \"url\",\n  \"url\": \"https://example.com/source\",\n  \"title\": \"Source Title\"\n}\n```\n\n**Archive Reference** (for dead link recovery)\n\n```json\n{\n  \"type\": \"archive\",\n  \"url\": \"https://example.com/source\",\n  \"snippet\": \"Relevant text excerpt...\",\n  \"title\": \"Source Title\"\n}\n```\n\n**Search Reference** (for refinding)\n\n```json\n{\n  \"type\": \"search\",\n  \"query\": \"search terms to find source\"\n}\n```\n\n**Hash Reference** (for verification)\n\n```json\n{\n  \"type\": \"hash\",\n  \"alg\": \"sha256\",\n  \"value\": \"abc123...\"\n}\n```\n\n### parent\n\nID of the parent block when this block is derived from another.\n\n```json\n{\n  \"parent\": \"sha256:original-block-id...\"\n}\n```\n\n## ID Generation\n\nThe block ID is generated from the **content only**, not including metadata. This ensures:\n\n* Same content always produces same ID\n* Metadata changes don't break validation\n* Easy to verify integrity",
+  "meta": {
+    "created": "2026-01-08T22:01:32.018Z",
+    "license": "CC-BY-4.0",
+    "author": "TREF Documentation"
+  },
+  "refs": [
+    {
+      "type": "url",
+      "url": "https://tref.lpmwfx.com/wiki/pages/block-format.html",
+      "title": "Block Format"
+    }
+  ]
+}

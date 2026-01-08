@@ -1,12 +1,38 @@
 /**
  * @fileoverview TREF Block wrapper for display and interaction
  * Self-contained - no external dependencies
+ *
+ * AUTO-INITIALIZATION:
+ * CSS is automatically injected when this module loads.
+ * No manual setup required - just import and use.
  */
 
 /* global btoa, navigator, Blob, URL, document */
 
 /** File extension for TREF files */
 const TREF_EXTENSION = '.tref';
+
+/** Track if CSS has been injected */
+let cssInjected = false;
+
+/**
+ * Auto-inject CSS into document head (runs once on module load)
+ */
+function autoInjectCSS() {
+  if (cssInjected || typeof document === 'undefined') {
+    return;
+  }
+  if (document.getElementById('tref-auto-styles')) {
+    cssInjected = true;
+    return;
+  }
+
+  const style = document.createElement('style');
+  style.id = 'tref-auto-styles';
+  style.textContent = TrefWrapper.getStyles();
+  document.head.appendChild(style);
+  cssInjected = true;
+}
 
 /**
  * @typedef {object} TrefBlock
@@ -880,3 +906,6 @@ export async function validateBlock(block) {
     actual: block.id,
   };
 }
+
+// Auto-inject CSS when module loads in browser
+autoInjectCSS();

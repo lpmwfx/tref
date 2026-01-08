@@ -1,0 +1,17 @@
+{
+  "v": 1,
+  "id": "sha256:44f0f044ae8436841022a6dea50b7bcb072d66575a4de2f12c69ed0cafbbdf44",
+  "content": "# TREF Manual\n\nWelcome to the TREF documentation. TREF (Traceable Reference Format) is an open format for verifiable, shareable knowledge blocks.\n\n## What is TREF?\n\nTREF blocks are self-contained units of knowledge that combine:\n\n* **Content** - The actual text or data\n* **Metadata** - Author, license, timestamps\n* **References** - Source links, archived snippets, search prompts\n* **Lineage** - Parent block reference for derived content\n\nEach block has a unique SHA-256 ID generated from its content, making it tamper-evident and verifiable.\n\n## Quick Links\n\n* **Getting Started** - Install and create your first block\n* **Block Format** - Understand the structure\n* **CLI Reference** - Command-line tools\n* **JavaScript API** - Browser and Node.js integration\n\n## Why TREF?\n\nIn the AI era, knowledge needs backbone:\n\n* **Traceability** - Know where information came from\n* **Verifiability** - Detect if content was modified\n* **Portability** - Drag, copy, share without losing context\n* **Attribution** - References travel with the content",
+  "meta": {
+    "created": "2026-01-08T22:01:32.020Z",
+    "license": "CC-BY-4.0",
+    "author": "TREF Documentation"
+  },
+  "refs": [
+    {
+      "type": "url",
+      "url": "https://tref.lpmwfx.com/wiki/pages/home.html",
+      "title": "Home"
+    }
+  ]
+}

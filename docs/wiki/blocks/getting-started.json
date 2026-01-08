@@ -1,0 +1,17 @@
+{
+  "v": 1,
+  "id": "sha256:c7aa08104a1fe31fc1c1227e9c8d7abd0254b7ced6092ef38bdabae39df57b66",
+  "content": "# Getting Started\n\nGet up and running with TREF in minutes.\n\n## Installation\n\n### CLI\n\nInstall the TREF command-line tool:\n\n```bash\nnpm install -g tref-block\n```\n\nOr download a standalone executable from the releases page.\n\n### Browser\n\nAdd TREF to your website via CDN:\n\n```html\n<script type=\"module\">\n  import { TrefWrapper } from 'https://cdn.jsdelivr.net/npm/tref-block';\n</script>\n```\n\n### Node.js\n\nInstall as a dependency:\n\n```bash\nnpm install tref-block\n```\n\n## Create Your First Block\n\n### Using the CLI\n\n```bash\n# Create a block from text\ntref publish -c \"Hello, TREF!\"\n\n# Create from a file\ntref publish -f article.md\n\n# Create with references\ntref publish -c \"Fact with source\" -r \"url:https://example.com,title:Source\"\n```\n\n### Using JavaScript\n\n```javascript\nimport { publish, createDraft } from 'tref-block';\n\nconst draft = createDraft('My first TREF block', {\n  author: 'Your Name',\n  refs: [{\n    type: 'url',\n    url: 'https://example.com',\n    title: 'Source'\n  }]\n});\n\nconst block = publish(draft);\nconsole.log(block.id); // sha256:...\n```\n\n## Validate a Block\n\nCheck that a block hasn't been tampered with:\n\n```bash\ntref validate block.json\n```\n\n```javascript\nimport { validate } from 'tref-block';\n\nconst result = validate(block);\nif (result.valid) {\n  console.log('Block integrity verified');\n}\n```\n\n## Next Steps\n\n* Learn about the **Block Format**\n* Explore the **CLI Reference**\n* Read about **Deriving Blocks**",
+  "meta": {
+    "created": "2026-01-08T22:01:32.019Z",
+    "license": "CC-BY-4.0",
+    "author": "TREF Documentation"
+  },
+  "refs": [
+    {
+      "type": "url",
+      "url": "https://tref.lpmwfx.com/wiki/pages/getting-started.html",
+      "title": "Getting Started"
+    }
+  ]
+}

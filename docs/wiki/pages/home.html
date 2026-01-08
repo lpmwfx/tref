@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - TREF Manual</title>
+  <link rel="stylesheet" href="../../css/tref-site.css">
+  <link rel="stylesheet" href="../wiki.css">
+  <link rel="icon" href="../../img/favicon.ico">
+  <style id="tref-styles"></style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+  <nav class="nav"></nav>
+  <script src="../../js/nav.js"></script>
+
+  <!-- Mobile menu button -->
+  <button class="wiki-menu-btn" id="wiki-menu-btn" aria-label="Open menu">
+    <span>&#9776;</span>
+  </button>
+
+  <!-- Mobile overlay -->
+  <div class="wiki-overlay" id="wiki-overlay"></div>
+
+  <div class="wiki-layout">
+    <aside class="wiki-sidebar" id="wiki-sidebar"></aside>
+    <main class="wiki-main">
+      <article class="wiki-article">
+        <div id="wiki-content"></div>
+        <div id="wiki-tref"></div>
+      </article>
+    </main>
+  </div>
+
+  <script type="module">
+    import { TrefWrapper } from '../../js/tref-block.js';
+
+    document.getElementById('tref-styles').textContent = TrefWrapper.getStyles();
+
+    try {
+      const pagesRes = await fetch('../_pages.json');
+      if (!pagesRes.ok) throw new Error('Failed to load _pages.json');
+      const pagesData = await pagesRes.json();
+      renderSidebar(document.getElementById('wiki-sidebar'), pagesData, 'home');
+
+      const blockRes = await fetch('../blocks/home.json');
+      if (!blockRes.ok) throw new Error('Failed to load block');
+      const block = await blockRes.json();
+
+      document.getElementById('wiki-content').innerHTML = renderMarkdown(block.content);
+      hljs.configure({ ignoreUnescapedHTML: true });
+      document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+      const wrapper = new TrefWrapper(block);
+      document.getElementById('wiki-tref').innerHTML = wrapper.toHTML();
+      wrapper.attachEvents(document.querySelector('.tref-wrapper'));
+    } catch (err) {
+      console.error('Wiki error:', err);
+      document.getElementById('wiki-content').innerHTML = '<p style="color:red">Error: ' + err.message + '</p>';
+    }
+
+    function renderSidebar(container, data, currentSlug) {
+      const sections = {};
+      const noSection = [];
+      for (const page of data.pages) {
+        if (page.section) {
+          if (!sections[page.section]) sections[page.section] = [];
+          sections[page.section].push(page);
+        } else {
+          noSection.push(page);
+        }
+      }
+
+      let html = '<nav class="wiki-nav"><button class="wiki-close-btn" aria-label="Close menu">&times;</button><h2 class="wiki-nav-title">' + data.title + '</h2>';
+
+      for (const page of noSection) {
+        const active = page.slug === currentSlug ? ' active' : '';
+        html += '<a href="' + page.slug + '.html" class="wiki-link top-level' + active + '">' + page.title + '</a>';
+      }
+
+      let idx = 0;
+      for (const [section, pages] of Object.entries(sections)) {
+        const hasActive = pages.some(p => p.slug === currentSlug);
+        const collapsed = !hasActive ? ' collapsed' : '';
+        html += '<h3 class="wiki-section' + collapsed + '" data-section="' + idx + '">' + section + '</h3>';
+        html += '<div class="wiki-section-content' + collapsed + '" data-section="' + idx + '">';
+        for (const page of pages) {
+          const active = page.slug === currentSlug ? ' active' : '';
+          html += '<a href="' + page.slug + '.html" class="wiki-link' + active + '">' + page.title + '</a>';
+        }
+        html += '</div>';
+        idx++;
+      }
+
+      html += '</nav>';
+      container.innerHTML = html;
+
+      container.querySelectorAll('.wiki-section').forEach(el => {
+        el.addEventListener('click', () => {
+          const i = el.dataset.section;
+          el.classList.toggle('collapsed');
+          container.querySelector('.wiki-section-content[data-section="' + i + '"]').classList.toggle('collapsed');
+        });
+      });
+
+      // Mobile menu toggle
+      const menuBtn = document.getElementById('wiki-menu-btn');
+      const overlay = document.getElementById('wiki-overlay');
+      const closeBtn = container.querySelector('.wiki-close-btn');
+
+      function openMenu() {
+        container.classList.add('open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        container.classList.remove('open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      menuBtn.addEventListener('click', openMenu);
+      overlay.addEventListener('click', closeMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+      // Close on link click (mobile navigation)
+      container.querySelectorAll('.wiki-link').forEach(link => {
+        link.addEventListener('click', closeMenu);
+      });
+    }
+
+    function renderMarkdown(md) {
+      return md
+        .replace(/```(\w*)[\r\n]+([\s\S]*?)```/g, (_, lang, code) => '<pre><code class="' + (lang ? 'language-' + lang : '') + '">' + escapeHtml(code.trim()) + '</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+        .replace(/^---$/gm, '<hr>')
+        .replace(/^\* (.+)$/gm, '<li>$1</li>')
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>\n?)+/g, match => '<ul>' + match + '</ul>')
+        .split('\n').map(line => line.trim() === '' || line.startsWith('<') ? line : '<p>' + line + '</p>').join('\n')
+        .replace(/<p><\/p>/g, '');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+  </script>
+</body>
+</html>

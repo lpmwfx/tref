@@ -25,6 +25,7 @@
     "lint:fix": "eslint src/ --fix",
     "lint:css": "stylelint 'docs/**/*.css' 'src/**/*.css'",
     "lint:css:fix": "stylelint 'docs/**/*.css' 'src/**/*.css' --fix",
+    "lint:html": "html-validate 'docs/**/*.html' 'demo/**/*.html'",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
     "check": "npm run typecheck && npm run lint && npm run format:check",
@@ -36,7 +37,8 @@
     "build:cli": "npm run build:cli:bundle && npm run build:cli:pkg",
     "build:cli:bundle": "esbuild src/cli/index.js --bundle --platform=node --format=cjs --outfile=build/tref-cli.cjs && esbuild src/mcp/server.js --bundle --platform=node --format=cjs --outfile=build/tref-mcp.cjs",
     "build:cli:pkg": "pkg build/tref-cli.cjs --targets node18-linux-x64,node18-macos-x64,node18-macos-arm64,node18-win-x64 --output dist/tref && pkg build/tref-mcp.cjs --targets node18-linux-x64,node18-macos-x64,node18-macos-arm64,node18-win-x64 --output dist/tref-mcp",
-    "dev": "python3 -m http.server 8080 --directory ."
+    "dev": "python3 -m http.server 8080 --directory .",
+    "build:wiki": "node bin/build-wiki.js"
   },
   "keywords": [
     "tref",
@@ -61,6 +63,7 @@
     "@types/node": "^25.0.3",
     "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
+    "html-validate": "^10.5.0",
     "pkg": "^5.8.1",
     "prettier": "^3.7.4",
     "stylelint": "^16.26.1",

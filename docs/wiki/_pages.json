@@ -1,0 +1,25 @@
+{
+  "title": "TREF Manual",
+  "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "section": null
+    },
+    {
+      "slug": "block-format",
+      "title": "Block Format",
+      "section": "Basics"
+    },
+    {
+      "slug": "getting-started",
+      "title": "Getting Started",
+      "section": "Basics"
+    },
+    {
+      "slug": "integration",
+      "title": "Integration Guide",
+      "section": "Guides"
+    }
+  ]
+}
