@@ -1,57 +1,43 @@
 # PHASES
 
-Dynamic phase description for TREF project.
+TREF project phases - all complete.
 
-## Current Phase: 7 - Polish & Documentation
+## Phase 7: Polish & Documentation ✓
+- Shared nav.js with SVG icons
+- Open Graph meta tags for social sharing
+- Cache-busting for browser updates
 
-Final polish, testing, and documentation.
-
-### Remaining Tasks
-- Screen reader support (live regions for status announcements)
-- Manual testing (keyboard-only, mobile/touch)
-- CONTRIBUTING.md for new developers
-- UI/UX Build Guide on docs site
-
----
-
-## Completed Phases
-
-### Phase 6: CSS Architecture ✓
+## Phase 6: CSS Architecture ✓
 - Unified stylesheet (docs/css/tref-site.css)
 - Removed all inline styles from HTML
 - Dark mode via CSS custom properties
-- Grouped selectors for maintainability
 
-### Phase 5: Documentation Site ✓
+## Phase 5: Documentation Site ✓
 - Live site at tref.lpmwfx.com
 - Builder (no-code block creation)
 - Guide (CLI, API, MCP)
-- Examples (drag-drop, AI chat)
-- Auto TREF block generation from markdown
+- Examples (drag-drop, AI chat, validation, history)
 
-### Phase 4: CLI & MCP ✓
+## Phase 4: CLI & MCP ✓
 - `tref publish` - create blocks
 - `tref validate` - verify integrity
 - `tref derive` - create child blocks
 - `tref-mcp` - Claude Code integration
 
-### Phase 3: Wrapper JS ✓
-- TrefWrapper component (display, drag, copy, download)
-- TrefReceiver component (drop zones)
-- Accessibility (ARIA, keyboard, focus-visible)
+## Phase 3: Wrapper JS ✓
+- TrefWrapper (display, drag, copy, download)
+- TrefReceiver (drop zones)
+- SHA-256 validation with visual indicator
+- Version history popup
+- Accessibility (ARIA labels, keyboard, focus-visible)
 - Touch support (tap-to-toggle, long-press)
-- Theme support (light/dark via CSS variables)
-- Published to npm as tref-block@0.1.0
 
-### Phase 2: Publisher Core ✓
+## Phase 2: Publisher Core ✓
 - Content-based ID generation (sha256)
 - Canonical JSON serialization
 - Publish, derive, validate functions
-- File I/O (.tref files)
 
-### Phase 1: Block Format Specification ✓
+## Phase 1: Block Format Specification ✓
 - Block schema (v, id, content, meta, origin, refs, parent)
 - Reference types (url, archive, search, hash)
 - ID format: sha256:<64 hex chars>
-- Zod schemas with JSDoc types
-- License-as-format philosophy
