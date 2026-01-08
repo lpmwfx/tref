@@ -23,6 +23,7 @@ Finished changes for TREF project.
 - ID generation now based on content only (not entire block) for simpler validation
 - CSS: Added `.tref-invalid`, `.tref-warning` styles
 - browser.js: Updated to match content-based ID generation
+- Cache-busting: All docs HTML files use `?v=0.3.0` on CSS/JS imports
 
 ---
 

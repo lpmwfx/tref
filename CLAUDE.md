@@ -193,3 +193,30 @@ docs/css/tref-site.css    ← ALL site styles (single file)
 ## Language Rule
 
 **All content in English before push.** Translate any Danish text in code, docs, and project files to English before committing/pushing.
+
+## Release Process
+
+When releasing a new version:
+
+1. **Update version** in `package.json`
+2. **Update CHANGELOG** with new features
+3. **Update cache-busting strings** in all docs HTML files:
+   ```bash
+   find docs -name "*.html" -exec sed -i 's/?v=OLD/?v=NEW/g' {} \;
+   ```
+   Files use `?v=X.Y.Z` on CSS/JS imports to force browser cache refresh.
+4. **Build and test**: `npm run build && npm test`
+5. **Commit and tag**:
+   ```bash
+   git add -A && git commit -m "Release vX.Y.Z"
+   git tag -a vX.Y.Z -m "vX.Y.Z - description"
+   git push origin main --tags
+   ```
+6. **Create GitHub release** with release notes:
+   ```bash
+   gh release create vX.Y.Z --title "vX.Y.Z - Title" --notes "..."
+   ```
+
+## ID Generation
+
+**Block IDs use content-only SHA-256 hashing.** The ID is the hash of the `content` field only (not the entire block). This enables simple browser-side validation: hash content, compare to ID.
