@@ -1,49 +1,10 @@
 /**
- * @fileoverview Tests for ID generation
+ * @fileoverview Tests for ID generation (content-only hashing)
  */
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { toCanonicalJson, sha256, generateId, verifyId } from './id.js';
-
-describe('toCanonicalJson', () => {
-  it('sorts keys alphabetically', () => {
-    const block = { z: 1, a: 2, m: 3 };
-    const json = toCanonicalJson(block);
-    assert.equal(json, '{"a":2,"m":3,"z":1}');
-  });
-
-  it('sorts nested object keys', () => {
-    const block = { outer: { z: 1, a: 2 } };
-    const json = toCanonicalJson(block);
-    assert.equal(json, '{"outer":{"a":2,"z":1}}');
-  });
-
-  it('handles arrays without sorting elements', () => {
-    const block = { arr: [3, 1, 2] };
-    const json = toCanonicalJson(block);
-    assert.equal(json, '{"arr":[3,1,2]}');
-  });
-
-  it('sorts keys inside array objects', () => {
-    const block = { arr: [{ z: 1, a: 2 }] };
-    const json = toCanonicalJson(block);
-    assert.equal(json, '{"arr":[{"a":2,"z":1}]}');
-  });
-
-  it('removes id field', () => {
-    const block = { id: 'sha256:abc', content: 'test' };
-    const json = toCanonicalJson(block);
-    assert.equal(json, '{"content":"test"}');
-  });
-
-  it('produces no whitespace', () => {
-    const block = { a: 1, b: { c: 2 } };
-    const json = toCanonicalJson(block);
-    assert.ok(!json.includes(' '));
-    assert.ok(!json.includes('\n'));
-  });
-});
+import { sha256, generateId, verifyId } from './id.js';
 
 describe('sha256', () => {
   it('produces 64 character hex string', () => {
@@ -85,12 +46,12 @@ describe('generateId', () => {
     assert.equal(id1, id2);
   });
 
-  it('is deterministic regardless of key order', () => {
+  it('hashes content only - metadata changes do not affect ID', () => {
     const block1 = { v: 1, content: 'test', meta: { a: 1 } };
-    const block2 = { meta: { a: 1 }, content: 'test', v: 1 };
+    const block2 = { v: 1, content: 'test', meta: { b: 2, c: 3 } };
     const id1 = generateId(block1);
     const id2 = generateId(block2);
-    assert.equal(id1, id2);
+    assert.equal(id1, id2, 'same content should produce same ID regardless of metadata');
   });
 
   it('produces different IDs for different content', () => {
@@ -108,14 +69,22 @@ describe('generateId', () => {
     const id2 = generateId(block2);
     assert.equal(id1, id2);
   });
+
+  it('ID equals sha256 of content string', () => {
+    const content = 'The sky is blue.';
+    const block = { v: 1, content };
+    const id = generateId(block);
+    const expectedId = `sha256:${sha256(content)}`;
+    assert.equal(id, expectedId);
+  });
 });
 
 describe('verifyId', () => {
   it('returns true for valid ID', () => {
-    const block = { v: 1, content: 'test' };
-    const id = generateId(block);
-    const blockWithId = { ...block, id };
-    assert.equal(verifyId(blockWithId), true);
+    const content = 'test';
+    const id = `sha256:${sha256(content)}`;
+    const block = { v: 1, content, id };
+    assert.equal(verifyId(block), true);
   });
 
   it('returns false for invalid ID', () => {
@@ -136,45 +105,41 @@ describe('verifyId', () => {
     const block = { v: 1, content: 'test', id: 123 };
     assert.equal(verifyId(block), false);
   });
+
+  it('returns false for missing content', () => {
+    const block = { v: 1, id: 'sha256:abc' };
+    assert.equal(verifyId(block), false);
+  });
 });
 
-describe('ID generation determinism', () => {
-  it('produces same ID for realistic block', () => {
+describe('ID generation for validation', () => {
+  it('validates correctly when content matches ID', () => {
+    const content = '# Test Article\n\nThis is content.';
+    const id = `sha256:${sha256(content)}`;
     const block = {
       v: 1,
-      content: '# Test Article\n\nThis is content.',
+      id,
+      content,
       meta: {
         author: 'Test Author',
         created: '2025-01-06T12:00:00Z',
         license: 'TREF-1.0',
-        lang: 'en',
       },
-      refs: [{ type: 'url', url: 'https://example.com', title: 'Example' }],
     };
 
-    const id1 = generateId(block);
-    const id2 = generateId(block);
-    const id3 = generateId({ ...block }); // shallow copy
-
-    assert.equal(id1, id2);
-    assert.equal(id2, id3);
+    assert.equal(verifyId(block), true);
   });
 
-  it('produces same ID when fields reordered', () => {
-    const block1 = {
+  it('detects tampered content', () => {
+    const originalContent = 'The sky is blue.';
+    const id = `sha256:${sha256(originalContent)}`;
+    const block = {
       v: 1,
-      content: 'test',
-      meta: { created: '2025-01-06', license: 'MIT' },
-      refs: [],
+      id,
+      content: 'The sky is green.', // tampered!
+      meta: { created: '2025-01-06' },
     };
 
-    const block2 = {
-      refs: [],
-      meta: { license: 'MIT', created: '2025-01-06' },
-      v: 1,
-      content: 'test',
-    };
-
-    assert.equal(generateId(block1), generateId(block2));
+    assert.equal(verifyId(block), false);
   });
 });

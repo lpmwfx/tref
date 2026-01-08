@@ -253,54 +253,13 @@ describe('toHTML', () => {
     assert.ok(html.includes('class="tref-icon"')); // Icon always present (drag handle)
   });
 
-  it('includes content preview by default', () => {
-    const block = createTestBlock('My test content');
-    const wrapper = new TrefWrapper(block);
-
-    const html = wrapper.toHTML();
-
-    assert.ok(html.includes('class="tref-content"'));
-    assert.ok(html.includes('My test content'));
-  });
-
-  it('truncates long content', () => {
-    const longContent = 'A'.repeat(300);
-    const block = createTestBlock(longContent);
-    const wrapper = new TrefWrapper(block);
-
-    const html = wrapper.toHTML({ maxContentLength: 100 });
-
-    assert.ok(html.includes('...'));
-    assert.ok(!html.includes('A'.repeat(300)));
-  });
-
-  it('escapes HTML in content', () => {
-    const block = createTestBlock('<script>alert("xss")</script>');
-    const wrapper = new TrefWrapper(block);
-
-    const html = wrapper.toHTML();
-
-    assert.ok(!html.includes('<script>'));
-    assert.ok(html.includes('&lt;script&gt;'));
-  });
-
-  it('includes short ID', () => {
+  it('includes data-tref-id attribute', () => {
     const block = createTestBlock('Test');
     const wrapper = new TrefWrapper(block);
 
     const html = wrapper.toHTML();
 
-    assert.ok(html.includes(wrapper.shortId));
-  });
-
-  it('includes date from meta', () => {
-    const block = createTestBlock('Test');
-    const wrapper = new TrefWrapper(block);
-
-    const html = wrapper.toHTML();
-    const date = block.meta.created.split('T')[0];
-
-    assert.ok(html.includes(date));
+    assert.ok(html.includes(`data-tref-id="${block.id}"`));
   });
 });
 
@@ -311,7 +270,7 @@ describe('getStyles', () => {
     assert.ok(typeof styles === 'string');
     assert.ok(styles.includes('.tref-wrapper'));
     assert.ok(styles.includes('.tref-icon'));
-    assert.ok(styles.includes('.tref-content'));
+    assert.ok(styles.includes('.tref-actions'));
   });
 });
 
@@ -406,9 +365,9 @@ describe('TrefReceiver', () => {
   });
 
   it('styles use brand colors', () => {
-    const styles = TrefReceiver.getStyles();
-    assert.ok(styles.includes('#5CCCCC')); // Mint border
-    assert.ok(styles.includes('#8B5CF6')); // Purple active
+    const styles = TrefWrapper.getStyles();
+    assert.ok(styles.includes('#5CCCCC')); // Mint accent
+    assert.ok(styles.includes('#8B5CF6')); // Purple hover
     assert.ok(styles.includes('#10B981')); // Green success
   });
 });

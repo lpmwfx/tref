@@ -2,7 +2,7 @@
   "v": 1,
   "content": "# Claude MCP\n\nUse TREF directly from Claude Code with the MCP server.\n\n## Install\n\n```\nclaude mcp add tref -- tref-mcp\n```\n\n## Available tools\n\n- tref_publish - Create a new block\n- tref_derive - Derive from parent\n- tref_validate - Check block integrity\n- tref_list - List all blocks\n- tref_info - Get block metadata\n- tref_cat - Read block content",
   "meta": {
-    "created": "2026-01-07T18:51:32.490Z",
+    "created": "2026-01-08T19:26:01.234Z",
     "license": "CC-BY-4.0",
     "author": "TREF Documentation"
   },
@@ -13,5 +13,5 @@
       "title": "Claude MCP"
     }
   ],
-  "id": "sha256:e361be0ee62554657da62599d393caa0a54991a12720939159a21c8c786e431e"
+  "id": "sha256:e29d91113d0afa4f0f1113874d83ff2038f0d5cbd0627611a782b01939871471"
 }

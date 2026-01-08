@@ -26,29 +26,18 @@ function mdToHtml(md) {
     .replace(/<p><\/p>/g, '');
 }
 
-// Generate TREF block ID
-function generateId(draft) {
-  const sorted = JSON.stringify(sortKeys(draft));
-  const hash = createHash('sha256').update(sorted).digest('hex');
+// Generate TREF block ID (content-only for validation compatibility)
+function generateId(content) {
+  const hash = createHash('sha256').update(content).digest('hex');
   return `sha256:${hash}`;
-}
-
-function sortKeys(obj) {
-  if (Array.isArray(obj)) return obj.map(sortKeys);
-  if (obj !== null && typeof obj === 'object') {
-    const sorted = {};
-    for (const key of Object.keys(obj).sort()) {
-      sorted[key] = sortKeys(obj[key]);
-    }
-    return sorted;
-  }
-  return obj;
 }
 
 // Create TREF block from content
 function createBlock(content, meta = {}) {
-  const draft = {
+  const id = generateId(content);
+  return {
     v: 1,
+    id,
     content,
     meta: {
       created: new Date().toISOString(),
@@ -57,8 +46,6 @@ function createBlock(content, meta = {}) {
     },
     ...(meta.refs && { refs: meta.refs }),
   };
-  const id = generateId(draft);
-  return { ...draft, id };
 }
 
 // Process a markdown file

@@ -1,51 +1,9 @@
 /**
  * @fileoverview ID generation for TREF blocks
- * Content-based IDs using SHA-256 hash of canonical JSON
+ * Content-based IDs using SHA-256 hash of content field only
  */
 
 import { createHash } from 'node:crypto';
-
-/**
- * Recursively sort object keys alphabetically
- * @param {unknown} value - Value to sort
- * @returns {unknown} - Value with sorted keys (if object)
- */
-function sortKeys(value) {
-  if (value === null || typeof value !== 'object') {
-    return value;
-  }
-
-  if (Array.isArray(value)) {
-    return value.map(sortKeys);
-  }
-
-  /** @type {Record<string, unknown>} */
-  const sorted = {};
-  const keys = Object.keys(value).sort();
-
-  for (const key of keys) {
-    sorted[key] = sortKeys(/** @type {Record<string, unknown>} */ (value)[key]);
-  }
-
-  return sorted;
-}
-
-/**
- * Convert block to canonical JSON string
- * - Keys sorted alphabetically (recursive)
- * - No whitespace
- * - UTF-8 encoding
- *
- * @param {Record<string, unknown>} block - Block object (without id)
- * @returns {string} - Canonical JSON string
- */
-export function toCanonicalJson(block) {
-  // Remove id field if present (id is computed from other fields)
-  const copy = { ...block };
-  delete copy.id;
-  const sorted = sortKeys(copy);
-  return JSON.stringify(sorted);
-}
 
 /**
  * Generate SHA-256 hash of string
@@ -60,22 +18,25 @@ export function sha256(data) {
  * Generate content-based ID for a block
  * Format: sha256:<64 hex chars>
  *
- * @param {Record<string, unknown>} block - Block object (without id)
+ * ID is hash of content field only (not entire block).
+ * This enables simple validation: rehash content and compare.
+ *
+ * @param {Record<string, unknown>} block - Block object with content field
  * @returns {string} - Block ID in format sha256:<hash>
  */
 export function generateId(block) {
-  const canonical = toCanonicalJson(block);
-  const hash = sha256(canonical);
+  const content = /** @type {string} */ (block.content);
+  const hash = sha256(content);
   return `sha256:${hash}`;
 }
 
 /**
  * Verify that a block's ID matches its content
- * @param {Record<string, unknown>} block - Block with id field
- * @returns {boolean} - True if ID matches content
+ * @param {Record<string, unknown>} block - Block with id and content fields
+ * @returns {boolean} - True if ID matches content hash
  */
 export function verifyId(block) {
-  if (typeof block.id !== 'string') {
+  if (typeof block.id !== 'string' || typeof block.content !== 'string') {
     return false;
   }
   const expectedId = generateId(block);
