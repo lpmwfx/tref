@@ -1,3 +1,27 @@
 # TODO
 
-No pending tasks. Project complete.
+## Mobile Touch Copy-Paste for TREF Blocks
+
+Replace drag-and-drop with clipboard-based transfer on touch devices.
+
+### TrefWrapper (sender):
+1. Hold finger on icon (300ms) → copy to clipboard + "Copied ✓" popup
+2. Short tap → toggle menu (existing behavior)
+
+### TrefReceiver:
+1. First tap → "Tap to paste" indicator
+2. Second tap (within 3s) → paste from clipboard
+
+### Implementation:
+- [ ] Touch copy logic in TrefWrapper.attachEvents()
+- [ ] #showCopiedPopup() method
+- [ ] Touch paste logic in TrefReceiver
+- [ ] CSS for touch states (.touch-selected, .touch-ready, .tref-copied-popup)
+- [ ] Build and test on mobile
+
+### Detection:
+```javascript
+const isTouch = window.matchMedia('(pointer: coarse)').matches;
+```
+
+### File: src/wrapper/wrapper.js

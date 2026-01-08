@@ -436,33 +436,48 @@ export class TrefWrapper {
         }
       });
 
-      // Touch: tap toggles actions
+      // Touch: detect if touch device for copy-paste flow
+      const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+      /** @type {ReturnType<typeof setTimeout> | undefined} */
+      let touchTimer;
+      let touchCopied = false;
+
+      icon.addEventListener('touchstart', () => {
+        touchCopied = false;
+        touchTimer = setTimeout(async () => {
+          // Long-press (300ms) → copy to clipboard
+          touchCopied = true;
+          icon.classList.add('touch-selected');
+
+          try {
+            await this.copyToClipboard();
+            this.#showCopiedPopup(element);
+          } catch {
+            // Clipboard failed silently
+          }
+
+          // Reset visual after delay
+          setTimeout(() => {
+            icon.classList.remove('touch-selected');
+          }, 300);
+        }, 300);
+      });
+
       icon.addEventListener('touchend', e => {
-        // Only handle if not dragging
-        if (!icon.dataset.dragging) {
+        clearTimeout(touchTimer);
+        if (!touchCopied) {
+          // Short tap → toggle menu
           e.preventDefault();
           this.#toggleActions(element);
         }
+        touchCopied = false;
       });
 
-      // Touch: long-press (500ms) to start drag indication
-      /** @type {ReturnType<typeof setTimeout> | undefined} */
-      let longPressTimer;
-      icon.addEventListener('touchstart', () => {
-        longPressTimer = setTimeout(() => {
-          icon.dataset.dragging = 'true';
-          icon.style.transform = 'scale(1.15)';
-        }, 500);
-      });
-      icon.addEventListener('touchend', () => {
-        clearTimeout(longPressTimer);
-        delete icon.dataset.dragging;
-        icon.style.transform = '';
-      });
       icon.addEventListener('touchcancel', () => {
-        clearTimeout(longPressTimer);
-        delete icon.dataset.dragging;
-        icon.style.transform = '';
+        clearTimeout(touchTimer);
+        icon.classList.remove('touch-selected');
+        touchCopied = false;
       });
     }
 
