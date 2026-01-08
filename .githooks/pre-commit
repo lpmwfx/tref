@@ -4,5 +4,5 @@
 if [ -f "bin/build-docs.js" ]; then
   echo "Building docs..."
   node bin/build-docs.js
-  git add docs/*.html
+  git add docs/*.html docs/blocks/*.json
 fi
