@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Builder - TREF</title>
   <meta name="description" content="Create your own TREF block - no coding required.">
-  <link rel="stylesheet" href="css/tref-site.css">
+  <link rel="stylesheet" href="css/tref-site.css?v=0.3.0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
 </head>
 <body>
@@ -167,7 +167,7 @@
   </footer>
 
   <script type="module">
-    import { TrefWrapper, publish, getStyles } from './js/browser.js';
+    import { TrefWrapper, publish, getStyles } from './js/browser.js?v=0.3.0';
 
     // Inject TREF styles
     const style = document.createElement('style');
@@ -226,7 +226,7 @@
       const embedHtml = `<!-- TREF Block -->
 <div id="tref-block"></div>
 <script type="module">
-  import { TrefWrapper } from 'https://cdn.jsdelivr.net/npm/tref-block/dist/tref-block.js';
+  import { TrefWrapper } from 'https://cdn.jsdelivr.net/npm/tref-block/dist/tref-block.js?v=0.3.0';
 
   const block = ${JSON.stringify(block, null, 2)};
   const wrapper = new TrefWrapper(block);
