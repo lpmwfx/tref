@@ -169,6 +169,12 @@ body {
   color: var(--mint);
 }
 
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .theme-toggle {
   background: transparent;
   border: 1px solid rgb(255 255 255 / 20%);
@@ -977,7 +983,7 @@ textarea.form-input {
   }
 }
 
-/* Hide hamburger on desktop */
+/* Hamburger - hidden on desktop */
 .nav-toggle {
   display: none;
 }
