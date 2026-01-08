@@ -1,3 +1,22 @@
 # ISSUES
 
-No known issues.
+## Guide and Examples pages not mobile responsive
+
+Guide subpages and Examples are not mobile responsive.
+Only the Manual/Wiki page has proper mobile layout.
+
+Pages affected:
+- docs/cli.html
+- docs/js-api.html
+- docs/mcp.html
+- docs/examples.html
+
+Root cause: Missing site template in build script.
+Need unified responsive template like wiki uses.
+
+## TREF blocks not draggable on mobile in examples
+
+Due to missing mobile optimization, TREF blocks cannot be dragged
+on mobile devices in some examples (e.g., chat example).
+
+Touch events may be blocked by non-responsive layout or overlapping elements.
