@@ -93,3 +93,17 @@ Full name: **AIBlocks - Traceable Knowledge Format**
 - [x] Updated CHANGELOG with v0.2.0 release notes
 - [x] Built browser bundle and CLI executables
 - [x] Published tref-block@0.2.0 to npm (16.4 kB)
+
+## Release v0.3.0 (2026-01-08)
+
+- [x] SHA-256 validation with visual indicator (red X for tampered blocks)
+- [x] Version history feature with popup
+- [x] Content-only ID generation (consistent across all components)
+- [x] Cache-busting with ?v=0.3.0 query strings
+- [x] Pre-commit hook stages block JSON files
+- [x] Shared nav.js with SVG icon navigation
+- [x] Icons + labels on desktop, icons only on mobile
+- [x] Remove duplicate nav HTML from all 12 pages (-405 lines)
+- [x] Open Graph meta tags for social sharing previews
+- [x] og-image.png (1200x630) with TREF logo
+- [x] Updated CHANGELOG with v0.3.0 release notes
