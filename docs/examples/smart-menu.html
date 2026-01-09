@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Menu - TREF Examples</title>
+  <link rel="stylesheet" href="../css/tref-site.css?v=0.4.1">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='88' height='88' rx='12' fill='%232D1B4E' stroke='%235CCCCC' stroke-width='5'/></svg>">
+  <style>
+    .test-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 120px 1fr 120px;
+      min-height: calc(100vh - 300px);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .pos {
+      padding: 0.5rem;
+      background: var(--site-card-bg);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .pos-label {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-bottom: 0.5rem;
+    }
+    /* Positions */
+    .top-left { grid-column: 1; grid-row: 1; justify-content: flex-start; align-items: flex-start; }
+    .top-center { grid-column: 2; grid-row: 1; align-items: flex-start; }
+    .top-right { grid-column: 3; grid-row: 1; justify-content: flex-end; align-items: flex-start; }
+    .middle-left { grid-column: 1; grid-row: 2; align-items: center; justify-content: flex-start; }
+    .middle-center { grid-column: 2; grid-row: 2; }
+    .middle-right { grid-column: 3; grid-row: 2; align-items: center; justify-content: flex-end; }
+    .bottom-left { grid-column: 1; grid-row: 3; justify-content: flex-start; align-items: flex-end; }
+    .bottom-center { grid-column: 2; grid-row: 3; align-items: flex-end; }
+    .bottom-right { grid-column: 3; grid-row: 3; justify-content: flex-end; align-items: flex-end; }
+  </style>
+</head>
+<body>
+  <!-- Navigation (rendered by nav.js) -->
+  <nav class="nav"></nav>
+  <script src="../js/nav.js?v=0.4.1"></script>
+
+  <section class="hero" style="padding: 2rem;">
+    <h1>Smart Menu Positioning</h1>
+    <p class="hero-subtitle" style="font-size: 1.2rem;">
+      Hover over each TREF block to see how the menu adapts to screen edges.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="test-grid">
+        <div class="pos top-left">
+          <div class="pos-label">Top Left</div>
+          <div id="tref-top-left"></div>
+        </div>
+        <div class="pos top-center">
+          <div class="pos-label">Top Center</div>
+          <div id="tref-top-center"></div>
+        </div>
+        <div class="pos top-right">
+          <div class="pos-label">Top Right</div>
+          <div id="tref-top-right"></div>
+        </div>
+
+        <div class="pos middle-left">
+          <div class="pos-label">Middle Left</div>
+          <div id="tref-middle-left"></div>
+        </div>
+        <div class="pos middle-center">
+          <div class="pos-label">Middle Center</div>
+          <div id="tref-middle-center"></div>
+        </div>
+        <div class="pos middle-right">
+          <div class="pos-label">Middle Right</div>
+          <div id="tref-middle-right"></div>
+        </div>
+
+        <div class="pos bottom-left">
+          <div class="pos-label">Bottom Left</div>
+          <div id="tref-bottom-left"></div>
+        </div>
+        <div class="pos bottom-center">
+          <div class="pos-label">Bottom Center</div>
+          <div id="tref-bottom-center"></div>
+        </div>
+        <div class="pos bottom-right">
+          <div class="pos-label">Bottom Right</div>
+          <div id="tref-bottom-right"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem;">How It Works</h3>
+        <ul style="line-height: 1.8; padding-left: 1.5rem;">
+          <li><strong>Center</strong>: Menu is centered below the icon (default)</li>
+          <li><strong>Left edge</strong>: Menu aligns to left to stay on screen</li>
+          <li><strong>Right edge</strong>: Menu aligns to right to stay on screen</li>
+          <li><strong>Bottom edge</strong>: Menu appears above the icon instead</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><a href="../examples.html">Back to Examples</a></p>
+  </footer>
+
+  <script type="module">
+    import { TrefWrapper, publish, getStyles } from '../js/browser.js?v=0.4.1';
+
+    // Inject TREF styles
+    const style = document.createElement('style');
+    style.textContent = getStyles();
+    document.head.appendChild(style);
+
+    // Create blocks for each position
+    const positions = [
+      'top-left', 'top-center', 'top-right',
+      'middle-left', 'middle-center', 'middle-right',
+      'bottom-left', 'bottom-center', 'bottom-right'
+    ];
+
+    for (const pos of positions) {
+      const block = await publish(`Test: ${pos}`, {
+        author: 'Position Test',
+        refs: [{ type: 'url', url: 'https://example.com', title: 'Example' }]
+      });
+
+      const container = document.getElementById(`tref-${pos}`);
+      const wrapper = new TrefWrapper(block);
+      container.innerHTML = wrapper.toHTML();
+      wrapper.attachEvents(container.querySelector('.tref-wrapper'));
+    }
+  </script>
+</body>
+</html>

@@ -1292,3 +1292,37 @@ textarea.form-input {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* ==========================================================================
+   21. TREF COMPONENT OVERRIDES
+   Ensure hover menu displays correctly within site layout
+   ========================================================================== */
+
+/* Ensure wrapper's absolute children (hover menu) aren't clipped */
+.tref-wrapper {
+  overflow: visible;
+}
+
+/* Raise hover menu z-index above navigation */
+.tref-actions {
+  z-index: 200 !important;
+}
+
+/* Ensure action button icons are visible (fix color inheritance) */
+.tref-action {
+  color: #374151 !important;
+}
+
+.tref-action svg {
+  stroke: #374151 !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+html.dark .tref-action {
+  color: #e5e7eb !important;
+}
+
+html.dark .tref-action svg {
+  stroke: #e5e7eb !important;
+}

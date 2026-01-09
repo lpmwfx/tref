@@ -192,12 +192,11 @@ export class TrefWrapper {
   #toggleActions(element) {
     const actions = element.querySelector('.tref-actions');
     if (actions) {
-      const actionsEl = /** @type {HTMLElement} */ (actions);
-      const isVisible = actionsEl.style.opacity === '1';
-      actionsEl.style.opacity = isVisible ? '0' : '1';
+      const isVisible = actions.classList.contains('tref-actions-visible');
+      actions.classList.toggle('tref-actions-visible', !isVisible);
       if (!isVisible) {
         // Focus first action button
-        const firstBtn = actionsEl.querySelector('button');
+        const firstBtn = actions.querySelector('button');
         if (firstBtn) {
           /** @type {HTMLElement} */ (firstBtn).focus();
         }
@@ -525,7 +524,8 @@ export class TrefWrapper {
   z-index: 100;
   margin-top: 4px;
 }
-.tref-wrapper:hover .tref-actions {
+.tref-wrapper:hover .tref-actions,
+.tref-actions.tref-actions-visible {
   opacity: 1;
   visibility: visible;
 }
