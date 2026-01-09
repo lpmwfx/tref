@@ -14,42 +14,51 @@ Pages affected:
 Root cause: Missing site template in build script.
 Need unified responsive template like wiki uses.
 
-## Wiki pages text overflow on mobile
+## Wiki pages text overflow on mobile - FIXED
+
+**Root cause:** CSS Grid children have `min-width: auto` by default, preventing
+shrinking below content size. Also needed `word-break: break-all` for inline code.
+
+**Fixes in wiki.css:**
+- Added `min-width: 0` to `.wiki-layout`, `.wiki-main`, `.wiki-article`
+- Added `overflow-x: hidden` to containers
+- Changed inline code to `word-break: break-all` for SHA-256 hashes
+- Code blocks now use `max-width: calc(100vw - 2rem)` with scrollable content
+
+## Guide cards too tall on desktop - FIXED
+
+**Root cause:** `.card-grid` goes to 4 columns at 1024px, but container is 800px.
+
+**Fix:** Added `.card-grid--narrow` modifier class (max 2 columns) to guide.html and examples.html.
+
+## Builder dark theme - input text invisible - FIXED
+
+**Root cause:** `--gray-100` is remapped to a dark color in dark mode, so
+`color: var(--gray-100)` became dark-on-dark.
+
+**Fix:** Changed to fixed hex color `#f1f5f9` in tref-site.css:645
+
+## Example cards not responsive on desktop - FIXED
+
+Same fix as guide.html: Added `.card-grid--narrow` class.
+
+## Wiki pages inconsistent fonts
 
 URL: http://localhost:8888/wiki/pages/block-format.html
 
-In mobile mode:
-- Long text (SHA-256 hashes in code blocks) overflows to the right
-- Code blocks need `overflow-x: auto` or `word-break`
-- Font styling differs from desktop (missing or different font)
+Font styling is not consistent across wiki pages.
+Some pages have different fonts than others.
 
-See: screenshot/image copy 3.png
+Need to ensure all wiki pages use the same font stack.
 
-## Guide cards too tall on desktop
+## AI Chat example - ugly form and stacked source blocks - FIXED
 
-URL: http://localhost:8888/guide.html
+**Root cause:** Chat CSS styles were removed during refactor.
 
-Cards are too tall in desktop mode - should be more square-shaped.
-Same issue as examples.html cards.
-
-## Builder dark theme - input text invisible
-
-URL: http://localhost:8888/builder.html
-
-In dark mode, text in input fields is not visible.
-Missing CSS for input field colors in dark theme.
-
-Note: Console errors about `content_script.js` are browser extension related, not our code.
-
-## Example cards not responsive on desktop
-
-URL: http://localhost:8888/examples.html
-
-Cards on examples.html don't arrange responsively.
-- Desktop: Cards are tall and ugly (not well-proportioned)
-- Mobile: Cards stack nicely
-
-Need CSS grid/flexbox adjustment for desktop card layout.
+**Fix:** Added section 11 to tref-site.css with chat styling:
+- `.chat-send` button with TREF gradient
+- `#source-blocks` with flexbox horizontal layout
+- Full dark mode support
 
 ## TREF blocks not draggable on mobile in examples
 
