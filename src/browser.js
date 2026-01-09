@@ -36,26 +36,6 @@ import {
  */
 
 /**
- * Sort object keys recursively for canonical JSON
- * @param {unknown} obj
- * @returns {unknown}
- */
-function sortKeys(obj) {
-  if (Array.isArray(obj)) {
-    return obj.map(sortKeys);
-  }
-  if (obj !== null && typeof obj === 'object') {
-    const sorted = /** @type {Record<string, unknown>} */ ({});
-    const record = /** @type {Record<string, unknown>} */ (obj);
-    for (const key of Object.keys(record).sort()) {
-      sorted[key] = sortKeys(record[key]);
-    }
-    return sorted;
-  }
-  return obj;
-}
-
-/**
  * SHA-256 hash using Web Crypto API
  * @param {string} data
  * @returns {Promise<string>}
@@ -69,13 +49,12 @@ async function sha256(data) {
 }
 
 /**
- * Generate block ID from draft
- * @param {Omit<TrefBlock, 'id'>} draft
+ * Generate block ID from content only
+ * @param {string} content - The content to hash
  * @returns {Promise<string>}
  */
-async function generateId(draft) {
-  const canonical = JSON.stringify(sortKeys(draft));
-  const hash = await sha256(canonical);
+async function generateId(content) {
+  const hash = await sha256(content);
   return `sha256:${hash}`;
 }
 
@@ -127,7 +106,7 @@ export function createDraft(content, options = {}) {
  */
 export async function publish(content, options = {}) {
   const draft = createDraft(content, options);
-  const id = await generateId(draft);
+  const id = await generateId(content);
   return /** @type {TrefBlock} */ ({ ...draft, id });
 }
 
@@ -150,14 +129,13 @@ export async function derive(parent, content, options = {}) {
 }
 
 /**
- * Validate a block's integrity
+ * Validate a block's integrity (content-only hash)
  * @param {TrefBlock} block
  * @returns {Promise<boolean>}
  */
 export async function validate(block) {
-  const { id, ...rest } = block;
-  const expectedId = await generateId(rest);
-  return id === expectedId;
+  const expectedId = await generateId(block.content);
+  return block.id === expectedId;
 }
 
 /**
