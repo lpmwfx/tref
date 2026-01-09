@@ -208,8 +208,11 @@ function generatePageHtml(slug, title, section) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title} - TREF Manual</title>
-  <link rel="stylesheet" href="../../css/tref-site.css">
-  <link rel="stylesheet" href="../wiki.css">
+  <!-- Vanilla Framework (base) -->
+  <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-4.16.0.min.css">
+  <!-- TREF overrides -->
+  <link rel="stylesheet" href="../../css/tref-site.css?v=0.5.1">
+  <link rel="stylesheet" href="../wiki.css?v=0.5.0">
   <link rel="icon" href="../../img/favicon.ico">
   <style id="tref-styles"></style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">

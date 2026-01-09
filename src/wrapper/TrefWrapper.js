@@ -2,7 +2,7 @@
  * @fileoverview TrefWrapper - displays a TREF block with drag/copy/download actions
  */
 
-/* global btoa, navigator, Blob, URL, document */
+/* global btoa, navigator, Blob, URL, document, window, requestAnimationFrame */
 
 import {
   TREF_EXTENSION,
@@ -186,6 +186,50 @@ export class TrefWrapper {
   }
 
   /**
+   * Position actions menu within viewport bounds
+   * @param {HTMLElement} actions - The actions element to position
+   */
+  #positionActions(actions) {
+    // Reset to default centered position first
+    actions.style.left = '50%';
+    actions.style.right = 'auto';
+    actions.style.transform = 'translateX(-50%)';
+    actions.style.top = '100%';
+    actions.style.bottom = 'auto';
+    actions.style.marginTop = '4px';
+    actions.style.marginBottom = '0';
+
+    // Wait for next frame so browser calculates position
+    requestAnimationFrame(() => {
+      const rect = actions.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const padding = 8; // Minimum distance from edge
+
+      // Check horizontal overflow
+      if (rect.left < padding) {
+        // Overflows left - align to left edge
+        actions.style.left = '0';
+        actions.style.transform = 'none';
+      } else if (rect.right > viewportWidth - padding) {
+        // Overflows right - align to right edge
+        actions.style.left = 'auto';
+        actions.style.right = '0';
+        actions.style.transform = 'none';
+      }
+
+      // Check vertical overflow (menu below viewport)
+      if (rect.bottom > viewportHeight - padding) {
+        // Show above instead of below
+        actions.style.top = 'auto';
+        actions.style.bottom = '100%';
+        actions.style.marginTop = '0';
+        actions.style.marginBottom = '4px';
+      }
+    });
+  }
+
+  /**
    * Toggle actions visibility (for keyboard/touch)
    * @param {HTMLElement} element
    */
@@ -195,6 +239,8 @@ export class TrefWrapper {
       const isVisible = actions.classList.contains('tref-actions-visible');
       actions.classList.toggle('tref-actions-visible', !isVisible);
       if (!isVisible) {
+        // Position menu when showing (for touch devices)
+        this.#positionActions(/** @type {HTMLElement} */ (actions));
         // Focus first action button
         const firstBtn = actions.querySelector('button');
         if (firstBtn) {
@@ -396,47 +442,12 @@ export class TrefWrapper {
       });
     }
 
-    // Smart menu positioning on hover
+    // Smart menu positioning on hover (desktop)
     const actionsEl = element.querySelector('.tref-actions');
     if (actionsEl) {
       const actions = /** @type {HTMLElement} */ (actionsEl);
-
       element.addEventListener('mouseenter', () => {
-        // Reset to default centered position first
-        actions.style.left = '50%';
-        actions.style.right = 'auto';
-        actions.style.transform = 'translateX(-50%)';
-        actions.style.top = '100%';
-        actions.style.bottom = 'auto';
-
-        // Wait for next frame so browser calculates position
-        requestAnimationFrame(() => {
-          const rect = actions.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
-          const padding = 8; // Minimum distance from edge
-
-          // Check horizontal overflow
-          if (rect.left < padding) {
-            // Overflows left - align to left edge
-            actions.style.left = '0';
-            actions.style.transform = 'none';
-          } else if (rect.right > viewportWidth - padding) {
-            // Overflows right - align to right edge
-            actions.style.left = 'auto';
-            actions.style.right = '0';
-            actions.style.transform = 'none';
-          }
-
-          // Check vertical overflow (menu below viewport)
-          if (rect.bottom > viewportHeight - padding) {
-            // Show above instead of below
-            actions.style.top = 'auto';
-            actions.style.bottom = '100%';
-            actions.style.marginTop = '0';
-            actions.style.marginBottom = '4px';
-          }
-        });
+        this.#positionActions(actions);
       });
     }
 

@@ -25,6 +25,14 @@ All searches, findings, links for TREF project.
 - registerTool() with Zod schemas for input validation
 - IMPORTANT: Use console.error() not console.log() in stdio servers
 
+### Vanilla Framework (CSS)
+- https://vanillaframework.io/docs - Official documentation
+- CDN: https://assets.ubuntu.com/v1/vanilla_framework_version_4_38_0_min.css
+- Grid: .grid-row, .grid-col-*, .grid-row--50-50, .grid-row--25-75
+- Responsive grid: .grid-row--50-50-on-large, .grid-col-start-{breakpoint}{index}
+- Utilities: u-hide, u-hide--small, u-no-margin, u-align--center, u-vertically-center
+- Breakpoints: small (<= 620px), large (>= 1036px)
+
 ## Search Terms
 - "JSDoc TypeScript checking JavaScript"
 - "Zod runtime validation"
