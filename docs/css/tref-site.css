@@ -73,13 +73,20 @@ html.dark {
 }
 
 /* ==========================================================================
-   2. BASE RESET
+   2. BASE RESET - Mobile First
    ========================================================================== */
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -88,6 +95,28 @@ body {
   color: var(--site-text);
   background: var(--site-bg);
   transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Prevent images and media from breaking layout */
+img,
+video,
+iframe,
+embed,
+object,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent pre/code from breaking layout */
+pre,
+code {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-wrap: break-word;
 }
 
 /* ==========================================================================
@@ -97,7 +126,20 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
 }
 
 .section {
@@ -414,7 +456,7 @@ body {
 }
 
 /* ==========================================================================
-   9. GRID PATTERN - All grid layouts
+   9. GRID PATTERN - Mobile First Responsive Grids
    ========================================================================== */
 
 .card-grid,
@@ -422,32 +464,141 @@ body {
 .comparison,
 .form-row {
   display: grid;
-  gap: 2rem;
-}
-
-.card-grid {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.feature-grid {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
-.comparison {
-  grid-template-columns: 1fr 1fr;
-  margin: 2rem 0;
-}
-
-.form-row {
-  grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-@media (width <= 600px) {
-  .comparison,
+/* Card grid - always responsive */
+.card-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    gap: 2rem;
+  }
+}
+
+/* Feature grid */
+.feature-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .feature-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Comparison - side by side on tablet+ */
+.comparison {
+  grid-template-columns: 1fr;
+  margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .comparison {
+    grid-template-columns: 1fr 1fr;
+    margin: 2rem 0;
+    gap: 2rem;
+  }
+}
+
+/* Form row */
+.form-row {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
   .form-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ==========================================================================
+   9b. RESPONSIVE GRID UTILITIES
+   ========================================================================== */
+
+/* Use these classes in HTML for responsive grids */
+
+/* .grid-cols-1 = always 1 column */
+.grid-cols-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* .grid-cols-2 = 1 col mobile, 2 cols tablet+ */
+.grid-cols-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* .grid-cols-3 = 1 col mobile, 2 cols tablet, 3 cols desktop */
+.grid-cols-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* .grid-cols-4 = 1/2/4 responsive */
+.grid-cols-4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 480px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Stack on mobile utility */
+.stack-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stack-mobile {
+    flex-direction: row;
   }
 }
 
@@ -741,16 +892,25 @@ textarea.form-input {
 }
 
 /* ==========================================================================
-   16. CHAT DEMO (examples/ai-chat.html)
+   16. CHAT DEMO (examples/ai-chat.html) - Mobile First
    ========================================================================== */
 
 .chat-messages {
-  height: 250px;
+  min-height: 150px;
+  max-height: 250px;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .chat-messages {
+    min-height: 200px;
+    max-height: 300px;
+    padding: 1rem;
+  }
 }
 
 .chat-msg {
@@ -927,34 +1087,156 @@ textarea.form-input {
 }
 
 /* ==========================================================================
-   19. RESPONSIVE
+   19. RESPONSIVE - Mobile First Breakpoints
    ========================================================================== */
 
-@media (width <= 768px) {
+/*
+   Breakpoints:
+   - Mobile: < 480px (default)
+   - Small: 480px+ (large phones, small tablets)
+   - Medium: 640px+ (tablets)
+   - Large: 768px+ (small laptops)
+   - XL: 1024px+ (desktops)
+*/
+
+/* --- MOBILE (default, no media query) --- */
+
+/* Hero mobile */
+.hero {
+  padding: 2rem 1rem;
+}
+
+.hero h1 {
+  font-size: 1.75rem;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+}
+
+.hero-cta {
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Nav mobile */
+.nav {
+  padding: 0.75rem 1rem;
+}
+
+.nav-links {
+  gap: 0.5rem;
+}
+
+.nav-label {
+  display: none;
+}
+
+.nav-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Section mobile */
+.section {
+  padding: 2rem 0;
+}
+
+/* Card mobile */
+.card {
+  padding: 1.25rem;
+}
+
+/* --- SMALL (480px+) --- */
+@media (min-width: 480px) {
   .hero h1 {
     font-size: 2rem;
   }
 
+  .hero-cta {
+    flex-direction: row;
+  }
+}
+
+/* --- MEDIUM (640px+) --- */
+@media (min-width: 640px) {
+  .hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 2.25rem;
+  }
+
   .hero-subtitle {
-    font-size: 1.1rem;
-  }
-
-  /* Mobile: icon-only navigation */
-  .nav-links {
-    gap: 0.75rem;
-  }
-
-  .nav-label {
-    display: none;
-  }
-
-  .nav-icon svg {
-    width: 24px;
-    height: 24px;
+    font-size: 1.2rem;
   }
 
   .section {
-    padding: 2rem 0;
+    padding: 3rem 0;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+}
+
+/* --- LARGE (768px+) --- */
+@media (min-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .nav-label {
+    display: inline;
+  }
+
+  .nav-links {
+    gap: 1.25rem;
+  }
+
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* --- XL (1024px+) --- */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 4rem 2rem;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+
+  .card {
+    padding: 2rem;
+  }
+
+  .nav {
+    padding: 1rem 2rem;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
   }
 }
 
