@@ -2,6 +2,37 @@
 
 Finished changes for TREF project.
 
+## [0.4.0] - 2026-01-09 (WIP)
+
+### Added
+- **Smart Hover Menu Positioning**: Menu adapts to viewport boundaries
+  - Centered by default
+  - Shifts left/right when near screen edges
+  - Appears above when near bottom of viewport
+  - Uses `requestAnimationFrame` for accurate positioning
+- **Mobile Touch Copy-Paste**: Clipboard-based transfer on touch devices
+  - Long-press icon (300ms) → copy to clipboard + "Copied ✓" popup
+  - Tap receiver → "Tap to paste" state → tap again → paste
+- **Mobile-First CSS**: Responsive design across all screen sizes
+  - Breakpoints: 480px, 640px, 768px, 1024px
+  - Code blocks scroll horizontally on mobile
+  - Touch-friendly hit areas (44×44px minimum)
+
+### Changed
+- **Refactored wrapper.js** into focused modules:
+  - `shared.js` - Constants, icons, validation
+  - `TrefWrapper.js` - Sender component + CSS
+  - `TrefReceiver.js` - Receiver component + CSS
+  - `index.js` - Entry point, re-exports
+- Simplified `doc/TrefBlockUIUX.md` to pure UI/UX spec (152 lines vs 796)
+
+### Fixed
+- SHA-256 validation mismatch (publish now hashes content only)
+- Code block overflow on mobile
+- Wiki sidebar height on mobile (uses 100dvh)
+
+---
+
 ## [0.3.0] - 2026-01-08
 
 ### Added
