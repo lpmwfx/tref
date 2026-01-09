@@ -466,8 +466,7 @@ export class TrefWrapper {
 .tref-actions {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   display: flex;
   align-items: center;
   gap: 2px;

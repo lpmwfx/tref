@@ -89,8 +89,7 @@ var T=".tref",h="application/vnd.tref+json",g=`<svg xmlns="http://www.w3.org/200
 .tref-actions {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   display: flex;
   align-items: center;
   gap: 2px;
