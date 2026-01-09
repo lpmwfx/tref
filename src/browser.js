@@ -32,7 +32,7 @@ import {
 // ========== Browser-specific: Crypto functions ==========
 
 /**
- * @typedef {import('./wrapper/wrapper.js').TrefBlock} TrefBlock
+ * @typedef {import('./wrapper/shared.js').TrefBlock} TrefBlock
  */
 
 /**

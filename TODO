@@ -1,6 +1,31 @@
 # TODO
 
-## Mobile Touch Copy-Paste for TREF Blocks
+## Refactor wrapper.js (prerequisite for touch features) ✅ DONE
+
+Split 930+ line wrapper.js into focused modules.
+
+### Structure:
+```
+src/wrapper/
+├── index.js          ← Entry point, re-exports, auto-inject
+├── TrefWrapper.js    ← Wrapper class + its CSS + touch copy
+├── TrefReceiver.js   ← Receiver class + its CSS + touch paste
+├── shared.js         ← Constants, icons, validation
+├── wrapper.js        ← Legacy re-export (backwards compat)
+```
+
+### Completed:
+- [x] Create shared.js (constants, icons, validation)
+- [x] Create TrefWrapper.js (class + getStyles + #showCopiedPopup)
+- [x] Create TrefReceiver.js (class + getStyles + touch paste)
+- [x] Create index.js (re-exports, auto-inject)
+- [x] Update build script (package.json)
+- [x] Verify npm build works
+- [x] All 136 tests pass
+
+---
+
+## Mobile Touch Copy-Paste for TREF Blocks ✅ DONE (included in refactor)
 
 Replace drag-and-drop with clipboard-based transfer on touch devices.
 
@@ -13,15 +38,86 @@ Replace drag-and-drop with clipboard-based transfer on touch devices.
 2. Second tap (within 3s) → paste from clipboard
 
 ### Implementation:
-- [ ] Touch copy logic in TrefWrapper.attachEvents()
-- [ ] #showCopiedPopup() method
-- [ ] Touch paste logic in TrefReceiver
-- [ ] CSS for touch states (.touch-selected, .touch-ready, .tref-copied-popup)
-- [ ] Build and test on mobile
+- [x] Touch copy logic in TrefWrapper.attachEvents()
+- [x] #showCopiedPopup() method
+- [x] Touch paste logic in TrefReceiver
+- [x] CSS for touch states (.touch-selected, .touch-ready, .tref-copied-popup)
+- [ ] Test on real mobile device
 
-### Detection:
-```javascript
-const isTouch = window.matchMedia('(pointer: coarse)').matches;
+### Files: src/wrapper/TrefWrapper.js, src/wrapper/TrefReceiver.js
+
+---
+
+## Unified Site Build (build-site.js)
+
+Replace build-wiki.js with unified build script for entire docs site.
+
+### Goal:
+One template, consistent responsive layout across all pages.
+
+### Structure:
+```
+doc/
+├── wiki/           ← Markdown articles (existing)
+├── guide/          ← CLI, JS API, MCP guides
+└── examples/       ← Examples
+
+bin/build-site.js   ← Builds ALL to docs/
+
+docs/               ← Output (GitHub Pages)
+├── wiki/
+├── guide/
+├── examples/
+└── index.html
 ```
 
-### File: src/wrapper/wrapper.js
+### Implementation:
+- [ ] Create shared HTML template with responsive layout
+- [ ] Migrate build-wiki.js → build-site.js
+- [ ] Add guide section build (doc/guide/*.md → docs/guide/)
+- [ ] Add examples section build
+- [ ] Unified CSS with breakpoints (mobile/tablet/desktop)
+- [ ] Test all devices
+
+### Breakpoints:
+| Device | Width | Pointer | Layout |
+|--------|-------|---------|--------|
+| Mobile | <640px | coarse | Stacked, slide-in nav |
+| Tablet | 640-1024px | coarse/fine | Sidebar optional |
+| Desktop | >1024px | fine | Fixed sidebar |
+
+---
+
+## Auto-Generated API Documentation
+
+Generate documentation from JSDoc comments in source files.
+
+### Goal:
+- Script parses src/*.js JSDoc comments
+- Outputs markdown or HTML API reference
+- Builds to docs/api/ section on site
+
+### Implementation:
+- [ ] Research: jsdoc, typedoc, or custom parser
+- [ ] Create bin/build-api-docs.js script
+- [ ] Generate docs for each module:
+  - TrefWrapper (methods, options, CSS)
+  - TrefReceiver (methods, options, CSS)
+  - Helpers (wrap, unwrap, validateBlock)
+  - Constants (TREF_MIME_TYPE, icons)
+- [ ] Add API section to site navigation
+- [ ] Integrate with build-site.js
+
+### Output structure:
+```
+docs/api/
+├── index.html        ← API overview
+├── TrefWrapper.html  ← Class reference
+├── TrefReceiver.html ← Class reference
+└── helpers.html      ← Utility functions
+```
+
+### Candidate tools:
+- **typedoc** - TypeScript/JSDoc → HTML/JSON
+- **jsdoc** - Classic JSDoc → HTML
+- **Custom** - Parse JSDoc, output markdown for build-site.js
