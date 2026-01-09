@@ -1,10 +1,7 @@
-/* TREF Site Styles
- * Uses Vanilla Framework as base (loaded via HTML)
- * This file contains ONLY TREF-specific overrides
- */
+/* TREF Site Styles - Unified */
 
 /* ==========================================================================
-   1. CSS VARIABLES - Brand & Theme
+   1. CSS VARIABLES
    ========================================================================== */
 
 :root {
@@ -13,7 +10,7 @@
   --mint: #5CCCCC;
   --dark-purple: #2D1B4E;
 
-  /* Grays (for dark mode compat) */
+  /* Grays */
   --gray-100: #f1f5f9;
   --gray-200: #e2e8f0;
   --gray-300: #cbd5e1;
@@ -24,13 +21,18 @@
   --gray-800: #1e293b;
   --gray-900: #0f172a;
 
-  /* Theme (light mode) */
+  /* Semantic */
+  --success: #10B981;
+  --error: #ef4444;
+
+  /* Theme (light mode defaults) */
   --site-bg: #f8fafc;
   --site-text: var(--gray-800);
   --site-text-muted: var(--gray-600);
   --site-card-bg: #fff;
   --site-card-shadow: 0 4px 12px rgb(0 0 0 / 5%);
   --site-section-alt: #fff;
+  --site-highlight-bg: rgb(92 204 204 / 15%);
 
   /* TREF component vars (light) */
   --tref-menu-bg: #fff;
@@ -45,7 +47,7 @@
   --tref-receiver-block-bg: #fff;
 }
 
-/* Dark mode */
+/* Dark mode overrides */
 html.dark {
   --site-bg: #0f172a;
   --site-text: #e2e8f0;
@@ -53,6 +55,7 @@ html.dark {
   --site-card-bg: #1e293b;
   --site-card-shadow: 0 4px 12px rgb(0 0 0 / 30%);
   --site-section-alt: #1e293b;
+  --site-highlight-bg: rgb(92 204 204 / 10%);
   --gray-100: #1e293b;
   --gray-200: #334155;
 
@@ -70,37 +73,97 @@ html.dark {
 }
 
 /* ==========================================================================
-   2. BASE OVERRIDES - Minimal additions to Vanilla
+   2. BASE RESET - Mobile First
    ========================================================================== */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html {
-  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--site-bg);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
   color: var(--site-text);
+  background: var(--site-bg);
   transition: background 0.3s, color 0.3s;
-  overflow-x: hidden;
   width: 100%;
+  min-height: 100vh;
+  /* Prevent horizontal scroll by constraining content, not hiding overflow */
+  overflow-x: clip;
 }
 
-/* Prevent any element from causing horizontal scroll */
-img, video, iframe, pre, code, table {
+/* Prevent images and media from breaking layout */
+img,
+video,
+iframe,
+embed,
+object,
+svg {
   max-width: 100%;
+  height: auto;
 }
 
-pre {
+/* Prevent pre/code from breaking layout */
+pre,
+code {
+  max-width: 100%;
   overflow-x: auto;
+  overflow-wrap: break-word;
 }
 
 /* ==========================================================================
-   3. NAVIGATION - TREF branding
+   3. LAYOUT
+   ========================================================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+.section-alt {
+  background: var(--site-section-alt);
+}
+
+.section-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--site-text);
+}
+
+/* ==========================================================================
+   4. NAVIGATION
    ========================================================================== */
 
 .nav {
   background: var(--dark-purple);
-  padding: 0.75rem 1rem;
+  padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -132,10 +195,8 @@ pre {
 
 .nav-links {
   display: flex;
-  gap: 0.5rem;
+  gap: 1.5rem;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .nav-links a {
@@ -146,6 +207,7 @@ pre {
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s;
+  position: relative;
 }
 
 .nav-links a:hover,
@@ -153,13 +215,26 @@ pre {
   color: var(--mint);
 }
 
-.nav-icon svg {
-  width: 22px;
-  height: 22px;
+/* Navigation icons */
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.nav-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Labels visible on desktop */
 .nav-label {
-  display: none;
+  display: inline;
+}
+
+/* Tooltip for mobile - uses title attribute */
+.nav-links a[title] {
+  position: relative;
 }
 
 .nav-controls {
@@ -176,6 +251,9 @@ pre {
   cursor: pointer;
   font-size: 14px;
   color: var(--gray-300);
+  display: flex;
+  align-items: center;
+  gap: 6px;
   transition: all 0.2s;
 }
 
@@ -184,56 +262,37 @@ pre {
   color: var(--mint);
 }
 
-/* Nav responsive */
-@media (min-width: 768px) {
-  .nav {
-    padding: 1rem 2rem;
-  }
-
-  .nav-links {
-    gap: 1.25rem;
-  }
-
-  .nav-label {
-    display: inline;
-  }
-
-  .nav-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
 /* ==========================================================================
-   4. HERO - TREF gradient
+   5. HERO
    ========================================================================== */
 
 .hero {
   background: linear-gradient(135deg, var(--dark-purple) 0%, #4C1D95 100%);
   color: white;
-  padding: 2rem 1rem;
+  padding: 4rem 2rem;
   text-align: center;
 }
 
 .hero h1 {
-  font-size: 1.75rem;
+  font-size: 3rem;
   margin-bottom: 1rem;
   background: linear-gradient(135deg, var(--purple) 0%, var(--mint) 100%);
+  /* stylelint-disable-next-line property-no-vendor-prefix */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .hero-eyebrow {
+  color: var(--teal-400);
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  opacity: 0.8;
 }
 
 .hero-subtitle {
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: var(--gray-300);
   max-width: 600px;
   margin: 0 auto 2rem;
@@ -246,110 +305,106 @@ pre {
   flex-wrap: wrap;
 }
 
-/* Hero responsive */
-@media (min-width: 640px) {
-  .hero {
-    padding: 3rem 1.5rem;
-  }
-
-  .hero h1 {
-    font-size: 2.25rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero {
-    padding: 4rem 2rem;
-  }
-
-  .hero h1 {
-    font-size: 3rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.5rem;
-  }
-}
-
 /* ==========================================================================
-   5. SECTIONS & CONTAINERS
+   6. BOX PATTERN - All containers with bg/radius/padding/shadow
    ========================================================================== */
 
-.section {
-  padding: 2rem 0;
-}
-
-.section-alt {
-  background: var(--site-section-alt);
-}
-
-.section-title {
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 2rem;
-  color: var(--site-text);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-@media (min-width: 640px) {
-  .section {
-    padding: 3rem 0;
-  }
-
-  .section-title {
-    font-size: 2rem;
-    margin-bottom: 3rem;
-  }
-
-  .container {
-    padding: 0 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .section {
-    padding: 4rem 0;
-  }
-
-  .container {
-    padding: 0 2rem;
-  }
-}
-
-/* ==========================================================================
-   6. CARDS - TREF look
-   ========================================================================== */
-
-.card {
+.card,
+.explainer,
+.builder-form,
+.result-preview,
+.comparison-box,
+.article-tref-card,
+.chat-box {
   background: var(--site-card-bg);
   border-radius: 12px;
-  padding: 1.25rem;
+  padding: 2rem;
   box-shadow: var(--site-card-shadow);
-  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+  transition: background 0.3s;
 }
 
+/* Card hover effect */
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
 }
 
-.card h3 {
+/* Box with highlight border */
+.analogy,
+.article-tref-card {
+  border-left: 4px solid var(--mint);
+}
+
+.analogy {
+  background: var(--site-highlight-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* Comparison box uses gray bg */
+.comparison-box {
+  background: var(--gray-100);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+/* Chat box specific */
+.chat-box {
+  padding: 0;
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  background: var(--gray-100);
+}
+
+/* ==========================================================================
+   7. BOX CONTENT - Headings and text inside boxes
+   ========================================================================== */
+
+.card h3,
+.explainer h2,
+.comparison-box h4 {
   color: var(--site-text);
+  margin-bottom: 1rem;
+}
+
+.explainer h2 {
+  color: var(--purple);
+}
+
+.card p,
+.explainer p,
+.analogy p,
+.step-content p,
+.feature p,
+.article-tref-content p {
+  color: var(--site-text-muted);
+  font-size: 0.95rem;
+}
+
+.analogy-title {
+  font-weight: 600;
+  color: var(--purple);
   margin-bottom: 0.5rem;
 }
 
-.card p {
-  color: var(--site-text-muted);
-  font-size: 0.95rem;
+/* Spacing */
+.explainer {
+  margin-bottom: 2rem;
+}
+
+/* ==========================================================================
+   8. BADGE PATTERN - Icon circles/squares
+   ========================================================================== */
+
+.card-icon,
+.list-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
 }
 
 .card-icon {
@@ -358,46 +413,218 @@ pre {
   background: linear-gradient(135deg, var(--purple), var(--mint));
   border-radius: 12px;
   margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.list-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--purple);
+  font-size: 0.8rem;
+}
+
+/* Step numbers (auto-generated) */
+.steps {
+  counter-reset: step;
+}
+
+.step {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--purple), var(--mint));
+  color: white;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.5rem;
   font-weight: 700;
 }
 
+.step-content h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--site-text);
+}
+
+/* ==========================================================================
+   9. GRID PATTERN - Mobile First Responsive Grids
+   ========================================================================== */
+
+.card-grid,
+.feature-grid,
+.comparison,
+.form-row {
+  display: grid;
+  gap: 1rem;
+}
+
+/* Card grid - always responsive */
 .card-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    gap: 2rem;
+  }
+}
+
+/* Feature grid */
+.feature-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .feature-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Comparison - side by side on tablet+ */
+.comparison {
+  grid-template-columns: 1fr;
+  margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .comparison {
+    grid-template-columns: 1fr 1fr;
+    margin: 2rem 0;
+    gap: 2rem;
+  }
+}
+
+/* Form row */
+.form-row {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ==========================================================================
+   9b. RESPONSIVE GRID UTILITIES
+   ========================================================================== */
+
+/* Use these classes in HTML for responsive grids */
+
+/* .grid-cols-1 = always 1 column */
+.grid-cols-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* .grid-cols-2 = 1 col mobile, 2 cols tablet+ */
+.grid-cols-2 {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
 }
 
 @media (min-width: 640px) {
-  .card {
-    padding: 1.5rem;
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
+}
 
-  .card-grid {
+/* .grid-cols-3 = 1 col mobile, 2 cols tablet, 3 cols desktop */
+.grid-cols-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid-cols-3 {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .card {
-    padding: 2rem;
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
   }
+}
 
-  .card-grid {
+/* .grid-cols-4 = 1/2/4 responsive */
+.grid-cols-4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 480px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cols-4 {
     grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+}
+
+/* Stack on mobile utility */
+.stack-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stack-mobile {
+    flex-direction: row;
   }
 }
 
 /* ==========================================================================
-   7. FEATURES
+   10. LIST PATTERN
    ========================================================================== */
 
+.simple-list {
+  list-style: none;
+  padding: 0;
+}
+
+.simple-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  color: var(--site-text);
+}
+
+.simple-list li:last-child {
+  border-bottom: none;
+}
+
+/* Feature list */
 .feature {
   display: flex;
   gap: 1rem;
@@ -414,34 +641,10 @@ pre {
 .feature h4 {
   font-size: 1rem;
   margin-bottom: 0.25rem;
-  color: var(--site-text);
-}
-
-.feature p {
-  color: var(--site-text-muted);
-  font-size: 0.95rem;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .feature-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .feature-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 /* ==========================================================================
-   8. BUTTONS - TREF gradient
+   11. BUTTONS
    ========================================================================== */
 
 .btn {
@@ -478,19 +681,97 @@ pre {
   background: rgb(255 255 255 / 20%);
 }
 
+.btn-build {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
 /* ==========================================================================
-   9. FORMS - Builder page
+   12. CODE BLOCKS
+   ========================================================================== */
+
+.code-block,
+.embed-code {
+  background: var(--gray-900);
+  color: var(--gray-100);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-family: 'Fira Code', Consolas, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.code-block {
+  position: relative;
+}
+
+.code-block code {
+  color: var(--mint);
+}
+
+.embed-code {
+  color: var(--mint);
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.code-block-label {
+  color: var(--gray-400);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Copy buttons */
+.copy-btn,
+.btn-copy-code {
+  background: var(--gray-700);
+  color: var(--gray-300);
+  border: none;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-copy-code {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: 1px solid var(--gray-600);
+}
+
+.copy-btn:hover,
+.btn-copy-code:hover {
+  background: var(--gray-600);
+  color: white;
+}
+
+.copy-btn.copied,
+.btn-copy-code.copied {
+  background: var(--mint);
+  color: var(--dark-purple);
+}
+
+/* ==========================================================================
+   13. FORMS
    ========================================================================== */
 
 .builder-container {
-  max-width: 700px;
-}
-
-.builder-form {
-  background: var(--site-card-bg);
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: var(--site-card-shadow);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .form-group {
@@ -506,9 +787,9 @@ pre {
 
 .form-group small {
   display: block;
-  margin-top: 0.5rem;
-  color: var(--site-text-muted);
+  color: var(--gray-500);
   font-size: 0.85rem;
+  margin-top: 0.25rem;
 }
 
 .form-input {
@@ -517,7 +798,8 @@ pre {
   border: 1px solid var(--gray-300);
   border-radius: 8px;
   font-size: 1rem;
-  background: var(--site-bg);
+  font-family: inherit;
+  background: var(--site-card-bg);
   color: var(--site-text);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -525,11 +807,7 @@ pre {
 .form-input:focus {
   outline: none;
   border-color: var(--purple);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
-}
-
-.form-input::placeholder {
-  color: var(--gray-400);
+  box-shadow: 0 0 0 3px rgb(139 92 246 / 10%);
 }
 
 textarea.form-input {
@@ -537,25 +815,30 @@ textarea.form-input {
   resize: vertical;
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr;
+/* ==========================================================================
+   14. RESULT/PREVIEW SECTION
+   ========================================================================== */
+
+.result-section {
+  margin-top: 2rem;
+  display: none;
+}
+
+.result-section.visible {
+  display: block;
+}
+
+.result-preview {
+  margin-bottom: 1.5rem;
+}
+
+.result-actions {
+  display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
-@media (min-width: 640px) {
-  .form-row {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.btn-build {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1.1rem;
-}
-
-/* Step indicator */
+/* Step indicator dots */
 .step-indicator {
   display: flex;
   justify-content: center;
@@ -568,102 +851,226 @@ textarea.form-input {
   height: 12px;
   border-radius: 50%;
   background: var(--gray-300);
-  transition: all 0.3s;
+  transition: background 0.3s;
 }
 
 .step-dot.active {
   background: var(--purple);
-  transform: scale(1.2);
 }
 
 .step-dot.done {
   background: var(--mint);
 }
 
-/* Result section */
-.result-section {
-  display: none;
-  margin-top: 2rem;
-}
+/* ==========================================================================
+   15. ARTICLE TREF CARD
+   ========================================================================== */
 
-.result-section.visible {
-  display: block;
-}
-
-.result-preview {
-  background: var(--site-card-bg);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--site-card-shadow);
-}
-
-.result-actions {
+.article-tref-card {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
 }
 
-.embed-code {
-  background: var(--gray-800);
-  color: var(--gray-100);
-  padding: 1rem;
-  border-radius: 8px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.8rem;
-  overflow-x: auto;
-  white-space: pre;
-  line-height: 1.5;
+.article-tref-card .tref-wrapper {
+  flex-shrink: 0;
 }
 
-.btn-copy-code {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--purple);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: background 0.2s;
+.article-tref-content {
+  flex: 1;
 }
 
-.btn-copy-code:hover {
-  background: var(--dark-purple);
+.article-tref-content h4 {
+  margin: 0 0 4px;
+  color: var(--site-text);
+  font-size: 1rem;
 }
 
-.btn-copy-code.copied {
-  background: var(--mint);
-}
-
-/* Dark mode forms */
-html.dark .form-input {
-  background: var(--gray-800);
-  border-color: var(--gray-600);
-  color: var(--gray-100);
-}
-
-html.dark .form-input:focus {
-  border-color: var(--purple);
-}
-
-html.dark .embed-code {
-  background: var(--gray-900);
+.article-tref-hint {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 8px;
 }
 
 /* ==========================================================================
-   10. FOOTER
+   16. CHAT DEMO (examples/ai-chat.html) - Mobile First
+   ========================================================================== */
+
+.chat-messages {
+  min-height: 150px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .chat-messages {
+    min-height: 200px;
+    max-height: 300px;
+    padding: 1rem;
+  }
+}
+
+.chat-msg {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  max-width: 85%;
+  font-size: 0.9rem;
+  overflow-wrap: break-word;
+}
+
+.chat-msg.ai {
+  background: var(--site-card-bg);
+  align-self: flex-start;
+}
+
+.chat-msg.user {
+  background: var(--purple);
+  color: white;
+  align-self: flex-end;
+}
+
+.chat-msg.tref-context {
+  background: var(--site-highlight-bg);
+  border: 1px solid var(--mint);
+  align-self: flex-end;
+  font-size: 0.8rem;
+  color: var(--site-text-muted);
+}
+
+.chat-tref-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgb(92 204 204 / 10%);
+  border-top: 1px solid var(--gray-200);
+  align-items: center;
+}
+
+.chat-input-row {
+  display: flex;
+  border-top: 1px solid var(--gray-200);
+}
+
+.chat-input {
+  flex: 1;
+  border: none;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  outline: none;
+  background: var(--site-card-bg);
+  color: var(--site-text);
+}
+
+.chat-send {
+  background: var(--purple);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.chat-send:hover {
+  background: #7c3aed;
+}
+
+.add-slot-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px dashed var(--gray-300);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gray-400);
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-slot-btn:hover {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+/* ==========================================================================
+   17. MINI RECEIVER (compact TREF receiver)
+   ========================================================================== */
+
+.mini-receiver.tref-receiver {
+  width: 48px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  padding: 0 !important;
+  border-radius: 8px;
+  aspect-ratio: 1;
+}
+
+.mini-receiver.tref-receiver-has-block {
+  padding: 0;
+}
+
+.mini-receiver .tref-wrapper {
+  max-width: 48px;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.mini-receiver .tref-header {
+  margin: 0;
+}
+
+.mini-receiver .tref-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.mini-receiver .tref-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mini-receiver .tref-id,
+.mini-receiver .tref-meta,
+.mini-receiver .tref-menu,
+.mini-receiver .tref-content,
+.mini-receiver .tref-refs {
+  display: none;
+}
+
+/* Receiver row for drag-drop demo */
+.receiver-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.received-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   18. FOOTER
    ========================================================================== */
 
 .footer {
   background: var(--gray-900);
   color: var(--gray-400);
-  padding: 2rem 1rem;
+  padding: 3rem 2rem;
   text-align: center;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .footer a {
   color: var(--mint);
   text-decoration: none;
@@ -676,35 +1083,232 @@ html.dark .embed-code {
 .footer-links {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
 
-@media (min-width: 640px) {
-  .footer {
-    padding: 3rem 2rem;
+/* ==========================================================================
+   19. RESPONSIVE - Mobile First Breakpoints
+   ========================================================================== */
+
+/*
+   Breakpoints:
+   - Mobile: < 480px (default)
+   - Small: 480px+ (large phones, small tablets)
+   - Medium: 640px+ (tablets)
+   - Large: 768px+ (small laptops)
+   - XL: 1024px+ (desktops)
+*/
+
+/* --- MOBILE (default, no media query) --- */
+
+/* Hero mobile */
+.hero {
+  padding: 2rem 1rem;
+}
+
+.hero h1 {
+  font-size: 1.75rem;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+}
+
+.hero-cta {
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Nav mobile */
+.nav {
+  padding: 0.75rem 1rem;
+}
+
+.nav-links {
+  gap: 0.5rem;
+}
+
+.nav-label {
+  display: none;
+}
+
+.nav-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Section mobile */
+.section {
+  padding: 2rem 0;
+}
+
+/* Card mobile */
+.card {
+  padding: 1.25rem;
+}
+
+/* Code blocks mobile */
+.code-block,
+.embed-code {
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  border-radius: 0;
+}
+
+.code-block code {
+  white-space: pre;
+  display: block;
+}
+
+/* --- SMALL (480px+) --- */
+@media (min-width: 480px) {
+  .hero h1 {
+    font-size: 2rem;
   }
 
-  .footer-links {
-    gap: 2rem;
-    margin-bottom: 1.5rem;
+  .hero-cta {
+    flex-direction: row;
+  }
+}
+
+/* --- MEDIUM (640px+) --- */
+@media (min-width: 640px) {
+  .hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+
+  /* Code blocks restore normal appearance */
+  .code-block,
+  .embed-code {
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 8px;
+  }
+}
+
+/* --- LARGE (768px+) --- */
+@media (min-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .nav-label {
+    display: inline;
+  }
+
+  .nav-links {
+    gap: 1.25rem;
+  }
+
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* --- XL (1024px+) --- */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 4rem 2rem;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+
+  .card {
+    padding: 2rem;
+  }
+
+  .nav {
+    padding: 1rem 2rem;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
   }
 }
 
 /* ==========================================================================
-   10. TREF COMPONENT OVERRIDES
-   Ensure TREF wrapper displays correctly within site layout
+   20. UTILITIES
    ========================================================================== */
 
+.text-center { text-align: center; }
+.text-muted { color: var(--site-text-muted); }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.max-w-sm { max-width: 500px; }
+.max-w-md { max-width: 800px; }
+.max-w-lg { max-width: 900px; }
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ==========================================================================
+   21. TREF COMPONENT OVERRIDES
+   Ensure hover menu displays correctly within site layout
+   ========================================================================== */
+
+/* Ensure wrapper's absolute children (hover menu) aren't clipped */
 .tref-wrapper {
   overflow: visible;
 }
 
+/* Raise hover menu z-index above navigation */
 .tref-actions {
   z-index: 200 !important;
 }
 
+/* Ensure action button icons are visible (fix color inheritance) */
 .tref-action {
   color: #374151 !important;
 }
