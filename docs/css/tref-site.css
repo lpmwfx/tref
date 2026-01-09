@@ -1317,6 +1317,7 @@ textarea.form-input {
   stroke: #374151 !important;
   width: 16px !important;
   height: 16px !important;
+  max-width: none !important;
 }
 
 html.dark .tref-action {
