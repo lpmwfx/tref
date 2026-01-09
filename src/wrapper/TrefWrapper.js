@@ -397,6 +397,50 @@ export class TrefWrapper {
       });
     }
 
+    // Smart menu positioning on hover
+    const actionsEl = element.querySelector('.tref-actions');
+    if (actionsEl) {
+      const actions = /** @type {HTMLElement} */ (actionsEl);
+
+      element.addEventListener('mouseenter', () => {
+        // Reset to default centered position first
+        actions.style.left = '50%';
+        actions.style.right = 'auto';
+        actions.style.transform = 'translateX(-50%)';
+        actions.style.top = '100%';
+        actions.style.bottom = 'auto';
+
+        // Wait for next frame so browser calculates position
+        requestAnimationFrame(() => {
+          const rect = actions.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+          const padding = 8; // Minimum distance from edge
+
+          // Check horizontal overflow
+          if (rect.left < padding) {
+            // Overflows left - align to left edge
+            actions.style.left = '0';
+            actions.style.transform = 'none';
+          } else if (rect.right > viewportWidth - padding) {
+            // Overflows right - align to right edge
+            actions.style.left = 'auto';
+            actions.style.right = '0';
+            actions.style.transform = 'none';
+          }
+
+          // Check vertical overflow (menu below viewport)
+          if (rect.bottom > viewportHeight - padding) {
+            // Show above instead of below
+            actions.style.top = 'auto';
+            actions.style.bottom = '100%';
+            actions.style.marginTop = '0';
+            actions.style.marginBottom = '4px';
+          }
+        });
+      });
+    }
+
     // Action buttons (visible on hover via CSS)
     const handleAction = async (/** @type {Event} */ e) => {
       e.stopPropagation();
@@ -466,7 +510,8 @@ export class TrefWrapper {
 .tref-actions {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 2px;
