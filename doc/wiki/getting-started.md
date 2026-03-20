@@ -93,3 +93,12 @@ if (result.valid) {
 * Learn about the **Block Format**
 * Explore the **CLI Reference**
 * Read about **Deriving Blocks**
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
