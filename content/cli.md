@@ -82,3 +82,12 @@ tref info sha256:abc...      # Show metadata
 tref cat sha256:abc...       # Output content
 tref cat sha256:abc... --format json
 ```
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
