@@ -118,3 +118,12 @@ The block ID is generated from the **content only**, not including metadata. Thi
 * Same content always produces same ID
 * Metadata changes don't break validation
 * Easy to verify integrity
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
