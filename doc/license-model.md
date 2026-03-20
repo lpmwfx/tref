@@ -138,3 +138,12 @@ SPDX-License-Identifier: TREF-1.0
 ```
 
 Full terms: Use freely with format preservation. Attribution via `parent` and `refs` fields.
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
