@@ -203,3 +203,12 @@ All tests performed in `/test-mcp/` directory:
 | derive | Parent ID + new content | Block `df7eefa6` with lineage |
 | validate good | Valid .tref file | `valid: true` |
 | validate bad | Fake .tref | Schema errors caught |
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
