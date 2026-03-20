@@ -228,3 +228,12 @@ Before deploying TREF blocks, verify:
 - [ ] Testing hover menu appears and works
 - [ ] Testing drag-and-drop works
 - [ ] Testing on mobile (tap toggles menu)
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
