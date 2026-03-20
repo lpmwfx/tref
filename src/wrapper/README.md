@@ -127,3 +127,12 @@ const receiver = new TrefReceiver(element, {
 - wrapper.js - TrefWrapper and TrefReceiver classes
 - wrapper.test.js - Tests
 - README - This file
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
