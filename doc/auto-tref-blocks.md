@@ -199,3 +199,12 @@ chmod +x .githooks/pre-commit
 3. **Stable IDs** - verifiable, content-addressed
 4. **Works with static sites** - no server needed
 5. **Source control** - markdown is the source of truth
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
