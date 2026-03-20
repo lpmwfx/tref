@@ -367,3 +367,12 @@ npm pkg set scripts.check="tsc -p jsconfig.json && eslint src/"
 6. **Husky + lint-staged** for pre-commit enforcement
 
 This gives you TypeScript-level safety with zero build step, native debugging, and runtime validation that TypeScript alone cannot provide.
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
