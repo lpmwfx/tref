@@ -793,3 +793,12 @@ Ready for next drop attempt
   .tref-receiver-compact { width: 48px; height: 48px; min-height: 48px; }
 }
 ```
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
