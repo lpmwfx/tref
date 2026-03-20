@@ -220,3 +220,12 @@ When releasing a new version:
 ## ID Generation
 
 **Block IDs use content-only SHA-256 hashing.** The ID is the hash of the `content` field only (not the entire block). This enables simple browser-side validation: hash content, compare to ID.
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
