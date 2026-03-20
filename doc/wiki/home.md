@@ -33,3 +33,12 @@ In the AI era, knowledge needs backbone:
 * **Verifiability** - Detect if content was modified
 * **Portability** - Drag, copy, share without losing context
 * **Attribution** - References travel with the content
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
