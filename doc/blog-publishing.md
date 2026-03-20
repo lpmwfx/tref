@@ -984,3 +984,12 @@ The `current` field always points to newest version, so Google can verify it's c
   "versions": [...]
 }
 ```
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
