@@ -412,3 +412,12 @@ import { TrefWrapper } from './src/wrapper/wrapper.js';
 
 TREF is an open, experimental format under active development.
 Standardization emerges through use – not through prior committees.
+
+
+---
+
+<!-- LARS:START -->
+<a href="https://lpmathiasen.com">
+  <img src="https://carousel.lpmathiasen.com/carousel.svg?slot=10" alt="Lars P. Mathiasen"/>
+</a>
+<!-- LARS:END -->
